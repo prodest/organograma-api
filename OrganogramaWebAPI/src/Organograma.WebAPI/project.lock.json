@@ -3,6 +3,23 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v1.0": {
+      "AutoMapper/5.1.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.0.1",
+          "NETStandard.Library": "1.6.0",
+          "System.Collections.Specialized": "4.0.1",
+          "System.ComponentModel.TypeConverter": "4.1.0",
+          "System.Dynamic.Runtime": "4.0.11",
+          "System.Linq.Queryable": "4.0.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/AutoMapper.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/AutoMapper.dll": {}
+        }
+      },
       "Libuv/1.9.0": {
         "type": "package",
         "dependencies": {
@@ -1684,7 +1701,7 @@
           "System.Threading": "4.0.11"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Collections.Specialized.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Collections.Specialized.dll": {}
@@ -2043,7 +2060,11 @@
           "lib/portable-net45+win8+wpa81/_._": {}
         },
         "runtimeTargets": {
-          "runtimes/win/lib/netstandard1.3/_._": {
+          "runtimes/unix/lib/netstandard1.3/System.IO.Compression.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard1.3/System.IO.Compression.dll": {
             "assetType": "runtime",
             "rid": "win"
           }
@@ -2066,7 +2087,7 @@
           "ref/netstandard1.3/System.IO.Compression.ZipFile.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.IO.Compression.ZipFile.dll": {}
         }
       },
       "System.IO.FileSystem/4.0.1": {
@@ -2261,7 +2282,7 @@
           "ref/netstandard1.0/System.Linq.Queryable.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Linq.Queryable.dll": {}
         }
       },
       "System.Net.Http/4.1.0": {
@@ -2301,7 +2322,11 @@
           "lib/portable-net45+win8+wpa81/_._": {}
         },
         "runtimeTargets": {
-          "runtimes/win/lib/netstandard1.3/_._": {
+          "runtimes/unix/lib/netstandard1.6/System.Net.Http.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Net.Http.dll": {
             "assetType": "runtime",
             "rid": "win"
           }
@@ -3418,10 +3443,85 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
+      },
+      "Apresentacao/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.6",
+        "dependencies": {
+          "Infraestrutura": "1.0.0",
+          "NETStandard.Library": "1.6.0",
+          "Negocio": "1.0.0"
+        },
+        "compile": {
+          "netstandard1.6/Apresentacao.dll": {}
+        },
+        "runtime": {
+          "netstandard1.6/Apresentacao.dll": {}
+        }
+      },
+      "Dominio/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.6",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        },
+        "compile": {
+          "netstandard1.6/Dominio.dll": {}
+        },
+        "runtime": {
+          "netstandard1.6/Dominio.dll": {}
+        }
+      },
+      "Infraestrutura/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.6",
+        "dependencies": {
+          "AutoMapper": "5.1.1",
+          "Dominio": "1.0.0",
+          "NETStandard.Library": "1.6.0"
+        },
+        "compile": {
+          "netstandard1.6/Infraestrutura.dll": {}
+        },
+        "runtime": {
+          "netstandard1.6/Infraestrutura.dll": {}
+        }
+      },
+      "Negocio/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.6",
+        "dependencies": {
+          "Dominio": "1.0.0",
+          "Infraestrutura": "1.0.0",
+          "NETStandard.Library": "1.6.0"
+        },
+        "compile": {
+          "netstandard1.6/Negocio.dll": {}
+        },
+        "runtime": {
+          "netstandard1.6/Negocio.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "AutoMapper/5.1.1": {
+      "sha512": "Q3uFSWccBUE1Q9BW88C6RO2Y/iFkPztTKK1ciyx1jhWPdOi5+pvzZ2EwcJKPiV0cr2EXZUWqQOsSpA5jVjfQBg==",
+      "type": "package",
+      "path": "AutoMapper/5.1.1",
+      "files": [
+        "AutoMapper.5.1.1.nupkg.sha512",
+        "AutoMapper.nuspec",
+        "lib/net45/AutoMapper.dll",
+        "lib/net45/AutoMapper.xml",
+        "lib/netstandard1.1/AutoMapper.dll",
+        "lib/netstandard1.1/AutoMapper.xml",
+        "lib/netstandard1.3/AutoMapper.dll",
+        "lib/netstandard1.3/AutoMapper.xml",
+        "lib/portable-net45+win8+wpa81/AutoMapper.dll",
+        "lib/portable-net45+win8+wpa81/AutoMapper.xml"
+      ]
+    },
     "Libuv/1.9.0": {
       "sha512": "9Q7AaqtQhS8JDSIvRBt6ODSLWDBI4c8YxNxyCQemWebBFUtBbc6M5Vi5Gz1ZyIUlTW3rZK9bIr5gnVyv0z7a2Q==",
       "type": "package",
@@ -9204,10 +9304,32 @@
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
       ]
+    },
+    "Apresentacao/1.0.0": {
+      "type": "project",
+      "path": "../Apresentacao/project.json",
+      "msbuildProject": "../Apresentacao/Apresentacao.xproj"
+    },
+    "Dominio/1.0.0": {
+      "type": "project",
+      "path": "../Dominio/project.json",
+      "msbuildProject": "../Dominio/Dominio.xproj"
+    },
+    "Infraestrutura/1.0.0": {
+      "type": "project",
+      "path": "../Infraestrutura/project.json",
+      "msbuildProject": "../Infraestrutura/Infraestrutura.xproj"
+    },
+    "Negocio/1.0.0": {
+      "type": "project",
+      "path": "../Negocio/project.json",
+      "msbuildProject": "../Negocio/Negocio.xproj"
     }
   },
   "projectFileDependencyGroups": {
     "": [
+      "Apresentacao >= 1.0.0-*",
+      "Infraestrutura >= 1.0.0-*",
       "Microsoft.AspNetCore.Mvc >= 1.0.0",
       "Microsoft.AspNetCore.Server.IISIntegration >= 1.0.0",
       "Microsoft.AspNetCore.Server.Kestrel >= 1.0.0",

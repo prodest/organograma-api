@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Organograma.WebAPI.Config;
 
 namespace Organograma.WebAPI
 {
@@ -29,6 +30,7 @@ namespace Organograma.WebAPI
         {
             // Add framework services.
             services.AddMvc();
+            ConfiguracaoDependencias.InjetarDependencias(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

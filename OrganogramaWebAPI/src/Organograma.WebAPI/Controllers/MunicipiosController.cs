@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Apresentacao.Municipio.Base;
 
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     public class MunicipiosController : Controller
     {
+        
+        private IMunicipioWorkService service;
+
+        public MunicipiosController (IMunicipioWorkService service)
+        {
+            this.service = service;
+        }
+
         // GET api/municipios
         [HttpGet]
         public IEnumerable<string> Get()
