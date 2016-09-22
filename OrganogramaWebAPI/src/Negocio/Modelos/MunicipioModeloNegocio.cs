@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Organograma.Dominio.Modelos
+namespace Organograma.Negocio.Modelos
 {
-    public partial class TiposRelacao
+    public class MunicipioModeloNegocio
     {
-        public int Idtiporelacao { get; set; }
+        public decimal Idmunicipio { get; set; }
+        public decimal? Codigoibge { get; set; }
         public string Nome { get; set; }
-        public decimal? Idtiporelacaopai { get; set; }
+        public string Uf { get; set; }
         public DateTime Iniciovigencia { get; set; }
         public DateTime? Fimvigencia { get; set; }
         public string Obsfimvigencia { get; set; }
-        public string Restrito { get; set; }
     }
 }

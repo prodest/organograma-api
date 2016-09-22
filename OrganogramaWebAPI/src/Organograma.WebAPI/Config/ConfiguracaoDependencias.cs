@@ -11,7 +11,7 @@ namespace Organograma.WebAPI.Config
         public static Dictionary<Type, Type> ObterDependencias()
         {
             Dictionary<Type, Type> dependencias = new Dictionary<Type, Type>();
-
+            dependencias = Apresentacao.Config.ConfiguracaoDepedencias.ObterDependencias();
             dependencias.Add(typeof(IMunicipioWorkService), typeof(MunicipioWorkService));
             return dependencias;
         }

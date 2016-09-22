@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Organograma.Negocio.Municipio;
+using Organograma.Negocio.Municipio.Base;
+using System;
 using System.Collections.Generic;
 
 namespace Organograma.Apresentacao.Config
@@ -10,7 +12,7 @@ namespace Organograma.Apresentacao.Config
             Dictionary<Type, Type> dependencias = new Dictionary<Type, Type>();
 
             dependencias = Negocio.Config.ConfiguracaoDependencias.ObterDependencias();
-            
+            dependencias.Add(typeof(IMunicipioNegocio), typeof(MunicipioNegocio));
             return dependencias;
         }
     }

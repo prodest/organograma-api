@@ -1,12 +1,32 @@
-﻿using Apresentacao.Municipio.Base;
+﻿using AutoMapper;
+using Apresentacao.Municipio.Base;
+using Organograma.Apresentacao.Modelos;
+using Organograma.Negocio.Modelos;
+using Organograma.Negocio.Municipio.Base;
+using System.Collections.Generic;
 
 namespace Apresentacao.Municipio
 {
     public class MunicipioWorkService : IMunicipioWorkService
     {
-        public string ConsultarMunicipios()
+
+        private IMunicipioNegocio consultaMunicipio;
+
+        public MunicipioWorkService (IMunicipioNegocio consultaMunicipio)
         {
-            return "Municipio Apresentacao";
+            this.consultaMunicipio = consultaMunicipio;
+        }
+
+
+        public List<MunicipioModeloApresentacao> ConsultarMunicipios()
+        {
+            List<MunicipioModeloApresentacao> municipiosApresentacao;
+            List<MunicipioModeloNegocio> municipiosNegocio;
+            municipiosNegocio = consultaMunicipio.ConsultaMunicipios();
+
+            municipiosApresentacao = Mapper.Map<List<MunicipioModeloNegocio>, List<MunicipioModeloApresentacao>>(municipiosNegocio);
+
+            return municipiosApresentacao;
         }
     }
 }

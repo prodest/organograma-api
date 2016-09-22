@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EntityFrameworkReverse.Models
+namespace Organograma.Dominio.Modelos
 {
     public partial class Partes
     {

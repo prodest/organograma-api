@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Apresentacao.Municipio.Base;
+using Organograma.Apresentacao.Modelos;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -20,9 +21,9 @@ namespace Organograma.WebAPI.Controllers
 
         // GET api/municipios
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "Município 1", "Município 2" };
+            return new ObjectResult(service.ConsultarMunicipios());
         }
 
         // GET api/municipios/id
