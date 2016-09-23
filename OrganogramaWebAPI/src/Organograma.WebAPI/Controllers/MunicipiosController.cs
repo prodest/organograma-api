@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Apresentacao.Municipio.Base;
 using Organograma.Apresentacao.Modelos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class MunicipiosController : Controller
     {
         

@@ -1,4 +1,4 @@
-﻿{
+{
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.0.0",
@@ -15,7 +15,9 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Apresentacao": "1.0.0-*",
-    "Infraestrutura": "1.0.0-*"
+    "Infraestrutura": "1.0.0-*",
+    "System.IdentityModel.Tokens.Jwt": "5.0.0",
+    "IdentityServer4.AccessTokenValidation": "1.0.1-rc1"
   },
 
   "tools": {
