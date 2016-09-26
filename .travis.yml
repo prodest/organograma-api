@@ -1,0 +1,13 @@
+require: sudo
+language: node_js
+services:
+  - docker
+env:
+  - DOCKER_IMAGE=prodest/organograma-api
+script: 
+  /bin/sh .travis.sh
+deploy:
+  provider: script
+  script: /bin/sh .develop.sh
+  on:
+    branch: develop
