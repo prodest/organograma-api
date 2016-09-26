@@ -1,10 +1,10 @@
 FROM microsoft/dotnet:latest
 
-COPY ProcessoEletronicoWebAPI/src /home/src/
+COPY OrganogramaWebAPI/src /home/src/
 WORKDIR /home/src/WebAPI.Restrito
 
 RUN dotnet restore
 
-EXPOSE 3308/tcp
+EXPOSE 8935/tcp
 
 CMD ["dotnet", "run"]

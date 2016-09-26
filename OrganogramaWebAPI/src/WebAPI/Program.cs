@@ -14,8 +14,7 @@ namespace Organograma.WebAPI
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
-                //.UseUrls("http://*:8935")
-                .UseUrls("http://*:3308")
+                .UseUrls("http://*:8935")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
