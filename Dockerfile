@@ -1,7 +1,7 @@
-FROM microsoft/dotnet:latest
+FROM microsoft/dotnet
 
 COPY OrganogramaWebAPI/src /home/src/
-WORKDIR /home/src/WebAPI.Restrito
+WORKDIR /home/src/WebAPI
 
 RUN dotnet restore
 
