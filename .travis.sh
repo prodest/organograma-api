@@ -1,3 +1,3 @@
 #!/bin/bash
  
-docker build -t $DOCKER_IMAGE -f ./Dockerfile .
+docker build -t $DOCKER_IMAGE .
