@@ -2,7 +2,7 @@
 using Apresentacao.Municipio.Base;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Modelos;
-using Organograma.Negocio.Municipio.Base;
+using Organograma.Negocio.Base;
 using System.Collections.Generic;
 
 namespace Apresentacao.Municipio

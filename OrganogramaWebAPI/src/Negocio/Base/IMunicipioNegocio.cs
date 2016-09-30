@@ -1,7 +1,7 @@
 ﻿using Organograma.Negocio.Modelos;
 using System.Collections.Generic;
 
-namespace Organograma.Negocio.Municipio.Base
+namespace Organograma.Negocio.Base
 {
     public interface IMunicipioNegocio
     {

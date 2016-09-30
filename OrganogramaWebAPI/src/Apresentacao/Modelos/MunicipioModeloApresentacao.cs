@@ -7,7 +7,7 @@ namespace Organograma.Apresentacao.Modelos
 {
     public class MunicipioModeloApresentacao
     {
-        public decimal? Codigoibge { get; set; }
+        public int CodigoIbge { get; set; }
         public string Nome { get; set; }
         public string Uf { get; set; }
     }

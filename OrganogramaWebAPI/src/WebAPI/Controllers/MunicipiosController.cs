@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     public class MunicipiosController : Controller
     {
         

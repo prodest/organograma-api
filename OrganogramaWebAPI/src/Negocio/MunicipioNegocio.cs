@@ -1,12 +1,13 @@
 ﻿using Organograma.Dominio.Base;
+using Organograma.Dominio.Modelos;
 using Organograma.Negocio.Modelos;
-using Organograma.Negocio.Municipio.Base;
+using Organograma.Negocio.Base;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 
 
-namespace Organograma.Negocio.Municipio
+namespace Organograma.Negocio
 {
     public class MunicipioNegocio : IMunicipioNegocio
     {
@@ -22,12 +23,12 @@ namespace Organograma.Negocio.Municipio
 
         public List<MunicipioModeloNegocio> ConsultaMunicipios()
         {
-            List<Dominio.Modelos.Municipio> municipiosDominio = new List<Dominio.Modelos.Municipio>();
+            List<Municipio> municipiosDominio = new List<Municipio>();
             List<MunicipioModeloNegocio> municipiosNegocio = new List<MunicipioModeloNegocio>();
 
             municipiosDominio = repositorioMunicipios.ToList();
 
-            municipiosNegocio = Mapper.Map<List<Dominio.Modelos.Municipio>, List<MunicipioModeloNegocio>>(municipiosDominio);
+            municipiosNegocio = Mapper.Map<List<Municipio>, List<MunicipioModeloNegocio>>(municipiosDominio);
 
             return municipiosNegocio;
         }

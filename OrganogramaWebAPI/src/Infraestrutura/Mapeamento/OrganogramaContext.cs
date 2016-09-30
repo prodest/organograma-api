@@ -94,7 +94,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnType("varchar(100)");
             });
         }
-        public virtual DbSet<Municipio> Municipios { get; set; }
+        public virtual DbSet<Municipio> Municipio { get; set; }
         public virtual DbSet<TipoOrganizacao> TipoOrganizacao { get; set; }
         public virtual DbSet<TipoUnidade> TipoUnidade { get; set; }
 
