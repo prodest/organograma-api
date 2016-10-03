@@ -10,6 +10,7 @@ namespace Organograma.Dominio.Base
     {
         IUnitOfWork UnitOfWork { get; }
         IRepositorioGenerico<Municipio> Municipios { get; }
+        IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; }
 
     }
 }
