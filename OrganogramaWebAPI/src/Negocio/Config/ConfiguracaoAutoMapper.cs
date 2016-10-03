@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Organograma.Dominio.Modelos;
 using Organograma.Negocio.Modelos;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace Organograma.Negocio.Config
         public NegocioProfile()
         {
             CreateMap<Dominio.Modelos.Municipio, MunicipioModeloNegocio>();
+
+            CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>();
         }
     }
 
