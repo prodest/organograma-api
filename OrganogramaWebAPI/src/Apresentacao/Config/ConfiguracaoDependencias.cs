@@ -1,7 +1,5 @@
 ﻿using Organograma.Negocio;
 using Organograma.Negocio.Base;
-using Organograma.Negocio.Municipio;
-using Organograma.Negocio.Municipio.Base;
 using System;
 using System.Collections.Generic;
 
