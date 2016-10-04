@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Apresentacao.Municipio.Base;
-using Organograma.Apresentacao.Modelos;
-using Microsoft.AspNetCore.Authorization;
+
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -29,9 +24,9 @@ namespace Organograma.WebAPI.Controllers
 
         // GET api/municipios/id
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return id.ToString();
+            return new ObjectResult(service.ConsultarMunicipioPorId(id));
         }
 
         // POST api/municipios

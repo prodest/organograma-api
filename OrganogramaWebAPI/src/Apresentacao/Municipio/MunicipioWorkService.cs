@@ -4,6 +4,7 @@ using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Modelos;
 using Organograma.Negocio.Base;
 using System.Collections.Generic;
+using System;
 
 namespace Apresentacao.Municipio
 {
@@ -12,21 +13,20 @@ namespace Apresentacao.Municipio
 
         private IMunicipioNegocio consultaMunicipio;
 
-        public MunicipioWorkService (IMunicipioNegocio consultaMunicipio)
+        public MunicipioWorkService(IMunicipioNegocio consultaMunicipio)
         {
             this.consultaMunicipio = consultaMunicipio;
         }
 
+        public MunicipioModeloApresentacao ConsultarMunicipioPorId(int id)
+        {
+            return Mapper.Map<MunicipioModeloNegocio, MunicipioModeloApresentacao>(consultaMunicipio.ConsultaMunicipiosPorId(id));
+        }
 
         public List<MunicipioModeloApresentacao> ConsultarMunicipios()
         {
-            List<MunicipioModeloApresentacao> municipiosApresentacao;
-            List<MunicipioModeloNegocio> municipiosNegocio;
-            municipiosNegocio = consultaMunicipio.ConsultaMunicipios();
+            return Mapper.Map<List<MunicipioModeloNegocio>, List<MunicipioModeloApresentacao>>(consultaMunicipio.ConsultaMunicipios());
 
-            municipiosApresentacao = Mapper.Map<List<MunicipioModeloNegocio>, List<MunicipioModeloApresentacao>>(municipiosNegocio);
-
-            return municipiosApresentacao;
         }
     }
 }

@@ -20,6 +20,17 @@ namespace Organograma.Negocio
             this.repositorioMunicipios = repositorios.Municipios;
         }
 
+        public MunicipioModeloNegocio ConsultaMunicipiosPorId(int id)
+        {
+            Municipio municipioDominio = new Municipio();
+            MunicipioModeloNegocio municipioNegocio = new MunicipioModeloNegocio();
+
+            municipioDominio = repositorioMunicipios.Where(q => q.Id.Equals(id)).SingleOrDefault();
+
+            municipioNegocio = Mapper.Map<Municipio, MunicipioModeloNegocio>(municipioDominio);
+
+            return municipioNegocio;
+        }
 
         public List<MunicipioModeloNegocio> ConsultaMunicipios()
         {
