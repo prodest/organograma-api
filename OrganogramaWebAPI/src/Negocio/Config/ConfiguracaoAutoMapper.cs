@@ -23,6 +23,7 @@ namespace Organograma.Negocio.Config
             CreateMap<Dominio.Modelos.Municipio, MunicipioModeloNegocio>();
 
             CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>();
+            CreateMap<TipoUnidade, TipoUnidadeModeloNegocio>();
         }
     }
 
