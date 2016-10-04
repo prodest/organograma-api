@@ -6,5 +6,6 @@ namespace Apresentacao.Municipio.Base
     public interface IMunicipioWorkService
     {
         List<MunicipioModeloApresentacao> ConsultarMunicipios();
+        MunicipioModeloApresentacao ConsultarMunicipioPorId(int id);
     }
 }

@@ -6,5 +6,6 @@ namespace Organograma.Negocio.Base
     public interface IMunicipioNegocio
     {
         List<MunicipioModeloNegocio> ConsultaMunicipios();
+        MunicipioModeloNegocio ConsultaMunicipiosPorId(int id);
     }
 }
