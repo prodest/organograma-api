@@ -58,7 +58,7 @@ namespace Organograma.Negocio
             repositorioMunicipios.Add(PreparaMunicipioParaInsercao(municipioNegocio));
             unitOfWork.Save();
 
-            return Pesquisar(municipioNegocio.CodigoIbge);
+            return municipioNegocio;
         }
 
 
