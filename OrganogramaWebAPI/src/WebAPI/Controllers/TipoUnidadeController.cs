@@ -12,46 +12,46 @@ using Microsoft.AspNetCore.Authorization;
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class TipoOrganizacaoController : Controller
+    public class TipoUnidadeController : Controller
     {
-        ITipoOrganizacaoWorkService service;
+        ITipoUnidadeWorkService service;
 
-        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service)
+        public TipoUnidadeController(ITipoUnidadeWorkService service)
         {
             this.service = service;
         }
 
-        // GET: api/tipoorganizacao
+        // GET: api/tipounidade
         [HttpGet]
-        public IEnumerable<TipoOrganizacaoModelo> Get()
+        public IEnumerable<TipoUnidadeModelo> Get()
         {
             return service.Listar();
         }
 
-        // GET api/tipoorganizacao/5
+        // GET api/tipounidade/5
         [HttpGet("{id}")]
-        public TipoOrganizacaoModelo Get(int id)
+        public TipoUnidadeModelo Get(int id)
         {
             return service.Pesquisar(id);
         }
 
-        // POST api/tipoorganizacao
+        // POST api/tipounidade
         [Authorize]
         [HttpPost]
-        public TipoOrganizacaoModelo Post([FromBody]TipoOrganizacaoModeloPost tipoOrganizacao)
+        public TipoUnidadeModelo Post([FromBody]TipoUnidadeModeloPost tipoUnidade)
         {
-            return service.Inserir(tipoOrganizacao);
+            return service.Inserir(tipoUnidade);
         }
 
-        // PUT api/tipoorganizacao/5
+        // PUT api/tipounidade/5
         [Authorize]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]TipoOrganizacaoModeloPut tipoOrganizacao)
+        public void Put(int id, [FromBody]TipoUnidadeModeloPut tipoUnidade)
         {
-            service.Alterar(id, tipoOrganizacao);
+            service.Alterar(id, tipoUnidade);
         }
 
-        // DELETE api/tipoorganizacao/5
+        // DELETE api/tipounidade/5
         [Authorize]
         [HttpDelete("{id}")]
         public void Delete(int id)

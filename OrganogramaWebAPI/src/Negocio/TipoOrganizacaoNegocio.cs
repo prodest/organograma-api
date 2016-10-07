@@ -57,7 +57,7 @@ namespace Organograma.Negocio
             unitOfWork.Save();
         }
 
-        public TipoOrganizacaoModeloNegocio Incluir(TipoOrganizacaoModeloNegocio tipoOrganizacao)
+        public TipoOrganizacaoModeloNegocio Inserir(TipoOrganizacaoModeloNegocio tipoOrganizacao)
         {
             validacao.TipoOrganizacaoValido(tipoOrganizacao);
 

@@ -11,17 +11,18 @@ namespace Organograma.Infraestrutura.Repositorios
         {
             UnitOfWork = new EFUnitOfWork(new OrganogramaContext());
 
+            EsferasOrganizacoes = UnitOfWork.MakeGenericRepository<EsferaOrganizacao>();
             Municipios = UnitOfWork.MakeGenericRepository<Municipio>();
-
             TiposOrganizacoes = UnitOfWork.MakeGenericRepository<TipoOrganizacao>();
-
+            TiposUnidades = UnitOfWork.MakeGenericRepository<TipoUnidade>();
         }
 
         public IUnitOfWork UnitOfWork { get; private set; }
 
+        public IRepositorioGenerico<EsferaOrganizacao> EsferasOrganizacoes { get; private set; }
         public IRepositorioGenerico<Municipio> Municipios { get; private set; }
-
         public IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; private set; }
+        public IRepositorioGenerico<TipoUnidade> TiposUnidades { get; private set; }
 
         public void Dispose()
         {

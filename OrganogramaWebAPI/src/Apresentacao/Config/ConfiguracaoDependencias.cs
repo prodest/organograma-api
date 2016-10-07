@@ -12,8 +12,12 @@ namespace Organograma.Apresentacao.Config
             Dictionary<Type, Type> dependencias = new Dictionary<Type, Type>();
 
             dependencias = Negocio.Config.ConfiguracaoDependencias.ObterDependencias();
+
+            dependencias.Add(typeof(IEsferaOrganizacaoNegocio), typeof(EsferaOrganizacaoNegocio));
             dependencias.Add(typeof(IMunicipioNegocio), typeof(MunicipioNegocio));
             dependencias.Add(typeof(ITipoOrganizacaoNegocio), typeof(TipoOrganizacaoNegocio));
+            dependencias.Add(typeof(ITipoUnidadeNegocio), typeof(TipoUnidadeNegocio));
+
             return dependencias;
         }
     }
