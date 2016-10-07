@@ -2,6 +2,7 @@
 using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Modelos;
 using Organograma.Negocio.Config;
+using System;
 
 namespace Organograma.Apresentacao.Config
 {
@@ -12,11 +13,19 @@ namespace Organograma.Apresentacao.Config
 
             Mapper.Initialize(cfg =>
             {
-                /* MunicipioNegocio -> MunicipioApresentacao   */
-                cfg.CreateMap<MunicipioModeloNegocio, MunicipioModeloApresentacao>()
-                 .ForMember(dest => dest.CodigoIbge, opt => opt.MapFrom(src => src.CodigoIbge))
-                 .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Nome))
-                 .ForMember(dest => dest.Uf, opt => opt.MapFrom(src => src.Uf));
+
+                #region Município
+
+                cfg.CreateMap<MunicipioModeloNegocio, MunicipioModeloGet>()
+                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.Value.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
+
+                cfg.CreateMap<MunicipioModeloPost, MunicipioModeloNegocio>();
+                               
+
+                #endregion
+
+                #region Tipo Organização
 
                 cfg.CreateMap<TipoOrganizacaoModeloNegocio, TipoOrganizacaoModelo>()
                 .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.ToString("dd/MM/yyyy")))
@@ -25,7 +34,13 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<TipoOrganizacaoModeloPut, TipoOrganizacaoModeloNegocio>();
                 cfg.CreateMap<TipoOrganizacaoModeloPost, TipoOrganizacaoModeloNegocio>();
 
+                #endregion
+
+                #region Negócio   
+
                 cfg.AddProfile<NegocioProfile>();
+
+                #endregion
             });
 
 

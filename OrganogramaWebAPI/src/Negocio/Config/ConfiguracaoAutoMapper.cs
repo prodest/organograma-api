@@ -20,8 +20,8 @@ namespace Organograma.Negocio.Config
     {
         public NegocioProfile()
         {
-            CreateMap<Dominio.Modelos.Municipio, MunicipioModeloNegocio>();
-
+            CreateMap<Municipio, MunicipioModeloNegocio>().ReverseMap();
+                       
             CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>();
         }
     }

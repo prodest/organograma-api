@@ -1,8 +1,5 @@
 ﻿using Organograma.Apresentacao.Base;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Base;
 using AutoMapper;

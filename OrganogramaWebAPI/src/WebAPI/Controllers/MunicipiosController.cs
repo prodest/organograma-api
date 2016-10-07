@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Apresentacao.Municipio.Base;
-
+using Apresentacao.Base;
+using System.Collections.Generic;
+using Organograma.Apresentacao.Modelos;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -17,22 +18,24 @@ namespace Organograma.WebAPI.Controllers
 
         // GET api/municipios
         [HttpGet]
-        public IActionResult Get()
+        public IEnumerable<MunicipioModeloGet> Listar()
         {
-            return new ObjectResult(service.ConsultarMunicipios());
+            return service.Listar();
         }
 
         // GET api/municipios/id
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("{int}")]
+        public MunicipioModeloGet Pesquisar(int id)
         {
-            return new ObjectResult(service.ConsultarMunicipioPorId(id));
+            return service.Pesquisar(id);
         }
 
         // POST api/municipios
         [HttpPost]
-        public void Post([FromBody]string value)
+        public MunicipioModeloGet Post([FromBody]MunicipioModeloPost municipioPost)
         {
+            service.Inserir(municipioPost);
+            return new MunicipioModeloGet();
         }
 
         // PUT api/municipios/id
