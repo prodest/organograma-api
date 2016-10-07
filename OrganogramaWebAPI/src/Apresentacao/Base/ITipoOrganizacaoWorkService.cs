@@ -13,7 +13,7 @@ namespace Organograma.Apresentacao.Base
 
         TipoOrganizacaoModelo Pesquisar(int id);
 
-        TipoOrganizacaoModelo Incluir(TipoOrganizacaoModeloPost tipoOrganizacao);
+        TipoOrganizacaoModelo Inserir(TipoOrganizacaoModeloPost tipoOrganizacao);
 
         void Alterar(int id, TipoOrganizacaoModeloPut tipoOrganizacao);
 

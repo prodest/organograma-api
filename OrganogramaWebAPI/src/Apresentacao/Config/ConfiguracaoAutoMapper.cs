@@ -12,7 +12,14 @@ namespace Organograma.Apresentacao.Config
 
             Mapper.Initialize(cfg =>
             {
-                #region Mapeamento e Municipio
+                #region Mapeamento de EsferaOrganizacao
+                cfg.CreateMap<EsferaOrganizacaoModeloNegocio, EsferaOrganizacaoModelo>();
+
+                cfg.CreateMap<EsferaOrganizacaoModelo, EsferaOrganizacaoModeloNegocio>();
+                cfg.CreateMap<EsferaOrganizacaoModeloPost, EsferaOrganizacaoModeloNegocio>();
+                #endregion
+
+                #region Mapeamento de Municipio
                 /* MunicipioNegocio -> MunicipioApresentacao   */
                 cfg.CreateMap<MunicipioModeloNegocio, MunicipioModeloApresentacao>()
                  .ForMember(dest => dest.CodigoIbge, opt => opt.MapFrom(src => src.CodigoIbge))

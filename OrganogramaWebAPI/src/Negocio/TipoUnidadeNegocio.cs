@@ -50,14 +50,14 @@ namespace Organograma.Negocio
         {
             validacao.IdExistente(id);
 
-            var tipoDocumental = repositorioTiposUnidades.Single(td => td.Id == id);
+            var tipoUnidade = repositorioTiposUnidades.Single(td => td.Id == id);
 
-            repositorioTiposUnidades.Remove(tipoDocumental);
+            repositorioTiposUnidades.Remove(tipoUnidade);
 
             unitOfWork.Save();
         }
 
-        public TipoUnidadeModeloNegocio Incluir(TipoUnidadeModeloNegocio tipoUnidade)
+        public TipoUnidadeModeloNegocio Inserir(TipoUnidadeModeloNegocio tipoUnidade)
         {
             validacao.TipoUnidadeValido(tipoUnidade);
 

@@ -20,8 +20,12 @@ namespace Organograma.Negocio.Config
     {
         public NegocioProfile()
         {
-            CreateMap<Dominio.Modelos.Municipio, MunicipioModeloNegocio>();
+            #region Mapeamento de EsferaOrganizacao
+            CreateMap<EsferaOrganizacao, EsferaOrganizacaoModeloNegocio>();
+            CreateMap<EsferaOrganizacaoModeloNegocio, EsferaOrganizacao>();
+            #endregion
 
+            CreateMap<Municipio, MunicipioModeloNegocio>();
             CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>();
             CreateMap<TipoUnidade, TipoUnidadeModeloNegocio>();
         }

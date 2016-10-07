@@ -28,11 +28,11 @@ namespace Organograma.Apresentacao
             tipoUnidadeNegocio.Excluir(id);
         }
 
-        public TipoUnidadeModelo Incluir(TipoUnidadeModeloPost tipoUnidade)
+        public TipoUnidadeModelo Inserir(TipoUnidadeModeloPost tipoUnidade)
         {
             TipoUnidadeModeloNegocio tUnidade = Mapper.Map<TipoUnidadeModeloPost, TipoUnidadeModeloNegocio>(tipoUnidade);
 
-            tUnidade = tipoUnidadeNegocio.Incluir(tUnidade);
+            tUnidade = tipoUnidadeNegocio.Inserir(tUnidade);
 
             return Mapper.Map<TipoUnidadeModeloNegocio, TipoUnidadeModelo>(tUnidade);
         }

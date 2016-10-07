@@ -12,7 +12,7 @@ namespace Organograma.Negocio.Base
 
         TipoOrganizacaoModeloNegocio Pesquisar(int id);
 
-        TipoOrganizacaoModeloNegocio Incluir(TipoOrganizacaoModeloNegocio tipoOrganizacao);
+        TipoOrganizacaoModeloNegocio Inserir(TipoOrganizacaoModeloNegocio tipoOrganizacao);
 
         void Alterar(int id, TipoOrganizacaoModeloNegocio tipoOrganizacao);
 

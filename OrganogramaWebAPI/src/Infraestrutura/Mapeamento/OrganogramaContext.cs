@@ -13,6 +13,20 @@ namespace Organograma.Infraestrutura.Mapeamento
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<EsferaOrganizacao>(entity =>
+            {
+                entity.HasIndex(e => e.Descricao)
+                    .HasName("UK_EsferaOrganizacaoDescricao")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasColumnType("varchar(100)");
+            });
+
             modelBuilder.Entity<Municipio>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -60,6 +74,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.InicioVigencia)
+                    .IsRequired()
                     .HasColumnName("inicioVigencia")
                     .HasColumnType("datetime");
 
@@ -86,6 +101,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.InicioVigencia)
+                    .IsRequired()
                     .HasColumnName("inicioVigencia")
                     .HasColumnType("datetime");
 

@@ -1,11 +1,9 @@
 ﻿using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Modelos;
-using Organograma.Negocio.Comum;
+using System;
+using System.Linq;
 
 namespace Organograma.Negocio.Validacao
 {
@@ -21,13 +19,13 @@ namespace Organograma.Negocio.Validacao
         internal void TipoOrganizacaoValido(TipoOrganizacaoModeloNegocio tipoOrganizacao)
         {
             if (tipoOrganizacao == null)
-                throw new TipoOrganizacaoException("Tipo de organização não pode ser nulo.");
+                throw new OrganogramaRequisicaoInvalidaException("Tipo de organização não pode ser nulo.");
         }
 
         internal void IdValido(int id)
         {
             if (id == default(int))
-                throw new TipoOrganizacaoException("Identificador do tipo de organização inválido.");
+                throw new OrganogramaRequisicaoInvalidaException("Identificador do tipo de organização inválido.");
         }
 
         internal void IdAlteracaoValido(int id, TipoOrganizacaoModeloNegocio tipoOrganizacao)
@@ -41,13 +39,13 @@ namespace Organograma.Negocio.Validacao
             var tipoOrganizacao = repositorioTiposOrganizacoes.SingleOrDefault(td => td.Id == id);
 
             if (tipoOrganizacao == null)
-                throw new TipoOrganizacaoException("Tipo de organização não encontrado.");
+                throw new OrganogramaRequisicaoInvalidaException("Tipo de organização não encontrado.");
         }
 
         internal void DescricaoValida(string descricao)
         {
             if (string.IsNullOrWhiteSpace(descricao))
-                throw new TipoOrganizacaoException("O campo descrição não pode ser vazio ou nulo.");
+                throw new OrganogramaRequisicaoInvalidaException("O campo descrição não pode ser vazio ou nulo.");
         }
 
         internal void DescricaoExistente(string descricao)
@@ -55,14 +53,7 @@ namespace Organograma.Negocio.Validacao
             var tipoOrganizacao = repositorioTiposOrganizacoes.SingleOrDefault(td => td.Descricao.ToUpper().Equals(descricao.ToUpper()));
 
             if (tipoOrganizacao != null)
-                throw new TipoOrganizacaoException("Já existe um tipo de organização com esta descrição.");
+                throw new OrganogramaRequisicaoInvalidaException("Já existe um tipo de organização com esta descrição.");
         }
-    }
-
-    public class TipoOrganizacaoException : OrganogramaException
-    {
-        public TipoOrganizacaoException(string mensagem) : base(mensagem) { }
-
-        public TipoOrganizacaoException(string mensagem, Exception ex) : base(mensagem, ex) { }
     }
 }

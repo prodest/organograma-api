@@ -13,7 +13,7 @@ namespace Organograma.Apresentacao.Base
 
         TipoUnidadeModelo Pesquisar(int id);
 
-        TipoUnidadeModelo Incluir(TipoUnidadeModeloPost tipoUnidade);
+        TipoUnidadeModelo Inserir(TipoUnidadeModeloPost tipoUnidade);
 
         void Alterar(int id, TipoUnidadeModeloPut tipoUnidade);
 

@@ -40,7 +40,7 @@ namespace Organograma.WebAPI.Controllers
         [HttpPost]
         public TipoOrganizacaoModelo Post([FromBody]TipoOrganizacaoModeloPost tipoOrganizacao)
         {
-            return service.Incluir(tipoOrganizacao);
+            return service.Inserir(tipoOrganizacao);
         }
 
         // PUT api/tipoorganizacao/5
