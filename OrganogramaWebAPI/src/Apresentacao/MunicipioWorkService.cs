@@ -36,5 +36,16 @@ namespace Apresentacao
             return Mapper.Map<MunicipioModeloNegocio, MunicipioModeloGet>(municipioNegocio.Inserir(municipioModeloNegocio));
            
         }
+
+        public void Alterar(int id, MunicipioModeloPut municipio)
+        {
+            municipioNegocio.Alterar(id, Mapper.Map<MunicipioModeloPut, MunicipioModeloNegocio>(municipio));
+        }
+
+        public void Excluir (int id)
+        {
+            municipioNegocio.Excluir(id);
+        }
+
     }
 }

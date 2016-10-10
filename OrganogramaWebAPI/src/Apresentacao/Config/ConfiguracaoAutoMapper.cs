@@ -20,22 +20,15 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<EsferaOrganizacaoModeloPost, EsferaOrganizacaoModeloNegocio>();
                 #endregion
 
-                #region Mapeamento de Municipio
-                /* MunicipioNegocio -> MunicipioApresentacao   */
-                cfg.CreateMap<MunicipioModeloNegocio, MunicipioModeloApresentacao>()
-                 .ForMember(dest => dest.CodigoIbge, opt => opt.MapFrom(src => src.CodigoIbge))
-                 .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Nome))
-                 .ForMember(dest => dest.Uf, opt => opt.MapFrom(src => src.Uf));
-                #endregion
-
                 #region Município
 
                 cfg.CreateMap<MunicipioModeloNegocio, MunicipioModeloGet>()
-                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.Value.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.HasValue ? src.InicioVigencia.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
 
                 cfg.CreateMap<MunicipioModeloPost, MunicipioModeloNegocio>();
-                               
+                cfg.CreateMap<MunicipioModeloPut, MunicipioModeloNegocio>();
+
 
                 #endregion
 

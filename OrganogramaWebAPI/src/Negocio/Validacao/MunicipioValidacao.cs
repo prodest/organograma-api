@@ -1,6 +1,6 @@
 ﻿using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
-using Organograma.Negocio.Comum;
+using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Modelos;
 using System;
 using System.Collections.Generic;
@@ -18,39 +18,75 @@ namespace Organograma.Negocio.Validacao
             this.repositorioMunicipios = repositorioMunicipios;
         }
 
+        internal void IdValido(int id)
+        {
+            if (id == default(int))
+                throw new OrganogramaRequisicaoInvalidaException("Identificador do município inválido.");
+        }
+
         internal void MunicipioValido (MunicipioModeloNegocio municipio)
         {
-            if(municipio.CodigoIbge == 0 || string.IsNullOrEmpty(municipio.Nome) || string.IsNullOrEmpty(municipio.Uf)) {
-                throw new MunicipioException("Dados inválidos: Código IBGE, nome e uf devem estar preenchidos.");
+            if(municipio.CodigoIbge == default(int) || string.IsNullOrEmpty(municipio.Nome) || string.IsNullOrEmpty(municipio.Uf)) {
+                throw new OrganogramaRequisicaoInvalidaException("Dados inválidos: Código IBGE, nome e uf devem estar preenchidos.");
             }
         }
 
         internal void CodigoIbgeExistente (MunicipioModeloNegocio municipio)
         {
-            var resultado = this.repositorioMunicipios.Where(q => q.CodigoIbge == municipio.CodigoIbge).SingleOrDefault();
-
-            if(resultado != null)
+            //O id do registro a ser alterado deve ser desconsiderado (na inserção, o id é 0).
+            //Em razão de erro de integridade do banco de dados (codigo IBGE deve ser único), o método ToList() está sendo utilizado no lugar de SingleOrDefault();
+            var resultado = repositorioMunicipios.Where(q => q.CodigoIbge == municipio.CodigoIbge).Where(q => q.Id != municipio.Id).ToList();
+                       
+            if (resultado.Count != 0)
             {
-                throw new MunicipioException("Já existe um município cadastrado com código IBGE informado.");
+                throw new OrganogramaRequisicaoInvalidaException("Já existe um município cadastrado com código IBGE informado.");
             }
         }
 
-        internal void NomeUfExistente(MunicipioModeloNegocio municipio)
+        internal void MunicipioNaoExistente(Municipio municipioDominio)
         {
-            var resultado = this.repositorioMunicipios.Where(q => q.Nome == municipio.Nome).Where(q => q.Uf == municipio.Uf).SingleOrDefault();
+            if (municipioDominio == null) {
+                throw new OrganogramaNaoEncontradoException("Muicípio não encontrado.");
+            }
+
+        }
+
+        internal void NomeUfExistente(MunicipioModeloNegocio municipio, int idDesconsiderado = 0)
+        {
+            //O id do registro a ser alterado deve ser desconsiderado (na inserção, o id é 0).
+            var resultado = repositorioMunicipios.Where(q => q.Nome.ToUpper() == municipio.Nome.ToUpper()).Where(q => q.Uf.ToUpper() == municipio.Uf.ToUpper()).Where(q => q.Id != municipio.Id).SingleOrDefault();
 
             if (resultado != null)
             {
-                throw new MunicipioException("Já existe um município cadastrado com o Nome e Uf informados");
+                throw new OrganogramaRequisicaoInvalidaException("Já existe um município cadastrado com o Nome e Uf informados");
             }
+        }
+
+        internal void PreenchimentoCompleto(MunicipioModeloNegocio municipioNegocio)
+        {
+
+            if(municipioNegocio.CodigoIbge == 0 || string.IsNullOrEmpty(municipioNegocio.Nome) || string.IsNullOrEmpty(municipioNegocio.Uf)) {
+                throw new OrganogramaRequisicaoInvalidaException("Todos os campos do município devem ser preenchidos");
+            }
+
+         }
+
+        internal void MunicipioNaoExistente(List<Municipio> municipios)
+        {
+            if (municipios.Count <= 0 || municipios == null)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Não há municípios cadastrados.");
+            }
+        }
+
+        
+
+        internal void IdAlteracaoValido(int id, MunicipioModeloNegocio municipioNegocio)
+        {
+            if (id != municipioNegocio.Id)
+                throw new Exception("Identificadores do municipio não podem ser diferentes.");
         }
 
     }
 
-    public class MunicipioException : OrganogramaException
-    {
-        public MunicipioException(string mensagem) : base(mensagem) { }
-
-        public MunicipioException(string mensagem, Exception ex) : base(mensagem, ex) { }
-    }
 }

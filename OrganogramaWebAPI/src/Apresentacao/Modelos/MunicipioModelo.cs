@@ -14,7 +14,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class MunicipioModeloPut : MunicipioModeloPost
     {
-        public int id { get; set; }
+        public int Id { get; set; }
     }
 
     public class MunicipioModeloDelete : MunicipioModeloPut

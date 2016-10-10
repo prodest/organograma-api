@@ -8,5 +8,8 @@ namespace Apresentacao.Base
         List<MunicipioModeloGet> Listar();
         MunicipioModeloGet Pesquisar(int id);
         MunicipioModeloGet Inserir(MunicipioModeloPost municipioPost);
+        void Alterar(int id, MunicipioModeloPut municipioPut);
+        void Excluir(int id);
     }
+
 }

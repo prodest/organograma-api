@@ -8,5 +8,9 @@ namespace Organograma.Negocio.Base
         List<MunicipioModeloNegocio> Listar();
         MunicipioModeloNegocio Pesquisar(int id);
         MunicipioModeloNegocio Inserir(MunicipioModeloNegocio municipioNegocio);
+
+        void Alterar(int id, MunicipioModeloNegocio municipioNegocio);
+
+        void Excluir (int id);
     }
 }

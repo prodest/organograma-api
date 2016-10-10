@@ -18,8 +18,8 @@ namespace Organograma.Negocio
         
         public MunicipioNegocio (IOrganogramaRepositorios repositorios)
         {
-            this.unitOfWork = repositorios.UnitOfWork;
-            this.repositorioMunicipios = repositorios.Municipios;
+            unitOfWork = repositorios.UnitOfWork;
+            repositorioMunicipios = repositorios.Municipios;
             validacao = new MunicipioValidacao(repositorioMunicipios);
         }
 
@@ -28,9 +28,10 @@ namespace Organograma.Negocio
         {
             Municipio municipioDominio = new Municipio();
             MunicipioModeloNegocio municipioNegocio = new MunicipioModeloNegocio();
+                        
+            municipioDominio = repositorioMunicipios.Where(q => q.Id.Equals(id)).SingleOrDefault();
 
-            //Obtem Município com o codigo Ibge informado desde que esteja vigente (data de fim de vigencia nula)
-            municipioDominio = repositorioMunicipios.Where(q => q.CodigoIbge.Equals(id)).SingleOrDefault();
+            validacao.MunicipioNaoExistente(municipioDominio);
 
             municipioNegocio = Mapper.Map<Municipio, MunicipioModeloNegocio>(municipioDominio);
 
@@ -43,6 +44,7 @@ namespace Organograma.Negocio
             List<MunicipioModeloNegocio> municipiosNegocio = new List<MunicipioModeloNegocio>();
 
             municipiosDominio = repositorioMunicipios.ToList();
+            validacao.MunicipioNaoExistente(municipiosDominio);
 
             municipiosNegocio = Mapper.Map<List<Municipio>, List<MunicipioModeloNegocio>>(municipiosDominio);
 
@@ -55,20 +57,58 @@ namespace Organograma.Negocio
             validacao.CodigoIbgeExistente(municipioNegocio);
             validacao.NomeUfExistente(municipioNegocio);
 
-            repositorioMunicipios.Add(PreparaMunicipioParaInsercao(municipioNegocio));
+            Municipio municipio = PreparaMunicipioParaInsercao(municipioNegocio);
+
+            repositorioMunicipios.Add(municipio);
             unitOfWork.Save();
 
-            return municipioNegocio;
+            return Mapper.Map<Municipio, MunicipioModeloNegocio>(municipio);
         }
 
+        public void Alterar (int id, MunicipioModeloNegocio municipioNegocio)
+        {
+            validacao.IdValido(municipioNegocio.Id);
+            validacao.IdAlteracaoValido(id, municipioNegocio);
+            validacao.PreenchimentoCompleto(municipioNegocio);
+            validacao.NomeUfExistente(municipioNegocio);
+            validacao.CodigoIbgeExistente(municipioNegocio);
+            validacao.PreenchimentoCompleto(municipioNegocio);
 
-        public Municipio PreparaMunicipioParaInsercao (MunicipioModeloNegocio municipioNegocio)
+            Municipio municipioDominio = repositorioMunicipios.Where(q => q.Id == municipioNegocio.Id).Single();
+
+            validacao.MunicipioNaoExistente(municipioDominio);
+
+            municipioNegocio.InicioVigencia = municipioDominio.InicioVigencia;            
+            municipioDominio = Mapper.Map<MunicipioModeloNegocio, Municipio>(municipioNegocio, municipioDominio);
+            unitOfWork.Save();
+
+
+        }
+
+        public void Excluir (int id)
+        {
+            validacao.IdValido(id);
+
+            Municipio municipio = repositorioMunicipios.Where(q => q.Id == id).SingleOrDefault();
+            validacao.MunicipioNaoExistente(municipio);
+
+            repositorioMunicipios.Remove(municipio);
+
+            unitOfWork.Save();
+        }
+
+        private Municipio PreparaMunicipioParaInsercao (MunicipioModeloNegocio municipioNegocio)
         {
             Municipio municipio = new Municipio();
+            municipioNegocio.InicioVigencia = DateTime.Now;
             municipio = Mapper.Map<MunicipioModeloNegocio, Municipio>(municipioNegocio);
-            municipio.InicioVigencia = DateTime.Now;
-
+            
             return municipio;
+
+        }
+
+        private void Altera ()
+        {
 
         }
 
