@@ -25,8 +25,9 @@ namespace Organograma.Negocio.Config
             CreateMap<EsferaOrganizacaoModeloNegocio, EsferaOrganizacao>();
             #endregion
 
-            CreateMap<Municipio, MunicipioModeloNegocio>();
             CreateMap<Municipio, MunicipioModeloNegocio>().ReverseMap();
+            CreateMap<Poder, PoderModeloNegocio>().ReverseMap();
+            
                        
             CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>();
             CreateMap<TipoUnidade, TipoUnidadeModeloNegocio>();

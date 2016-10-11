@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Apresentacao.Base;
+using System.Collections.Generic;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Infraestrutura.Comum;
 using System;
@@ -9,17 +10,17 @@ using Microsoft.AspNetCore.Authorization;
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class MunicipiosController : Controller
+    public class PoderController : Controller
     {
 
-        private IMunicipioWorkService service;
+        private IPoderWorkService service;
 
-        public MunicipiosController(IMunicipioWorkService service)
+        public PoderController(IPoderWorkService service)
         {
             this.service = service;
         }
 
-        // GET api/municipios
+        // GET api/poder
         [HttpGet]
         public IActionResult Listar()
         {
@@ -39,7 +40,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/municipios/id
+        // GET api/poder/id
         [HttpGet("{id}")]
         public IActionResult Pesquisar(int id)
         {
@@ -60,14 +61,14 @@ namespace Organograma.WebAPI.Controllers
 
         }
 
-        // POST api/municipios
+        // POST api/poder
         [HttpPost]
         [Authorize]
-        public IActionResult Post([FromBody]MunicipioModeloPost municipioPost)
+        public IActionResult Post([FromBody]PoderModeloPost poderPost)
         {
             try
             {
-               return new ObjectResult(service.Inserir(municipioPost));
+               return new ObjectResult(service.Inserir(poderPost));
             }
             catch(OrganogramaRequisicaoInvalidaException e)
             {
@@ -75,19 +76,20 @@ namespace Organograma.WebAPI.Controllers
             }
             catch (Exception e)
             {
+
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
             
         }
 
-        // PUT api/municipios/id
+        // PUT api/poder/id
         [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Alterar(int id, [FromBody]MunicipioModeloPut municipioPut)
+        public IActionResult Alterar(int id, [FromBody]PoderModeloPut poderPut)
         {
             try
             {
-                service.Alterar(id, municipioPut);
+                service.Alterar(id, poderPut);
                 return Ok();
             }
             catch (OrganogramaNaoEncontradoException e)

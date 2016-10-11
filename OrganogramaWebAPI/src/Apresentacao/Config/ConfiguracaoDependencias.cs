@@ -17,6 +17,7 @@ namespace Organograma.Apresentacao.Config
             dependencias.Add(typeof(IMunicipioNegocio), typeof(MunicipioNegocio));
             dependencias.Add(typeof(ITipoOrganizacaoNegocio), typeof(TipoOrganizacaoNegocio));
             dependencias.Add(typeof(ITipoUnidadeNegocio), typeof(TipoUnidadeNegocio));
+            dependencias.Add(typeof(IPoderNegocio), typeof(PoderNegocio));
 
             return dependencias;
         }

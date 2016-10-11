@@ -19,6 +19,7 @@ namespace Organograma.WebAPI.Config
             dependencias.Add(typeof(IMunicipioWorkService), typeof(MunicipioWorkService));
             dependencias.Add(typeof(ITipoOrganizacaoWorkService), typeof(TipoOrganizacaoWorkService));
             dependencias.Add(typeof(ITipoUnidadeWorkService), typeof(TipoUnidadeWorkService));
+            dependencias.Add(typeof(IPoderWorkService), typeof(PoderWorkService));
 
             return dependencias;
         }

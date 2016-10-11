@@ -26,7 +26,6 @@ namespace Apresentacao
         public List<MunicipioModeloGet> Listar()
         {
             return Mapper.Map<List<MunicipioModeloNegocio>, List<MunicipioModeloGet>>(municipioNegocio.Listar());
-
         }
 
         public MunicipioModeloGet Inserir(MunicipioModeloPost municipioPost)

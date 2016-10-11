@@ -109,10 +109,41 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("observacaoFimVigencia")
                     .HasColumnType("varchar(100)");
             });
+
+            modelBuilder.Entity<Poder>(entity =>
+            {
+                entity.HasIndex(e => e.Descricao)
+                    .HasName("UK_EsferaOrganizacaoDescricao")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasColumnType("varchar(100)");
+            });
+
+            modelBuilder.Entity<Poder>(entity =>
+            {
+                entity.HasIndex(e => e.Descricao)
+                    .HasName("UQ__PoderDescricao")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasColumnType("varchar(100)");
+            });
+
+
         }
         public virtual DbSet<Municipio> Municipio { get; set; }
         public virtual DbSet<TipoOrganizacao> TipoOrganizacao { get; set; }
         public virtual DbSet<TipoUnidade> TipoUnidade { get; set; }
+        public virtual DbSet<Poder> Poder { get; set; }
 
     }
 }

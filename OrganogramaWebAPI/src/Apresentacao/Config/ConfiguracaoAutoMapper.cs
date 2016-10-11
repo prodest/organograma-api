@@ -54,6 +54,14 @@ namespace Organograma.Apresentacao.Config
 
                 #endregion
 
+                #region Poder
+
+                cfg.CreateMap<PoderModeloPut, PoderModeloNegocio>();
+                cfg.CreateMap<PoderModeloPost, PoderModeloNegocio>();
+                cfg.CreateMap<PoderModeloNegocio, PoderModeloGet>();
+                
+                #endregion
+
                 #region Negócio   
 
                 cfg.AddProfile<NegocioProfile>();

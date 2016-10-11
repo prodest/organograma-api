@@ -1,8 +1,5 @@
 ﻿using Organograma.Dominio.Modelos;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Organograma.Dominio.Base
 {
@@ -13,6 +10,8 @@ namespace Organograma.Dominio.Base
         IRepositorioGenerico<Municipio> Municipios { get; }
         IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; }
         IRepositorioGenerico<TipoUnidade> TiposUnidades { get; }
+        IRepositorioGenerico<Poder> Poderes { get; }
+
 
     }
 }

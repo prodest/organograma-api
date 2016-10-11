@@ -106,12 +106,7 @@ namespace Organograma.Negocio
             return municipio;
 
         }
-
-        private void Altera ()
-        {
-
-        }
-
+               
 
     }
 }
