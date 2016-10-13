@@ -29,9 +29,17 @@ namespace Organograma.Infraestrutura.Mapeamento
 
             modelBuilder.Entity<Municipio>(entity =>
             {
+                entity.HasIndex(e => e.CodigoIbge)
+                    .HasName("UQ__codigoIbge")
+                    .IsUnique();
+
+                entity.HasIndex(e => new { e.Nome, e.Uf })
+                    .HasName("UQ_nome_uf")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.CodigoIbge).HasColumnName("codigoIBGE");
+                entity.Property(e => e.CodigoIbge).HasColumnName("codigoIbge");
 
                 entity.Property(e => e.FimVigencia)
                     .HasColumnName("fimVigencia")
@@ -48,7 +56,7 @@ namespace Organograma.Infraestrutura.Mapeamento
 
                 entity.Property(e => e.ObservacaoFimVigencia)
                     .HasColumnName("observacaoFimVigencia")
-                    .HasColumnType("varchar(100)");
+                    .HasColumnType("varchar(255)");
 
                 entity.Property(e => e.Uf)
                     .IsRequired()
