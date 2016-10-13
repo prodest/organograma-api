@@ -398,7 +398,5 @@ namespace Organograma.Infraestrutura.Mapeamento
         public virtual DbSet<SiteOrganizacao> SiteOrganizacao { get; set; }
         public virtual DbSet<TipoOrganizacao> TipoOrganizacao { get; set; }
         public virtual DbSet<TipoUnidade> TipoUnidade { get; set; }
-        public virtual DbSet<Poder> Poder { get; set; }
-
     }
 }
