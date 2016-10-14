@@ -21,7 +21,8 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("nome")
                     .HasColumnType("varchar(255)");
 
-                entity.Property(e => e.Telefone).HasColumnName("telefone");
+                entity.Property(e => e.Telefone).HasColumnName("telefone")
+                    .HasColumnType("varchar(15)");
 
                 entity.Property(e => e.TipoTelefone)
                     .HasColumnName("tipoTelefone")
@@ -97,7 +98,9 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("bairro")
                     .HasColumnType("varchar(50)");
 
-                entity.Property(e => e.Cep).HasColumnName("cep");
+                entity.Property(e => e.Cep).HasColumnName("cep")
+                    .HasColumnType("varchar(8)")
+                    .IsRequired();
 
                 entity.Property(e => e.Complemento)
                     .HasColumnName("complemento")
@@ -110,7 +113,8 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("logradouro")
                     .HasColumnType("varchar(1000)");
 
-                entity.Property(e => e.Numero).HasColumnName("numero");
+                entity.Property(e => e.Numero).HasColumnName("numero")
+                    .HasColumnType("varchar(10)");
 
                 entity.HasOne(d => d.IdMunicipioNavigation)
                     .WithMany(p => p.Endereco)
@@ -353,36 +357,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("observacaoFimVigencia")
                     .HasColumnType("varchar(100)");
             });
-
-            modelBuilder.Entity<Poder>(entity =>
-            {
-                entity.HasIndex(e => e.Descricao)
-                    .HasName("UK_EsferaOrganizacaoDescricao")
-                    .IsUnique();
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Descricao)
-                    .IsRequired()
-                    .HasColumnName("descricao")
-                    .HasColumnType("varchar(100)");
-            });
-
-            modelBuilder.Entity<Poder>(entity =>
-            {
-                entity.HasIndex(e => e.Descricao)
-                    .HasName("UQ__PoderDescricao")
-                    .IsUnique();
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Descricao)
-                    .IsRequired()
-                    .HasColumnName("descricao")
-                    .HasColumnType("varchar(100)");
-            });
-
-
+            
         }
 
         public virtual DbSet<Contato> Contato { get; set; }

@@ -27,8 +27,12 @@ namespace Organograma.Negocio.Config
 
             CreateMap<Municipio, MunicipioModeloNegocio>().ReverseMap();
             CreateMap<Poder, PoderModeloNegocio>().ReverseMap();
-            
-                       
+
+            CreateMap<EmailModeloNegocio, Email>().ReverseMap();
+            CreateMap<EnderecoModeloNegocio, Endereco>().ReverseMap();
+            CreateMap<SiteModeloNegocio, Site>().ReverseMap();
+            CreateMap<ContatoModeloNegocio, Contato>().ReverseMap();
+
             CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>();
             CreateMap<TipoUnidade, TipoUnidadeModeloNegocio>();
         }
