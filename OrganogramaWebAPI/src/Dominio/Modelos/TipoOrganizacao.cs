@@ -7,7 +7,7 @@ namespace Organograma.Dominio.Modelos
     {
         public TipoOrganizacao()
         {
-            Organizacao = new HashSet<Organizacao>();
+            Organizacoes = new HashSet<Organizacao>();
         }
 
         public int Id { get; set; }
@@ -16,6 +16,6 @@ namespace Organograma.Dominio.Modelos
         public DateTime? FimVigencia { get; set; }
         public string ObservacaoFimVigencia { get; set; }
 
-        public virtual ICollection<Organizacao> Organizacao { get; set; }
+        public virtual ICollection<Organizacao> Organizacoes { get; set; }
     }
 }

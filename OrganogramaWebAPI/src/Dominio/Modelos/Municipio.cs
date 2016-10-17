@@ -7,7 +7,7 @@ namespace Organograma.Dominio.Modelos
     {
         public Municipio()
         {
-            Endereco = new HashSet<Endereco>();
+            Enderecos = new HashSet<Endereco>();
         }
 
         public int Id { get; set; }
@@ -18,6 +18,6 @@ namespace Organograma.Dominio.Modelos
         public DateTime? FimVigencia { get; set; }
         public string ObservacaoFimVigencia { get; set; }
 
-        public virtual ICollection<Endereco> Endereco { get; set; }
+        public virtual ICollection<Endereco> Enderecos { get; set; }
     }
 }

@@ -21,7 +21,8 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("nome")
                     .HasColumnType("varchar(255)");
 
-                entity.Property(e => e.Telefone).HasColumnName("telefone")
+                entity.Property(e => e.Telefone)
+                    .HasColumnName("telefone")
                     .HasColumnType("varchar(15)");
 
                 entity.Property(e => e.TipoTelefone)
@@ -41,17 +42,44 @@ namespace Organograma.Infraestrutura.Mapeamento
 
                 entity.Property(e => e.IdOrganizacao).HasColumnName("idOrganizacao");
 
-                entity.HasOne(d => d.IdContatoNavigation)
-                    .WithMany(p => p.ContatoOrganizacao)
+                entity.HasOne(d => d.Contato)
+                    .WithMany(p => p.ContatosOrganizacao)
                     .HasForeignKey(d => d.IdContato)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_ContatoOrganizacao_Contato");
 
-                entity.HasOne(d => d.IdOrganizacaoNavigation)
-                    .WithMany(p => p.ContatoOrganizacao)
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.ContatosOrganizacao)
                     .HasForeignKey(d => d.IdOrganizacao)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_ContatoOrganizacao_Organizacao");
+            });
+
+            modelBuilder.Entity<ContatoUnidade>(entity =>
+            {
+                entity.HasIndex(e => new { e.IdContato, e.IdUnidade })
+                    .HasName("UK_ContatoUnidade_Contato_Unidade")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.IdContato).HasColumnName("idContato");
+
+                entity.Property(e => e.IdUnidade).HasColumnName("idUnidade");
+
+                entity.HasOne(d => d.Contato)
+                    .WithMany(p => p.ContatosUnidade)
+                    .HasForeignKey(d => d.IdContato)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_ContatoUnidade_Contato");
+
+                entity.HasOne(d => d.Unidade)
+                    .WithMany(p => p.ContatosUnidade)
+                    .HasForeignKey(d => d.IdUnidade)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_ContatoUnidade_Unidade");
             });
 
             modelBuilder.Entity<Email>(entity =>
@@ -76,17 +104,44 @@ namespace Organograma.Infraestrutura.Mapeamento
 
                 entity.Property(e => e.IdOrganizacao).HasColumnName("idOrganizacao");
 
-                entity.HasOne(d => d.IdEmailNavigation)
-                    .WithMany(p => p.EmailOrganizacao)
+                entity.HasOne(d => d.Email)
+                    .WithMany(p => p.EmailsOrganizacao)
                     .HasForeignKey(d => d.IdEmail)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_EmailOrganizacao_Email");
 
-                entity.HasOne(d => d.IdOrganizacaoNavigation)
-                    .WithMany(p => p.EmailOrganizacao)
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.EmailsOrganizacao)
                     .HasForeignKey(d => d.IdOrganizacao)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_EmailOrganizacao_Organizacao");
+            });
+
+            modelBuilder.Entity<EmailUnidade>(entity =>
+            {
+                entity.HasIndex(e => new { e.IdEmail, e.IdUnidade })
+                    .HasName("UK_EmailUnidade_Email_Unidade")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.IdEmail).HasColumnName("idEmail");
+
+                entity.Property(e => e.IdUnidade).HasColumnName("idUnidade");
+
+                entity.HasOne(d => d.Email)
+                    .WithMany(p => p.EmailsUnidade)
+                    .HasForeignKey(d => d.IdEmail)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_EmailUnidade_Email");
+
+                entity.HasOne(d => d.Unidade)
+                    .WithMany(p => p.EmailsUnidade)
+                    .HasForeignKey(d => d.IdUnidade)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_EmailUnidade_Unidade");
             });
 
             modelBuilder.Entity<Endereco>(entity =>
@@ -98,9 +153,10 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("bairro")
                     .HasColumnType("varchar(50)");
 
-                entity.Property(e => e.Cep).HasColumnName("cep")
-                    .HasColumnType("varchar(8)")
-                    .IsRequired();
+                entity.Property(e => e.Cep)
+                    .IsRequired()
+                    .HasColumnName("cep")
+                    .HasColumnType("varchar(8)");
 
                 entity.Property(e => e.Complemento)
                     .HasColumnName("complemento")
@@ -113,11 +169,12 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("logradouro")
                     .HasColumnType("varchar(1000)");
 
-                entity.Property(e => e.Numero).HasColumnName("numero")
+                entity.Property(e => e.Numero)
+                    .HasColumnName("numero")
                     .HasColumnType("varchar(10)");
 
-                entity.HasOne(d => d.IdMunicipioNavigation)
-                    .WithMany(p => p.Endereco)
+                entity.HasOne(d => d.Municipio)
+                    .WithMany(p => p.Enderecos)
                     .HasForeignKey(d => d.IdMunicipio)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Endereco_Municipio");
@@ -226,32 +283,32 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("sigla")
                     .HasColumnType("varchar(10)");
 
-                entity.HasOne(d => d.IdEnderecoNavigation)
-                    .WithMany(p => p.Organizacao)
+                entity.HasOne(d => d.Endereco)
+                    .WithMany(p => p.Organizacoes)
                     .HasForeignKey(d => d.IdEndereco)
                     .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("fk_Organizacao_Endereco");
+                    .HasConstraintName("FK_Organizacao_Endereco");
 
-                entity.HasOne(d => d.IdEsferaNavigation)
-                    .WithMany(p => p.Organizacao)
+                entity.HasOne(d => d.Esfera)
+                    .WithMany(p => p.Organizacoes)
                     .HasForeignKey(d => d.IdEsfera)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Organizacao_EsferaOrganizacao");
 
-                entity.HasOne(d => d.IdOrganizacaoPaiNavigation)
-                    .WithMany(p => p.InverseIdOrganizacaoPaiNavigation)
+                entity.HasOne(d => d.OrganizacaoPai)
+                    .WithMany(p => p.OrganizacoesFilhas)
                     .HasForeignKey(d => d.IdOrganizacaoPai)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Organizacao_OrganizacaoPai");
 
-                entity.HasOne(d => d.IdPoderNavigation)
-                    .WithMany(p => p.Organizacao)
+                entity.HasOne(d => d.Poder)
+                    .WithMany(p => p.Organizacoes)
                     .HasForeignKey(d => d.IdPoder)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Organizacao_Poder");
 
-                entity.HasOne(d => d.IdTipoOrganizacaoNavigation)
-                    .WithMany(p => p.Organizacao)
+                entity.HasOne(d => d.TipoOrganizacao)
+                    .WithMany(p => p.Organizacoes)
                     .HasForeignKey(d => d.IdTipoOrganizacao)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Organizacao_TipoOrganizacao");
@@ -293,17 +350,44 @@ namespace Organograma.Infraestrutura.Mapeamento
 
                 entity.Property(e => e.IdSite).HasColumnName("idSite");
 
-                entity.HasOne(d => d.IdOrganizacaoNavigation)
-                    .WithMany(p => p.SiteOrganizacao)
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.SitesOrganizacao)
                     .HasForeignKey(d => d.IdOrganizacao)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_SiteOrganizacao_Organizacao");
 
-                entity.HasOne(d => d.IdSiteNavigation)
-                    .WithMany(p => p.SiteOrganizacao)
+                entity.HasOne(d => d.Site)
+                    .WithMany(p => p.SitesOrganizacao)
                     .HasForeignKey(d => d.IdSite)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_SiteOrganizacao_Site");
+            });
+
+            modelBuilder.Entity<SiteUnidade>(entity =>
+            {
+                entity.HasIndex(e => new { e.IdSite, e.IdUnidade })
+                    .HasName("UK_SiteUnidade_Site_Unidade")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.IdSite).HasColumnName("idSite");
+
+                entity.Property(e => e.IdUnidade).HasColumnName("idUnidade");
+
+                entity.HasOne(d => d.Site)
+                    .WithMany(p => p.SitesUnidade)
+                    .HasForeignKey(d => d.IdSite)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_SiteUnidade_Site");
+
+                entity.HasOne(d => d.Unidade)
+                    .WithMany(p => p.SitesUnidade)
+                    .HasForeignKey(d => d.IdUnidade)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_SiteUnidade_Unidade");
             });
 
             modelBuilder.Entity<TipoOrganizacao>(entity =>
@@ -357,13 +441,70 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("observacaoFimVigencia")
                     .HasColumnType("varchar(100)");
             });
-            
+
+            modelBuilder.Entity<Unidade>(entity =>
+            {
+                entity.HasIndex(e => new { e.IdOrganizacao, e.Nome })
+                    .HasName("UK_UnidadeNome")
+                    .IsUnique();
+
+                entity.HasIndex(e => new { e.IdOrganizacao, e.Sigla })
+                    .HasName("UK_UnidadeSigla")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.IdEndereco).HasColumnName("idEndereco");
+
+                entity.Property(e => e.IdOrganizacao).HasColumnName("idOrganizacao");
+
+                entity.Property(e => e.IdTipoUnidade).HasColumnName("idTipoUnidade");
+
+                entity.Property(e => e.IdUnidadePai).HasColumnName("idUnidadePai");
+
+                entity.Property(e => e.Nome)
+                    .IsRequired()
+                    .HasColumnName("nome")
+                    .HasColumnType("varchar(100)");
+
+                entity.Property(e => e.Sigla)
+                    .IsRequired()
+                    .HasColumnName("sigla")
+                    .HasColumnType("varchar(100)");
+
+                entity.HasOne(d => d.Endereco)
+                    .WithMany(p => p.Unidades)
+                    .HasForeignKey(d => d.IdEndereco)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Unidade_Endereco");
+
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.Unidades)
+                    .HasForeignKey(d => d.IdOrganizacao)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Unidade_Organizacao");
+
+                entity.HasOne(d => d.TipoUnidade)
+                    .WithMany(p => p.Unidades)
+                    .HasForeignKey(d => d.IdTipoUnidade)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Unidade_TipoUnidade");
+
+                entity.HasOne(d => d.UnidadePai)
+                    .WithMany(p => p.UnidadesFilhas)
+                    .HasForeignKey(d => d.IdUnidadePai)
+                    .HasConstraintName("FK_Unidade_UnidadePai");
+            });
         }
 
         public virtual DbSet<Contato> Contato { get; set; }
         public virtual DbSet<ContatoOrganizacao> ContatoOrganizacao { get; set; }
+        public virtual DbSet<ContatoUnidade> ContatoUnidade { get; set; }
         public virtual DbSet<Email> Email { get; set; }
         public virtual DbSet<EmailOrganizacao> EmailOrganizacao { get; set; }
+        public virtual DbSet<EmailUnidade> EmailUnidade { get; set; }
         public virtual DbSet<Endereco> Endereco { get; set; }
         public virtual DbSet<EsferaOrganizacao> EsferaOrganizacao { get; set; }
         public virtual DbSet<Municipio> Municipio { get; set; }
@@ -371,7 +512,9 @@ namespace Organograma.Infraestrutura.Mapeamento
         public virtual DbSet<Poder> Poder { get; set; }
         public virtual DbSet<Site> Site { get; set; }
         public virtual DbSet<SiteOrganizacao> SiteOrganizacao { get; set; }
+        public virtual DbSet<SiteUnidade> SiteUnidade { get; set; }
         public virtual DbSet<TipoOrganizacao> TipoOrganizacao { get; set; }
         public virtual DbSet<TipoUnidade> TipoUnidade { get; set; }
+        public virtual DbSet<Unidade> Unidade { get; set; }
     }
 }

@@ -7,7 +7,8 @@ namespace Organograma.Dominio.Modelos
     {
         public Contato()
         {
-            ContatoOrganizacao = new HashSet<ContatoOrganizacao>();
+            ContatosOrganizacao = new HashSet<ContatoOrganizacao>();
+            ContatosUnidade = new HashSet<ContatoUnidade>();
         }
 
         public int Id { get; set; }
@@ -15,6 +16,7 @@ namespace Organograma.Dominio.Modelos
         public byte TipoTelefone { get; set; }
         public string Nome { get; set; }
 
-        public virtual ICollection<ContatoOrganizacao> ContatoOrganizacao { get; set; }
+        public virtual ICollection<ContatoOrganizacao> ContatosOrganizacao { get; set; }
+        public virtual ICollection<ContatoUnidade> ContatosUnidade { get; set; }
     }
 }

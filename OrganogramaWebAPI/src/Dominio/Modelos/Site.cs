@@ -7,12 +7,14 @@ namespace Organograma.Dominio.Modelos
     {
         public Site()
         {
-            SiteOrganizacao = new HashSet<SiteOrganizacao>();
+            SitesOrganizacao = new HashSet<SiteOrganizacao>();
+            SitesUnidade = new HashSet<SiteUnidade>();
         }
 
         public int Id { get; set; }
         public string Url { get; set; }
 
-        public virtual ICollection<SiteOrganizacao> SiteOrganizacao { get; set; }
+        public virtual ICollection<SiteOrganizacao> SitesOrganizacao { get; set; }
+        public virtual ICollection<SiteUnidade> SitesUnidade { get; set; }
     }
 }

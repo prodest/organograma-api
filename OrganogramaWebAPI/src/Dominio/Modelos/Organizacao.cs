@@ -7,9 +7,10 @@ namespace Organograma.Dominio.Modelos
     {
         public Organizacao()
         {
-            ContatoOrganizacao = new HashSet<ContatoOrganizacao>();
-            EmailOrganizacao = new HashSet<EmailOrganizacao>();
-            SiteOrganizacao = new HashSet<SiteOrganizacao>();
+            ContatosOrganizacao = new HashSet<ContatoOrganizacao>();
+            EmailsOrganizacao = new HashSet<EmailOrganizacao>();
+            SitesOrganizacao = new HashSet<SiteOrganizacao>();
+            Unidades = new HashSet<Unidade>();
         }
 
         public int Id { get; set; }
@@ -23,14 +24,15 @@ namespace Organograma.Dominio.Modelos
         public int? IdOrganizacaoPai { get; set; }
         public int IdEndereco { get; set; }
 
-        public virtual ICollection<ContatoOrganizacao> ContatoOrganizacao { get; set; }
-        public virtual ICollection<EmailOrganizacao> EmailOrganizacao { get; set; }
-        public virtual ICollection<SiteOrganizacao> SiteOrganizacao { get; set; }
-        public virtual Endereco IdEnderecoNavigation { get; set; }
-        public virtual EsferaOrganizacao IdEsferaNavigation { get; set; }
-        public virtual Organizacao IdOrganizacaoPaiNavigation { get; set; }
-        public virtual ICollection<Organizacao> InverseIdOrganizacaoPaiNavigation { get; set; }
-        public virtual Poder IdPoderNavigation { get; set; }
-        public virtual TipoOrganizacao IdTipoOrganizacaoNavigation { get; set; }
+        public virtual ICollection<ContatoOrganizacao> ContatosOrganizacao { get; set; }
+        public virtual ICollection<EmailOrganizacao> EmailsOrganizacao { get; set; }
+        public virtual ICollection<SiteOrganizacao> SitesOrganizacao { get; set; }
+        public virtual ICollection<Unidade> Unidades { get; set; }
+        public virtual Endereco Endereco { get; set; }
+        public virtual EsferaOrganizacao Esfera { get; set; }
+        public virtual Organizacao OrganizacaoPai { get; set; }
+        public virtual ICollection<Organizacao> OrganizacoesFilhas { get; set; }
+        public virtual Poder Poder { get; set; }
+        public virtual TipoOrganizacao TipoOrganizacao { get; set; }
     }
 }
