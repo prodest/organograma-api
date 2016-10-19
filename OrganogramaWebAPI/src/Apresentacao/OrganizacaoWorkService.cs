@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Base;
+using AutoMapper;
+using Organograma.Negocio.Modelos;
 
 namespace Organograma.Apresentacao
 {
@@ -27,7 +29,10 @@ namespace Organograma.Apresentacao
 
         public OrganizacaoModeloGet Inserir(OrganizacaoModeloPost organizacaoPost)
         {
-            throw new NotImplementedException();
+            OrganizacaoModeloNegocio organizacaoModeloNegocio = new OrganizacaoModeloNegocio();
+            Mapper.Map(organizacaoPost, organizacaoModeloNegocio);
+
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Inserir(organizacaoModeloNegocio));
         }
 
         public List<OrganizacaoModeloGet> Listar()

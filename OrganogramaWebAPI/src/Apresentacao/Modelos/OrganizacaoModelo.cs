@@ -1,4 +1,6 @@
-﻿namespace Organograma.Apresentacao.Modelos
+﻿using System.Collections.Generic;
+
+namespace Organograma.Apresentacao.Modelos
 {
     public class OrganizacaoModeloPost
     {
@@ -6,8 +8,9 @@
         public OrganizacaoModeloPost ()
         {
             Endereco = new EnderecoModelo();
-            Email = new EmailModelo();
-            Site = new SiteModelo();
+            Contatos = new List<ContatoModelo>();
+            Emails = new List<EmailModelo>();
+            Sites = new List<SiteModelo>();
         }
 
         public string Cnpj { get; set; }
@@ -17,10 +20,13 @@
         public int IdEsfera { get; set; }
         public int IdPoder { get; set; }
         public int IdTipoOrganizacao { get; set; }
-        public int? IdOrganizacaoPai { get; set; }
+        public int IdOrganizacaoPai { get; set; }
         public EnderecoModelo Endereco { get; set; }
-        public EmailModelo Email { get; set; }
-        public SiteModelo Site { get; set; }
+        public List<ContatoModelo> Contatos { get; set; }
+        public List<EmailModelo> Emails { get; set; }
+        public List<SiteModelo> Sites { get; set; }
+
+
 
     }
 

@@ -4,6 +4,7 @@ using Organograma.Infraestrutura.Comum;
 using System;
 using System.Net;
 using Apresentacao.Base;
+using Organograma.Apresentacao.Modelos;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -25,6 +26,7 @@ namespace Organograma.WebAPI.Controllers
             try
             {
                 return new ObjectResult(service.Listar());
+                //return new ObjectResult("Get");
             }
 
             catch (OrganogramaNaoEncontradoException e)
@@ -61,8 +63,23 @@ namespace Organograma.WebAPI.Controllers
 
         // POST api/organizacao
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
         {
+
+            try
+            {
+                return new ObjectResult(service.Inserir(organizacaoPost));
+            }
+
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
         // PUT api/values/5

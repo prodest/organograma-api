@@ -47,12 +47,12 @@ namespace Organograma.Negocio
             validacao.IdValido(id);
             validacao.IdValido(poderNegocio.Id);
             validacao.IdAlteracaoValido(id, poderNegocio);
+            validacao.PoderExiste(poderNegocio);
             validacao.DescricaoValida(poderNegocio);
             validacao.DescricaoExistente(poderNegocio);
+            
 
             Poder poder = repositorioPoderes.Where(p => p.Id == id).SingleOrDefault();
-            validacao.NaoEncontrado(poder);
-
             Mapper.Map(poderNegocio, poder);
             unitOfWork.Save();
 

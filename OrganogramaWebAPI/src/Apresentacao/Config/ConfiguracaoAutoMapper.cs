@@ -3,6 +3,7 @@ using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Modelos;
 using Organograma.Negocio.Config;
 using System;
+using System.Collections.Generic;
 
 namespace Organograma.Apresentacao.Config
 {
@@ -62,10 +63,32 @@ namespace Organograma.Apresentacao.Config
 
                 #endregion
 
-                cfg.CreateMap<EmailModelo, EmailModeloNegocio>();
-                cfg.CreateMap<EnderecoModelo, EnderecoModeloNegocio>();
-                cfg.CreateMap<SiteModelo, SiteModeloNegocio>();
-                cfg.CreateMap<ContatoModelo, ContatoModeloNegocio>();
+                cfg.CreateMap<EmailModelo, EmailModeloNegocio>().ReverseMap();
+                cfg.CreateMap<EnderecoModelo, EnderecoModeloNegocio>().ReverseMap();
+                cfg.CreateMap<SiteModelo, SiteModeloNegocio>().ReverseMap();
+                cfg.CreateMap<ContatoModelo, ContatoModeloNegocio>().ReverseMap();
+
+
+            #region Organizacao
+
+                cfg.CreateMap<OrganizacaoModeloPost, OrganizacaoModeloNegocio>()
+                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => Mapper.Map<EnderecoModelo, EnderecoModeloNegocio>(s.Endereco)))
+                 .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => Mapper.Map<List<EmailModelo>, List<EmailModeloNegocio>>(s.Emails)))
+                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModelo>, List<SiteModeloNegocio>>(s.Sites)))
+                 .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModelo>, List<ContatoModeloNegocio>>(s.Contatos)))
+                 .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => Mapper.Map<PoderModeloNegocio>(new PoderModeloGet { Id = s.IdPoder })))
+                 .ForMember(dest => dest.Esfera, opt => opt.MapFrom(s => Mapper.Map<EsferaOrganizacaoModeloNegocio>(new EsferaOrganizacaoModelo { Id = s.IdEsfera })))
+                 .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => new OrganizacaoModeloNegocio() { Id = s.IdOrganizacaoPai }))
+                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => Mapper.Map<TipoOrganizacaoModeloNegocio>(new TipoOrganizacaoModelo { Id = s.IdTipoOrganizacao })));
+
+                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoModeloGet>()
+                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => Mapper.Map<EnderecoModeloNegocio, EnderecoModelo>(s.Endereco)))
+                 .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailModelo>>(s.Emails)))
+                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteModelo>>(s.Sites)))
+                 .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoModelo>>(s.Contatos)));
+
+
+                #endregion
 
                 #region Negócio   
 

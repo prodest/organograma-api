@@ -44,9 +44,22 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaRequisicaoInvalidaException("Já existe um poder com esta descrição.");
         }
 
-        internal void PoderValido(PoderModeloNegocio poder)
+        internal Poder PoderExiste(PoderModeloNegocio poderNegocio)
         {
-            if (poder == null)
+            Poder poder = repositorioPoderes.Where(p => p.Id == poderNegocio.Id).SingleOrDefault();
+
+            if ( poder == null)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("O Poder informado não está cadastrado");
+            }
+
+            return poder;
+
+        }
+
+        internal void PoderValido(PoderModeloNegocio poderNegocio)
+        {
+            if (poderNegocio == null)
                 throw new OrganogramaRequisicaoInvalidaException("O poder não pode ser nulo.");
         }
 

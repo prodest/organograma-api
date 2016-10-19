@@ -16,6 +16,7 @@ namespace Organograma.Infraestrutura.Repositorios
             TiposOrganizacoes = UnitOfWork.MakeGenericRepository<TipoOrganizacao>();
             TiposUnidades = UnitOfWork.MakeGenericRepository<TipoUnidade>();
             Poderes = UnitOfWork.MakeGenericRepository<Poder>();
+            Organizacoes = UnitOfWork.MakeGenericRepository<Organizacao>();
         }
 
         public IUnitOfWork UnitOfWork { get; private set; }
@@ -25,6 +26,7 @@ namespace Organograma.Infraestrutura.Repositorios
         public IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; private set; }
         public IRepositorioGenerico<TipoUnidade> TiposUnidades { get; private set; }
         public IRepositorioGenerico<Poder> Poderes { get; private set; }
+        public IRepositorioGenerico<Organizacao> Organizacoes { get; private set; }
 
         public void Dispose()
         {

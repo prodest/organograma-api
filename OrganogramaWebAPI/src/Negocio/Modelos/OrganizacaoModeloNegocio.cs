@@ -1,27 +1,36 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Organograma.Negocio.Modelos
 {
     public class OrganizacaoModeloNegocio
     {
 
+        
         public OrganizacaoModeloNegocio()
         {
             Endereco = new EnderecoModeloNegocio();
-            Email = new EmailModeloNegocio();
-            Site = new SiteModeloNegocio();
+            Contatos = new List<ContatoModeloNegocio>();
+            Emails = new List<EmailModeloNegocio>();
+            Sites = new List<SiteModeloNegocio>();
+            Esfera = new EsferaOrganizacaoModeloNegocio();
+            Poder = new PoderModeloNegocio();
+            TipoOrganizacao = new TipoOrganizacaoModeloNegocio();
+            //Organizacao Pai não é instanciado no construtor propositalmente para evitar estouro de memória
         }
-
+        
         public int Id { get; set; }
         public string Cnpj { get; set; }
         public string RazaoSocial { get; set; }
         public string NomeFantasia { get; set; }
         public string Sigla { get; set; }
-        public int IdEsfera { get; set; }
-        public int IdPoder { get; set; }
-        public int IdTipoOrganizacao { get; set; }
-        public int? IdOrganizacaoPai { get; set; }
+        public EsferaOrganizacaoModeloNegocio Esfera { get; set; }
+        public PoderModeloNegocio Poder { get; set; }
+        public TipoOrganizacaoModeloNegocio TipoOrganizacao { get; set; }
+        public OrganizacaoModeloNegocio OrganizacaoPai { get; set; }
         public EnderecoModeloNegocio Endereco { get; set; }
-        public EmailModeloNegocio Email { get; set; }
-        public SiteModeloNegocio Site { get; set; }
+        public List<ContatoModeloNegocio> Contatos { get; set; }
+        public List<EmailModeloNegocio> Emails { get; set; }
+        public List<SiteModeloNegocio> Sites { get; set; }
     }
 }
