@@ -16,6 +16,7 @@ namespace Organograma.Negocio
         IRepositorioGenerico<Organizacao> repositorioOrganizacoes;
         OrganizacaoValidacao validacao;
         CnpjValidacao cnpjValidacao;
+        ContatoValidacao contatoValidacao;
 
         public OrganizacaoNegocio(IOrganogramaRepositorios repositorios)
         {
@@ -23,6 +24,7 @@ namespace Organograma.Negocio
             repositorioOrganizacoes = repositorios.Organizacoes;
             validacao = new OrganizacaoValidacao(repositorioOrganizacoes);
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
+            contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContato);
         }
 
         public void Alterar(int id, OrganizacaoModeloNegocio poderNegocio)
@@ -37,10 +39,11 @@ namespace Organograma.Negocio
 
         public OrganizacaoModeloNegocio Inserir(OrganizacaoModeloNegocio organizacaoNegocio)
         {
-            validacao.camposObrigatorios(organizacaoNegocio);
-            cnpjValidacao.CnpjExiste(organizacaoNegocio);
-            cnpjValidacao.CnpjValido(organizacaoNegocio.Cnpj);
-            
+            validacao.Preenchido(organizacaoNegocio);
+            validacao.Valido(organizacaoNegocio);
+            validacao.PaiValido(organizacaoNegocio.OrganizacaoPai);
+            contatoValidacao.Preenchido(organizacaoNegocio.Contatos);
+            contatoValidacao.Valido(organizacaoNegocio.Contatos);
 
             throw new NotImplementedException();
         }

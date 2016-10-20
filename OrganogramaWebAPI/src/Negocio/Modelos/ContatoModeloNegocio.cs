@@ -4,7 +4,8 @@
     {
         public int Id { get; set; }
         public string Telefone { get; set; }
-        public byte TipoTelefone { get; set; }
+
+        public TipoContatoModeloNegocio TipoContato { get; set; }
         public string Nome { get; set; }
 
        

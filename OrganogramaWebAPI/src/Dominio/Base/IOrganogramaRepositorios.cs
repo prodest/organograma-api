@@ -12,6 +12,8 @@ namespace Organograma.Dominio.Base
         IRepositorioGenerico<TipoUnidade> TiposUnidades { get; }
         IRepositorioGenerico<Poder> Poderes { get; }
         IRepositorioGenerico<Organizacao> Organizacoes { get; }
+        IRepositorioGenerico<Contato> Contatos { get; }
+        IRepositorioGenerico<TipoContato> TiposContato { get; }
 
 
     }

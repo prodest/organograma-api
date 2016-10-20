@@ -76,6 +76,11 @@ namespace Organograma.WebAPI.Controllers
                 return NotFound(e.Message);
             }
 
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
+
             catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);

@@ -17,17 +17,22 @@ namespace Organograma.Infraestrutura.Mapeamento
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.IdTipoContato).HasColumnName("idTipoContato");
+
                 entity.Property(e => e.Nome)
                     .HasColumnName("nome")
                     .HasColumnType("varchar(255)");
 
                 entity.Property(e => e.Telefone)
+                    .IsRequired()
                     .HasColumnName("telefone")
-                    .HasColumnType("varchar(15)");
+                    .HasColumnType("varchar(255)");
 
-                entity.Property(e => e.TipoTelefone)
-                    .HasColumnName("tipoTelefone")
-                    .HasDefaultValueSql("1");
+                entity.HasOne(d => d.TipoContato)
+                    .WithMany(p => p.Contatos)
+                    .HasForeignKey(d => d.IdTipoContato)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Contato_TipoContato");
             });
 
             modelBuilder.Entity<ContatoOrganizacao>(entity =>
@@ -80,6 +85,24 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasForeignKey(d => d.IdUnidade)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_ContatoUnidade_Unidade");
+            });
+
+            modelBuilder.Entity<TipoContato>(entity =>
+            {
+                entity.HasIndex(e => e.Descricao)
+                    .HasName("UK_TipoContatoDescricao")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasColumnType("varchar(100)");
+
+                entity.Property(e => e.QuantidadeDigitos).HasColumnName("quantidadeDigitos");
             });
 
             modelBuilder.Entity<Email>(entity =>
@@ -500,6 +523,7 @@ namespace Organograma.Infraestrutura.Mapeamento
         }
 
         public virtual DbSet<Contato> Contato { get; set; }
+        public virtual DbSet<TipoContato> TipoContato { get; set; }
         public virtual DbSet<ContatoOrganizacao> ContatoOrganizacao { get; set; }
         public virtual DbSet<ContatoUnidade> ContatoUnidade { get; set; }
         public virtual DbSet<Email> Email { get; set; }

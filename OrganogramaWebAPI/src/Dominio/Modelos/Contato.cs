@@ -13,10 +13,11 @@ namespace Organograma.Dominio.Modelos
 
         public int Id { get; set; }
         public string Telefone { get; set; }
-        public byte TipoTelefone { get; set; }
+        public int IdTipoContato { get; set; }
         public string Nome { get; set; }
 
         public virtual ICollection<ContatoOrganizacao> ContatosOrganizacao { get; set; }
         public virtual ICollection<ContatoUnidade> ContatosUnidade { get; set; }
+        public virtual TipoContato TipoContato { get; set; }
     }
 }
