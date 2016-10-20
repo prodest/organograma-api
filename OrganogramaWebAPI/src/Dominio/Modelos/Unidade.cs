@@ -17,7 +17,7 @@ namespace Organograma.Dominio.Modelos
         public string Sigla { get; set; }
         public int IdOrganizacao { get; set; }
         public int IdTipoUnidade { get; set; }
-        public int IdEndereco { get; set; }
+        public int? IdEndereco { get; set; }
         public int? IdUnidadePai { get; set; }
 
         public virtual ICollection<ContatoUnidade> ContatosUnidade { get; set; }

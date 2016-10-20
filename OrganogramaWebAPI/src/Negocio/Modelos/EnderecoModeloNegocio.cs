@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace Organograma.Negocio.Modelos
 {
     public class EnderecoModeloNegocio
@@ -9,7 +10,9 @@ namespace Organograma.Negocio.Modelos
         public string Complemento { get; set; }
         public string Bairro { get; set; }
         public string Cep { get; set; }
-        public int IdMunicipio { get; set; }
-        
+
+        public virtual List<OrganizacaoModeloNegocio> Organizacoes { get; set; }
+        public virtual List<UnidadeModeloNegocio> Unidades { get; set; }
+        public virtual MunicipioModeloNegocio Municipio { get; set; }
     }
 }

@@ -55,5 +55,26 @@ namespace Organograma.Negocio.Validacao
             if (tipoUnidade != null)
                 throw new OrganogramaRequisicaoInvalidaException("Já existe um tipo de unidades com esta descrição.");
         }
+
+        internal void NaoNulo(TipoUnidadeModeloNegocio tipoUnidade)
+        {
+            if (tipoUnidade == null)
+                throw new OrganogramaRequisicaoInvalidaException("Tipo de unidade não pode ser nulo.");
+        }
+
+        internal void IdPreenchido(TipoUnidadeModeloNegocio tipoUnidade)
+        {
+            if (tipoUnidade.Id == default(int))
+                throw new OrganogramaRequisicaoInvalidaException("O id do tipo de unidade deve ser preenchido.");
+        }
+
+        internal void Existe(TipoUnidadeModeloNegocio tipoUnidade)
+        {
+            var tUnidade = repositorioTiposUnidades.Where(tu => tu.Id == tipoUnidade.Id)
+                                                   .SingleOrDefault();
+
+            if (tUnidade == null)
+                throw new OrganogramaNaoEncontradoException("Tipo de unidade não encontrado.");
+        }
     }
 }
