@@ -42,8 +42,8 @@ namespace Organograma.Negocio
             validacao.Preenchido(organizacaoNegocio);
             validacao.Valido(organizacaoNegocio);
             validacao.PaiValido(organizacaoNegocio.OrganizacaoPai);
-            contatoValidacao.Preenchido(organizacaoNegocio.Contatos);
-            contatoValidacao.Valido(organizacaoNegocio.Contatos);
+            contatoValidacao.Preenchidos(organizacaoNegocio.Contatos);
+            contatoValidacao.Validos(organizacaoNegocio.Contatos);
 
             throw new NotImplementedException();
         }

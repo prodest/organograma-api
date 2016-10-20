@@ -9,7 +9,6 @@ namespace Organograma.Dominio.Base
         IRepositorioGenerico<Endereco> Enderecos { get; }
         IRepositorioGenerico<EsferaOrganizacao> EsferasOrganizacoes { get; }
         IRepositorioGenerico<Municipio> Municipios { get; }
-        IRepositorioGenerico<Organizacao> Organizacoes { get; }
         IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; }
         IRepositorioGenerico<TipoUnidade> TiposUnidades { get; }
         IRepositorioGenerico<Poder> Poderes { get; }
