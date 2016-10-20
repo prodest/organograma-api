@@ -104,5 +104,10 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaRequisicaoInvalidaException("Sigla deve possuir no máximo 10 caracteres");
             }
         }
+
+        internal void NaoNulo(OrganizacaoModeloNegocio organizacao)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

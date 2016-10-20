@@ -20,8 +20,24 @@ namespace Organograma.Negocio.Validacao
 
         internal void IdValido(int id)
         {
-            if (id == default(int))
+            if (id <= 0)
                 throw new OrganogramaRequisicaoInvalidaException("Identificador do município inválido.");
+        }
+
+        internal void IdValido(MunicipioModeloNegocio municipio)
+        {
+            NaoNulo(municipio);
+
+            if (municipio.Id <= 0)
+                throw new OrganogramaRequisicaoInvalidaException("Identificador do município inválido.");
+        }
+
+        internal void IdPreenchido(MunicipioModeloNegocio municipio)
+        {
+            NaoNulo(municipio);
+
+            if (municipio.Id == default(int))
+                throw new OrganogramaRequisicaoInvalidaException("O id do munícipio deve ser preenchido.");
         }
 
         internal void MunicipioValido (MunicipioModeloNegocio municipio)
@@ -79,14 +95,26 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
-        
-
         internal void IdAlteracaoValido(int id, MunicipioModeloNegocio municipioNegocio)
         {
             if (id != municipioNegocio.Id)
                 throw new Exception("Identificadores do municipio não podem ser diferentes.");
         }
 
+        internal void NaoNulo(MunicipioModeloNegocio municipio)
+        {
+            if (municipio == null)
+                throw new OrganogramaRequisicaoInvalidaException("Município não pode ser nulo.");
+        }
+
+        internal void Existe(MunicipioModeloNegocio municipio)
+        {
+            var mun = repositorioMunicipios.Where(m => m.Id == municipio.Id)
+                                           .SingleOrDefault();
+
+            if(mun == null)
+                throw new OrganogramaNaoEncontradoException("Município não encontrado.");
+        }
     }
 
 }

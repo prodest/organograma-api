@@ -11,6 +11,7 @@ namespace Organograma.Infraestrutura.Repositorios
         {
             UnitOfWork = new EFUnitOfWork(new OrganogramaContext());
 
+            Enderecos = UnitOfWork.MakeGenericRepository<Endereco>();
             EsferasOrganizacoes = UnitOfWork.MakeGenericRepository<EsferaOrganizacao>();
             Municipios = UnitOfWork.MakeGenericRepository<Municipio>();
             TiposOrganizacoes = UnitOfWork.MakeGenericRepository<TipoOrganizacao>();
@@ -20,10 +21,12 @@ namespace Organograma.Infraestrutura.Repositorios
             Contatos = UnitOfWork.MakeGenericRepository<Contato>();
             TiposContato = UnitOfWork.MakeGenericRepository<TipoContato>();
 
+            Unidades = UnitOfWork.MakeGenericRepository<Unidade>();
         }
 
         public IUnitOfWork UnitOfWork { get; private set; }
 
+        public IRepositorioGenerico<Endereco> Enderecos { get; private set; }
         public IRepositorioGenerico<EsferaOrganizacao> EsferasOrganizacoes { get; private set; }
         public IRepositorioGenerico<Municipio> Municipios { get; private set; }
         public IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; private set; }
@@ -32,6 +35,7 @@ namespace Organograma.Infraestrutura.Repositorios
         public IRepositorioGenerico<Organizacao> Organizacoes { get; private set; }
         public IRepositorioGenerico<Contato> Contatos { get; private set; }
         public IRepositorioGenerico<TipoContato> TiposContato { get; private set; }
+        public IRepositorioGenerico<Unidade> Unidades { get; private set; }
 
         public void Dispose()
         {
