@@ -24,7 +24,7 @@ namespace Organograma.Negocio
             repositorioOrganizacoes = repositorios.Organizacoes;
             validacao = new OrganizacaoValidacao(repositorioOrganizacoes);
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
-            contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContato);
+            contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContatos);
         }
 
         public void Alterar(int id, OrganizacaoModeloNegocio poderNegocio)

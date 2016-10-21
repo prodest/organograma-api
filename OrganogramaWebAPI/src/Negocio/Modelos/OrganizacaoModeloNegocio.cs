@@ -5,20 +5,6 @@ namespace Organograma.Negocio.Modelos
 {
     public class OrganizacaoModeloNegocio
     {
-
-        
-        public OrganizacaoModeloNegocio()
-        {
-            Endereco = new EnderecoModeloNegocio();
-            Contatos = new List<ContatoModeloNegocio>();
-            Emails = new List<EmailModeloNegocio>();
-            Sites = new List<SiteModeloNegocio>();
-            Esfera = new EsferaOrganizacaoModeloNegocio();
-            Poder = new PoderModeloNegocio();
-            TipoOrganizacao = new TipoOrganizacaoModeloNegocio();
-            //Organizacao Pai não é instanciado no construtor propositalmente para evitar estouro de memória
-        }
-        
         public int Id { get; set; }
         public string Cnpj { get; set; }
         public string RazaoSocial { get; set; }
