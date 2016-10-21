@@ -1,24 +1,49 @@
-﻿using Organograma.Dominio.Base;
-using Organograma.Dominio.Modelos;
-using Organograma.Infraestrutura.Comum;
+﻿using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Modelos;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Organograma.Negocio.Validacao
 {
     //TODO: Implemetar esta classe
     public class EmailValidacao
     {
-        internal void Preenchidos(List<EmailModeloNegocio> emails)
+        private string padraoEmail = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
+
+        internal void Preenchido(List<EmailModeloNegocio> emails)
         {
-            throw new NotImplementedException();
+            foreach (var email in emails)
+            {
+                Preenchido(email);
+            }
         }
 
-        internal void Validos(List<EmailModeloNegocio> emails)
+        internal void Valido(List<EmailModeloNegocio> emails)
         {
-            throw new NotImplementedException();
+            foreach (var email in emails)
+            {
+                Valido(email);
+            }
         }
+
+        internal void Preenchido (EmailModeloNegocio email)
+        {
+            if (string.IsNullOrEmpty(email.Endereco))
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Endereço do email não preenchido");
+            }
+        }
+
+        internal void Valido (EmailModeloNegocio email)
+        {
+            Regex emailRegex = new Regex(padraoEmail);
+
+            if (!emailRegex.IsMatch(email.Endereco))
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Email \"" + email.Endereco + "\" inválido.");
+            }
+
+        }
+
     }
 }

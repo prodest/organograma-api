@@ -1,6 +1,4 @@
-﻿using Organograma.Dominio.Base;
-using Organograma.Dominio.Modelos;
-using Organograma.Infraestrutura.Comum;
+﻿using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Modelos;
 using System;
 using System.Collections.Generic;
@@ -11,14 +9,37 @@ namespace Organograma.Negocio.Validacao
     //TODO: Implemetar esta classe
     public class SiteValidacao
     {
-        internal void Preenchidos(List<SiteModeloNegocio> sites)
+        internal void Preenchido(List<SiteModeloNegocio> sites)
         {
-            throw new NotImplementedException();
+            foreach (var site in sites)
+            {
+                Preenchido(site);
+            }
         }
 
-        internal void Validos(List<SiteModeloNegocio> sites)
+        internal void Valido(List<SiteModeloNegocio> sites)
         {
-            throw new NotImplementedException();
+            foreach (var site in sites)
+            {
+                Valido(site);
+            }
         }
+
+        internal void Preenchido(SiteModeloNegocio site)
+        {
+            if (string.IsNullOrEmpty(site.Url))
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Site não preenchido");
+            }
+        }
+
+        internal void Valido(SiteModeloNegocio site)
+        {
+            if (!Uri.IsWellFormedUriString(site.Url, UriKind.Absolute))
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Site \"" + site.Url + "\" inválido");
+            }
+        }
+
     }
 }

@@ -7,7 +7,7 @@ namespace Organograma.Apresentacao.Modelos
 
         public OrganizacaoModeloPost ()
         {
-            Endereco = new EnderecoModelo();
+            //Endereco = new EnderecoModelo();
             Contatos = new List<ContatoModelo>();
             Emails = new List<EmailModelo>();
             Sites = new List<SiteModelo>();

@@ -63,8 +63,9 @@ namespace Organograma.Apresentacao.Config
 
                 #endregion
 
-                cfg.CreateMap<EmailModelo, EmailModeloNegocio>().ReverseMap();
-                cfg.CreateMap<EnderecoModelo, EnderecoModeloNegocio>().ReverseMap();
+                cfg.CreateMap<EmailModelo, EmailModeloNegocio>();
+
+                cfg.CreateMap<EnderecoModelo, EnderecoModeloNegocio>().ForMember(dest => dest.Municipio, opt => opt.MapFrom(s => s.IdMunicipio != default(int) ? new MunicipioModeloNegocio { Id = s.IdMunicipio } : null ));
                 cfg.CreateMap<SiteModelo, SiteModeloNegocio>().ReverseMap();
                 cfg.CreateMap<ContatoModelo, ContatoModeloNegocio>().ForMember(dest => dest.TipoContato, opt => opt.MapFrom(s => new TipoContatoModeloNegocio { Id = s.IdTipoContato }));
 
@@ -72,7 +73,7 @@ namespace Organograma.Apresentacao.Config
             #region Organizacao
 
                 cfg.CreateMap<OrganizacaoModeloPost, OrganizacaoModeloNegocio>()
-                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => Mapper.Map<EnderecoModelo, EnderecoModeloNegocio>(s.Endereco)))
+                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null? Mapper.Map<EnderecoModelo, EnderecoModeloNegocio>(s.Endereco) : null))
                  .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => Mapper.Map<List<EmailModelo>, List<EmailModeloNegocio>>(s.Emails)))
                  .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModelo>, List<SiteModeloNegocio>>(s.Sites)))
                  .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModelo>, List<ContatoModeloNegocio>>(s.Contatos)))

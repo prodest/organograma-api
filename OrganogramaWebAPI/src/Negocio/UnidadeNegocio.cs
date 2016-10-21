@@ -83,11 +83,11 @@ namespace Organograma.Negocio
 
             enderecoValidacao.Preenchido(unidade.Endereco);
 
-            contatoValidacao.Preenchidos(unidade.Contatos);
+            contatoValidacao.Preenchido(unidade.Contatos);
 
-            emailValidacao.Preenchidos(unidade.Emails);
+            emailValidacao.Preenchido(unidade.Emails);
 
-            siteValidacao.Preenchidos(unidade.Sites);
+            siteValidacao.Preenchido(unidade.Sites);
 
             #endregion
 
@@ -103,11 +103,11 @@ namespace Organograma.Negocio
 
             enderecoValidacao.Valido(unidade.Endereco);
 
-            contatoValidacao.Validos(unidade.Contatos);
+            contatoValidacao.Valido(unidade.Contatos);
 
-            emailValidacao.Validos(unidade.Emails);
+            emailValidacao.Valido(unidade.Emails);
 
-            siteValidacao.Validos(unidade.Sites);
+            siteValidacao.Valido(unidade.Sites);
 
             #endregion
 

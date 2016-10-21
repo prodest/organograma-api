@@ -12,7 +12,6 @@ namespace Organograma.Negocio.Validacao
     {
         IRepositorioGenerico<Organizacao> repositorioOrganizacoes;
         private CnpjValidacao cnpjValidacao;
-        private ContatoValidacao contatoValidacao;
 
         public OrganizacaoValidacao(IRepositorioGenerico<Organizacao> repositorioOrganizacoes)
         {

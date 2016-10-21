@@ -30,12 +30,28 @@ namespace Organograma.Negocio.Validacao
             if (endereco != null)
             {
                 LogradouroPreenchido(endereco.Logradouro);
-                BairroPreenchido(endereco.Numero);
+                BairroPreenchido(endereco.Bairro);
                 CepPreenchido(endereco.Cep);
 
                 municipioValidacao.IdPreenchido(endereco.Municipio);
+                
             }
         }
+
+        /**
+         * <summary>
+         * Verificação de nulidade do endereço.
+         * </summary>
+         * <param name="endereco">Endereço a ser verificado. Caso seja nulo, uma exceção será gerada</param>
+         */
+        internal void NaoNulo(EnderecoModeloNegocio endereco)
+        {
+            if (endereco == null)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Endereço deve ser preenchido.");
+            }
+        }
+
 
         /**
          * <summary>
@@ -69,5 +85,7 @@ namespace Organograma.Negocio.Validacao
             if (string.IsNullOrWhiteSpace(cep))
                 throw new OrganogramaRequisicaoInvalidaException("O campo cep não pode ser vazio ou nulo.");
         }
+
+
     }
 }

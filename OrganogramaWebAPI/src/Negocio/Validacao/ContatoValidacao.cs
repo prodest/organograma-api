@@ -27,7 +27,7 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
-        internal void Preenchidos(List<ContatoModeloNegocio> contatos)
+        internal void Preenchido(List<ContatoModeloNegocio> contatos)
         {
             foreach (var contato in contatos)
             {
@@ -35,7 +35,7 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
-        internal void Validos(List<ContatoModeloNegocio> contatos)
+        internal void Valido(List<ContatoModeloNegocio> contatos)
         {
             foreach (var contato in contatos)
             {
@@ -80,8 +80,17 @@ namespace Organograma.Negocio.Validacao
 
         private void TelefoneValido(ContatoModeloNegocio contato)
         {
+
+            try
+            {
+                long.Parse(contato.Telefone);
+            }
+            catch (Exception)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("O Telefone deve possuir apenas números.");
+            }
+
             TipoContato tipoContato = repositorioTiposContato.Where(t => t.Id == contato.TipoContato.Id).Single();
-            
             if (contato.Telefone.Length != tipoContato.QuantidadeDigitos)
             {
                 throw new OrganogramaRequisicaoInvalidaException("Telefone do tipo " + tipoContato.Descricao + " devem possuir " + tipoContato.QuantidadeDigitos + " dígitos.");
