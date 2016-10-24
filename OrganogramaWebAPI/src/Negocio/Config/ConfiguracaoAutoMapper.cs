@@ -27,14 +27,14 @@ namespace Organograma.Negocio.Config
 
             CreateMap<Municipio, MunicipioModeloNegocio>().ReverseMap();
             CreateMap<Poder, PoderModeloNegocio>().ReverseMap();
-
-            CreateMap<EmailModeloNegocio, Email>();
+            
+            
 
             CreateMap<EnderecoModeloNegocio, Endereco>().ReverseMap();
             CreateMap<SiteModeloNegocio, Site>().ReverseMap();
             CreateMap<ContatoModeloNegocio, Contato>().ReverseMap();
 
-            CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>();
+            CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>().ReverseMap();
             CreateMap<TipoUnidade, TipoUnidadeModeloNegocio>().ReverseMap();
 
             CreateMap<Endereco, EnderecoModeloNegocio>();
@@ -42,14 +42,15 @@ namespace Organograma.Negocio.Config
             CreateMap<EnderecoModeloNegocio, Endereco>().ForMember(dest => dest.IdMunicipio, opt => opt.MapFrom(s => s.Municipio.Id));
 
 
+            CreateMap<EmailModeloNegocio, Email>();
+            CreateMap<EmailModeloNegocio, EmailOrganizacao>().ForMember(dest => dest.Email, opt => opt.MapFrom(s => s));
             CreateMap<OrganizacaoModeloNegocio, Organizacao>()
-                .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? s.OrganizacaoPai.Id : 0))
+                .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null? s.OrganizacaoPai.Id : (int?)null))
                 .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
                 .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder.Id))
                 .ForMember(dest => dest.IdTipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao.Id))
                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco))
-                .ForMember(dest => dest.EmailsOrganizacao, opt => opt.MapFrom(null))
-                .ForMember(dest => dest, opt => opt.MapFrom(null));
+                .ForMember(dest => dest.EmailsOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailOrganizacao>>(s.Emails)));
 
 
 

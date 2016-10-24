@@ -60,5 +60,20 @@ namespace Organograma.Negocio.Validacao
             if (esferasOrganizacoes == null || esferasOrganizacoes.Count <= 0)
                 throw new OrganogramaNaoEncontradoException("Esfera de organização não encontrada.");
         }
+
+        internal void IdPreenchido (EsferaOrganizacaoModeloNegocio esfera)
+        {
+            if (esfera.Id == default(int))
+                throw new OrganogramaRequisicaoInvalidaException("Esfera da organização não preenchido.");
+        }
+
+        internal void Existe (EsferaOrganizacaoModeloNegocio esfera)
+        {
+            if (repositorioEsferasOrganizacoes.Where(e => e.Id == esfera.Id).SingleOrDefault() == null) {
+                throw new OrganogramaNaoEncontradoException("Esfera de organização não existe");
+            }
+        }
+
+        
     }
 }

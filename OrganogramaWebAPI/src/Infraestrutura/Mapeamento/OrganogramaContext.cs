@@ -292,7 +292,6 @@ namespace Organograma.Infraestrutura.Mapeamento
                 entity.Property(e => e.IdTipoOrganizacao).HasColumnName("idTipoOrganizacao");
 
                 entity.Property(e => e.NomeFantasia)
-                    .IsRequired()
                     .HasColumnName("nomeFantasia")
                     .HasColumnType("varchar(100)");
 

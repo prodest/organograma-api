@@ -5,6 +5,7 @@ using System;
 using System.Net;
 using Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -79,6 +80,11 @@ namespace Organograma.WebAPI.Controllers
             catch (OrganogramaRequisicaoInvalidaException e)
             {
                 return BadRequest(e.Message);
+            }
+
+            catch(DbUpdateException e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
 
             catch (Exception e)

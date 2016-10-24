@@ -55,5 +55,19 @@ namespace Organograma.Negocio.Validacao
             if (tipoOrganizacao != null)
                 throw new OrganogramaRequisicaoInvalidaException("Já existe um tipo de organização com esta descrição.");
         }
+
+        internal void IdPreenchido(TipoOrganizacaoModeloNegocio tipoOrganizacao)
+        {
+            if (tipoOrganizacao.Id == default(int))
+                throw new OrganogramaRequisicaoInvalidaException("Tipo da organização não preenchido.");
+        }
+
+        internal void Existe(TipoOrganizacaoModeloNegocio tipoOrganizacao)
+        {
+            if (repositorioTiposOrganizacoes.Where(e => e.Id == tipoOrganizacao.Id).SingleOrDefault() == null)
+            {
+                throw new OrganogramaNaoEncontradoException("Tipo da organização não existe");
+            }
+        }
     }
 }
