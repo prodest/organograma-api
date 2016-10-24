@@ -28,7 +28,7 @@ namespace Organograma.Negocio
             repositorioOrganizacoes = repositorios.Organizacoes;
             validacao = new OrganizacaoValidacao(repositorioOrganizacoes);
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
-            contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContato);
+            contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContatos);
             emailValidacao = new EmailValidacao();
             enderecoValidacao = new EnderecoValidacao(repositorios.Enderecos, repositorios.Municipios);
             siteValidacao = new SiteValidacao();
