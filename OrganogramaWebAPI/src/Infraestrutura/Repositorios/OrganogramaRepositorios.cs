@@ -19,7 +19,7 @@ namespace Organograma.Infraestrutura.Repositorios
             Poderes = UnitOfWork.MakeGenericRepository<Poder>();
             Organizacoes = UnitOfWork.MakeGenericRepository<Organizacao>();
             Contatos = UnitOfWork.MakeGenericRepository<Contato>();
-            TiposContato = UnitOfWork.MakeGenericRepository<TipoContato>();
+            TiposContatos = UnitOfWork.MakeGenericRepository<TipoContato>();
 
             Unidades = UnitOfWork.MakeGenericRepository<Unidade>();
         }
@@ -34,7 +34,7 @@ namespace Organograma.Infraestrutura.Repositorios
         public IRepositorioGenerico<Poder> Poderes { get; private set; }
         public IRepositorioGenerico<Organizacao> Organizacoes { get; private set; }
         public IRepositorioGenerico<Contato> Contatos { get; private set; }
-        public IRepositorioGenerico<TipoContato> TiposContato { get; private set; }
+        public IRepositorioGenerico<TipoContato> TiposContatos { get; private set; }
         public IRepositorioGenerico<Unidade> Unidades { get; private set; }
 
         public void Dispose()

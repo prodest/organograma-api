@@ -29,7 +29,12 @@ namespace Organograma.Negocio
             unitOfWork = repositorios.UnitOfWork;
             repositorioUnidades = repositorios.Unidades;
             unidadeValidacao = new UnidadeValidacao(repositorioUnidades, repositorios.TiposUnidades, repositorios.Organizacoes);
+            tipoUnidadeValidacao = new TipoUnidadeValidacao(repositorios.TiposUnidades);
+            organizacaoValidacao = new OrganizacaoValidacao(repositorios.Organizacoes);
             enderecoValidacao = new EnderecoValidacao(repositorios.Enderecos, repositorios.Municipios);
+            contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContatos);
+            emailValidacao = new EmailValidacao();
+            siteValidacao = new SiteValidacao();
         }
 
         public void Alterar(int id, UnidadeModeloNegocio unidade)
@@ -115,7 +120,7 @@ namespace Organograma.Negocio
 
             repositorioUnidades.Add(unid);
 
-            unitOfWork.Save();
+            //unitOfWork.Save();
 
             return Mapper.Map<Unidade, UnidadeModeloNegocio>(unid);
         }

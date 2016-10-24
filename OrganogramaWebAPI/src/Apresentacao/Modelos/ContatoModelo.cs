@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Organograma.Apresentacao.Modelos
+﻿namespace Organograma.Apresentacao.Modelos
 {
     public class ContatoModelo
     {
@@ -11,5 +6,5 @@ namespace Organograma.Apresentacao.Modelos
         public int IdTipoContato{ get; set; }
         public string Nome { get; set; }
     }
-        
+
 }

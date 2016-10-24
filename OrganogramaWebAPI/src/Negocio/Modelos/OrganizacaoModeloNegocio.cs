@@ -5,7 +5,6 @@ namespace Organograma.Negocio.Modelos
 {
     public class OrganizacaoModeloNegocio
     {
-
         public int Id { get; set; }
         public string Cnpj { get; set; }
         public string RazaoSocial { get; set; }
