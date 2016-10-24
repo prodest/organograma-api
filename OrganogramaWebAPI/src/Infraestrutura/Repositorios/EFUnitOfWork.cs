@@ -32,5 +32,10 @@ namespace Organograma.Infraestrutura.Repositorios
 
             _context.Dispose();
         }
+
+        public void Attach(object entity)
+        {
+            _context.Attach(entity);
+        }
     }
 }

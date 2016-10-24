@@ -106,7 +106,8 @@ namespace Organograma.Negocio.Validacao
 
         internal void NaoNulo(OrganizacaoModeloNegocio organizacao)
         {
-            throw new NotImplementedException();
+            if (organizacao == null)
+                throw new OrganogramaRequisicaoInvalidaException("Organização não pode ser nulo.");
         }
     }
 }
