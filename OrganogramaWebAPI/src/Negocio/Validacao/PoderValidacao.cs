@@ -75,5 +75,19 @@ namespace Organograma.Negocio.Validacao
             if (poderes == null || poderes.Count <= 0)
                 throw new OrganogramaNaoEncontradoException("Poderes não encontrados.");
         }
+
+        internal void IdPreenchido(PoderModeloNegocio poder)
+        {
+            if (poder.Id == default(int))
+                throw new OrganogramaRequisicaoInvalidaException("Poder não preenchido.");
+        }
+
+        internal void Existe(PoderModeloNegocio poder)
+        {
+            if (repositorioPoderes.Where(e => e.Id == poder.Id).SingleOrDefault() == null)
+            {
+                throw new OrganogramaNaoEncontradoException("Poder não existe");
+            }
+        }
     }
 }

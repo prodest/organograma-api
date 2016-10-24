@@ -36,7 +36,7 @@ namespace Organograma.Negocio.Config
             CreateMap<SiteModeloNegocio, Site>().ReverseMap();
             CreateMap<ContatoModeloNegocio, Contato>().ReverseMap();
 
-            CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>();
+            CreateMap<TipoOrganizacao, TipoOrganizacaoModeloNegocio>().ReverseMap();
             CreateMap<TipoUnidade, TipoUnidadeModeloNegocio>().ReverseMap();
 
             CreateMap<Endereco, EnderecoModeloNegocio>();
@@ -45,13 +45,12 @@ namespace Organograma.Negocio.Config
 
 
             CreateMap<OrganizacaoModeloNegocio, Organizacao>()
-                .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? s.OrganizacaoPai.Id : default(int)))
-                .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera != null ? s.Esfera.Id : default(int)))
-                .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder != null ? s.Poder.Id : default(int)))
-                .ForMember(dest => dest.IdTipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao != null ? s.TipoOrganizacao.Id : default(int)))
-                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? s.Endereco : null));
-            //.ForMember(dest => dest.EmailsOrganizacao, opt => opt.MapFrom(null))
-            //.ForMember(dest => dest, opt => opt.MapFrom(null));
+                .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null? s.OrganizacaoPai.Id : (int?)null))
+                .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
+                .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder.Id))
+                .ForMember(dest => dest.IdTipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao.Id))
+                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco))
+                .ForMember(dest => dest.EmailsOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailOrganizacao>>(s.Emails)));
 
             CreateMap<UnidadeModeloNegocio, Unidade>()
                 .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(s => s.Organizacao != null ? s.Organizacao.Id : default(int)))

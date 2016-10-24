@@ -25,6 +25,11 @@ namespace Organograma.Infraestrutura.Repositorios
             _context.SaveChanges();
         }
 
+        public void Attach(object entity)
+        {
+            _context.Attach(entity);
+        }
+
         public void Dispose()
         {
             if (AutoSave)
