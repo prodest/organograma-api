@@ -29,22 +29,28 @@ namespace Organograma.Negocio.Validacao
 
         internal void Preenchido(List<ContatoModeloNegocio> contatos)
         {
-            foreach (var contato in contatos)
+            if (contatos != null)
             {
-                Preenchido(contato);
+                foreach (var contato in contatos)
+                {
+                    Preenchido(contato);
+                }
             }
         }
 
         internal void Valido(List<ContatoModeloNegocio> contatos)
         {
-            foreach (var contato in contatos)
+            if (contatos != null)
             {
-                Valido(contato);
+                foreach (var contato in contatos)
+                {
+                    Valido(contato);
+                }
             }
         }
 
 
-        internal void Preenchido (ContatoModeloNegocio contato)
+        internal void Preenchido(ContatoModeloNegocio contato)
         {
             if (contato != null)
             {

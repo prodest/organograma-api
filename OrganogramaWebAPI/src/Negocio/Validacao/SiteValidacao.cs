@@ -11,33 +11,45 @@ namespace Organograma.Negocio.Validacao
     {
         internal void Preenchido(List<SiteModeloNegocio> sites)
         {
-            foreach (var site in sites)
+            if (sites != null)
             {
-                Preenchido(site);
+                foreach (var site in sites)
+                {
+                    Preenchido(site);
+                }
             }
         }
 
         internal void Valido(List<SiteModeloNegocio> sites)
         {
-            foreach (var site in sites)
+            if (sites != null)
             {
-                Valido(site);
+                foreach (var site in sites)
+                {
+                    Valido(site);
+                }
             }
         }
 
         internal void Preenchido(SiteModeloNegocio site)
         {
-            if (string.IsNullOrEmpty(site.Url))
+            if (site != null)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Site não preenchido");
+                if (string.IsNullOrEmpty(site.Url))
+                {
+                    throw new OrganogramaRequisicaoInvalidaException("Site não preenchido");
+                }
             }
         }
 
         internal void Valido(SiteModeloNegocio site)
         {
-            if (!Uri.IsWellFormedUriString(site.Url, UriKind.Absolute))
+            if (site != null)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Site \"" + site.Url + "\" inválido");
+                if (!Uri.IsWellFormedUriString(site.Url, UriKind.Absolute))
+                {
+                    throw new OrganogramaRequisicaoInvalidaException("Site \"" + site.Url + "\" inválido");
+                }
             }
         }
 

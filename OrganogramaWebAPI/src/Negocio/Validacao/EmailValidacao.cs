@@ -12,37 +12,48 @@ namespace Organograma.Negocio.Validacao
 
         internal void Preenchido(List<EmailModeloNegocio> emails)
         {
-            foreach (var email in emails)
+            if (emails != null)
             {
-                Preenchido(email);
+                foreach (var email in emails)
+                {
+                    Preenchido(email);
+                }
             }
         }
 
         internal void Valido(List<EmailModeloNegocio> emails)
         {
-            foreach (var email in emails)
+            if (emails != null)
             {
-                Valido(email);
+                foreach (var email in emails)
+                {
+                    Valido(email);
+                }
             }
         }
 
-        internal void Preenchido (EmailModeloNegocio email)
+        internal void Preenchido(EmailModeloNegocio email)
         {
-            if (string.IsNullOrEmpty(email.Endereco))
+            if (email != null)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Endereço do email não preenchido");
+                if (string.IsNullOrEmpty(email.Endereco))
+                {
+                    throw new OrganogramaRequisicaoInvalidaException("Endereço do email não preenchido");
+                }
             }
         }
 
-        internal void Valido (EmailModeloNegocio email)
+        internal void Valido(EmailModeloNegocio email)
         {
-            Regex emailRegex = new Regex(padraoEmail);
-
-            if (!emailRegex.IsMatch(email.Endereco))
+            if (email != null)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Email \"" + email.Endereco + "\" inválido.");
-            }
+                Regex emailRegex = new Regex(padraoEmail);
 
+                if (!emailRegex.IsMatch(email.Endereco))
+                {
+                    throw new OrganogramaRequisicaoInvalidaException("Email \"" + email.Endereco + "\" inválido.");
+                }
+            }
         }
 
     }

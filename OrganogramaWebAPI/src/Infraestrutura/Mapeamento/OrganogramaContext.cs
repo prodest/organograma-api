@@ -67,8 +67,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .IsUnique();
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .HasColumnName("id");
 
                 entity.Property(e => e.IdContato).HasColumnName("idContato");
 
@@ -94,8 +93,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .IsUnique();
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .HasColumnName("id");
 
                 entity.Property(e => e.Descricao)
                     .IsRequired()
@@ -147,8 +145,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .IsUnique();
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .HasColumnName("id");
 
                 entity.Property(e => e.IdEmail).HasColumnName("idEmail");
 
@@ -392,8 +389,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .IsUnique();
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .HasColumnName("id");
 
                 entity.Property(e => e.IdSite).HasColumnName("idSite");
 
@@ -475,8 +471,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .IsUnique();
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .HasColumnName("id");
 
                 entity.Property(e => e.IdEndereco).HasColumnName("idEndereco");
 

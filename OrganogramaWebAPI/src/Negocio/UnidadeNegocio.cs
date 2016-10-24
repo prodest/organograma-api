@@ -118,17 +118,9 @@ namespace Organograma.Negocio
 
             var unid = Mapper.Map<UnidadeModeloNegocio, Unidade>(unidade);
 
-            unitOfWork.Attach(unid.Organizacao);
+            repositorioUnidades.Add(unid);
 
-            unitOfWork.Attach(unid.TipoUnidade);
-
-            if (unid.Endereco != null)
-                unitOfWork.Attach(unid.Endereco.Municipio);
-
-            if (unid.UnidadePai != null)
-                unitOfWork.Attach(unid.UnidadePai);
-
-            //unitOfWork.Save();
+            unitOfWork.Save();
 
             return Mapper.Map<Unidade, UnidadeModeloNegocio>(unid);
         }
