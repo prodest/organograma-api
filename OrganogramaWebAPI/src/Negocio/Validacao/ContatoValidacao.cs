@@ -88,6 +88,12 @@ namespace Organograma.Negocio.Validacao
 
         private void TelefoneValido(ContatoModeloNegocio contato)
         {
+            ApenasNumeros(contato);
+            NumeroDigitosValido(contato);
+        }
+
+        private void ApenasNumeros(ContatoModeloNegocio contato)
+        {
             try
             {
                 long.Parse(contato.Telefone);
@@ -96,7 +102,10 @@ namespace Organograma.Negocio.Validacao
             {
                 throw new OrganogramaRequisicaoInvalidaException("O Telefone deve possuir apenas números.");
             }
+        }
 
+        private void NumeroDigitosValido (ContatoModeloNegocio contato)
+        {
             TipoContato tipoContato = repositorioTiposContato.Where(t => t.Id == contato.TipoContato.Id).Single();
             if (contato.Telefone.Length != tipoContato.QuantidadeDigitos)
             {
