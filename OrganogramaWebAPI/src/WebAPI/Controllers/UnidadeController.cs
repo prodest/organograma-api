@@ -100,7 +100,7 @@ namespace Organograma.WebAPI.Controllers
         }
 
         // DELETE api/unidade/5
-        [Authorize]
+        //[Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

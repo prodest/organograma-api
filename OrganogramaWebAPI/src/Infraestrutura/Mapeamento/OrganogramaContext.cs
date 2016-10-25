@@ -86,23 +86,6 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasConstraintName("FK_ContatoUnidade_Unidade");
             });
 
-            modelBuilder.Entity<TipoContato>(entity =>
-            {
-                entity.HasIndex(e => e.Descricao)
-                    .HasName("UK_TipoContatoDescricao")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id");
-
-                entity.Property(e => e.Descricao)
-                    .IsRequired()
-                    .HasColumnName("descricao")
-                    .HasColumnType("varchar(100)");
-
-                entity.Property(e => e.QuantidadeDigitos).HasColumnName("quantidadeDigitos");
-            });
-
             modelBuilder.Entity<Email>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -406,6 +389,23 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasForeignKey(d => d.IdUnidade)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_SiteUnidade_Unidade");
+            });
+
+            modelBuilder.Entity<TipoContato>(entity =>
+            {
+                entity.HasIndex(e => e.Descricao)
+                    .HasName("UK_TipoContatoDescricao")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasColumnName("descricao")
+                    .HasColumnType("varchar(100)");
+
+                entity.Property(e => e.QuantidadeDigitos).HasColumnName("quantidadeDigitos");
             });
 
             modelBuilder.Entity<TipoOrganizacao>(entity =>

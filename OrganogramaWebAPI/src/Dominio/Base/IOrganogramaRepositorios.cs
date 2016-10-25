@@ -8,15 +8,19 @@ namespace Organograma.Dominio.Base
         IUnitOfWork UnitOfWork { get; }
 
         IRepositorioGenerico<Contato> Contatos { get; }
+        IRepositorioGenerico<ContatoUnidade> ContatosUnidades { get; }
+        IRepositorioGenerico<Email> Emails { get; }
         IRepositorioGenerico<Endereco> Enderecos { get; }
+        IRepositorioGenerico<EmailUnidade> EmailsUnidades { get; }
         IRepositorioGenerico<EsferaOrganizacao> EsferasOrganizacoes { get; }
         IRepositorioGenerico<Municipio> Municipios { get; }
-        IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; }
-        IRepositorioGenerico<TipoUnidade> TiposUnidades { get; }
         IRepositorioGenerico<Organizacao> Organizacoes { get; }
         IRepositorioGenerico<Poder> Poderes { get; }
+        IRepositorioGenerico<Site> Sites { get; }
+        IRepositorioGenerico<SiteUnidade> SitesUnidades { get; }
         IRepositorioGenerico<TipoContato> TiposContatos { get; }
+        IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; }
+        IRepositorioGenerico<TipoUnidade> TiposUnidades { get; }
         IRepositorioGenerico<Unidade> Unidades { get; }
-
     }
 }
