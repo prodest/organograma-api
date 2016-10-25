@@ -65,7 +65,7 @@ namespace Organograma.Negocio
             siteValidacao.Preenchido(organizacaoNegocio.Sites);
             tipoOrganizacaoValidacao.IdPreenchido(organizacaoNegocio.TipoOrganizacao);
 
-
+            //Validações utilizam cálculos e/ou interagem com o banco de dados
             validacao.Valido(organizacaoNegocio);
             validacao.PaiValido(organizacaoNegocio.OrganizacaoPai);
             contatoValidacao.Valido(organizacaoNegocio.Contatos);
@@ -77,8 +77,6 @@ namespace Organograma.Negocio
             tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
 
 
-            throw new NotImplementedException();
-
             Organizacao organizacao = PreparaInsercao(organizacaoNegocio);
             repositorioOrganizacoes.Add(organizacao);
             unitOfWork.Attach(organizacao.TipoOrganizacao);
@@ -86,7 +84,7 @@ namespace Organograma.Negocio
             unitOfWork.Attach(organizacao.Poder);
             unitOfWork.Save();
 
-            //return organizacaoNegocio;
+            return Mapper.Map(organizacao, organizacaoNegocio);
         }
 
         public List<OrganizacaoModeloNegocio> Listar()
