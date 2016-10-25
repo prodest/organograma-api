@@ -46,6 +46,8 @@ namespace Organograma.Negocio.Validacao
                 {
                     Valido(contato);
                 }
+
+                Repetido(contatos);
             }
         }
 
@@ -86,7 +88,6 @@ namespace Organograma.Negocio.Validacao
 
         private void TelefoneValido(ContatoModeloNegocio contato)
         {
-
             try
             {
                 long.Parse(contato.Telefone);
@@ -101,7 +102,6 @@ namespace Organograma.Negocio.Validacao
             {
                 throw new OrganogramaRequisicaoInvalidaException("Telefone do tipo " + tipoContato.Descricao + " devem possuir " + tipoContato.QuantidadeDigitos + " dígitos.");
             }
-
         }
 
         internal void TipoContatoExiste(ContatoModeloNegocio contato)
@@ -114,6 +114,15 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
+        private void Repetido(List<ContatoModeloNegocio> contatos)
+        {
+            var duplicados = contatos.GroupBy(e => e.Telefone)
+                                   .Where(g => g.Count() > 1)
+                                   .Select(g => g.Key)
+                                   .ToList(); ;
 
+            if (duplicados != null && duplicados.Count > 0)
+                throw new OrganogramaRequisicaoInvalidaException("Existe contato duplicado.");
+        }
     }
 }
