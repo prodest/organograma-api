@@ -7,7 +7,6 @@ namespace Organograma.Apresentacao.Modelos
 
         public OrganizacaoModeloPost ()
         {
-            //Endereco = new EnderecoModelo();
             Contatos = new List<ContatoModelo>();
             Emails = new List<EmailModelo>();
             Sites = new List<SiteModelo>();
@@ -25,8 +24,6 @@ namespace Organograma.Apresentacao.Modelos
         public List<ContatoModelo> Contatos { get; set; }
         public List<EmailModelo> Emails { get; set; }
         public List<SiteModelo> Sites { get; set; }
-
-
 
     }
 

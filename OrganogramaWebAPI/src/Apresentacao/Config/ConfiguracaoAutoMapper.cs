@@ -66,10 +66,16 @@ namespace Organograma.Apresentacao.Config
                  .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => Mapper.Map<TipoOrganizacaoModeloNegocio>(new TipoOrganizacaoModelo { Id = s.IdTipoOrganizacao })));
 
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoModeloGet>()
+                 .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
+                 .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder.Id))
+                 .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? s.OrganizacaoPai.Id : 0))
+                 .ForMember(dest => dest.IdTipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao.Id))
+                 .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
                  .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => Mapper.Map<EnderecoModeloNegocio, EnderecoModelo>(s.Endereco)))
                  .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailModelo>>(s.Emails)))
                  .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteModelo>>(s.Sites)))
                  .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoModelo>>(s.Contatos)));
+
                 #endregion
 
                 #region Mapeamento de Poder

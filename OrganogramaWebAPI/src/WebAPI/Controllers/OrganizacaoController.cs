@@ -6,6 +6,7 @@ using System.Net;
 using Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -64,6 +65,7 @@ namespace Organograma.WebAPI.Controllers
 
         // POST api/organizacao
         [HttpPost]
+        [Authorize]
         public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
         {
 
@@ -81,12 +83,7 @@ namespace Organograma.WebAPI.Controllers
             {
                 return BadRequest(e.Message);
             }
-
-            catch(DbUpdateException e)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-            }
-
+            
             catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
