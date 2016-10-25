@@ -7,6 +7,7 @@ using Organograma.Negocio.Modelos;
 using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
 using Organograma.Negocio.Validacao;
+using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.Negocio
 {
@@ -15,6 +16,14 @@ namespace Organograma.Negocio
 
         IUnitOfWork unitOfWork;
         IRepositorioGenerico<Organizacao> repositorioOrganizacoes;
+        IRepositorioGenerico<Contato> repositorioContatos;
+        IRepositorioGenerico<ContatoOrganizacao> repositorioContatosOrganizacoes;
+        IRepositorioGenerico<Email> repositorioEmails;
+        IRepositorioGenerico<EmailOrganizacao> repositorioEmailsOrganizacoes;
+        IRepositorioGenerico<Endereco> repositorioEnderecos;
+        IRepositorioGenerico<Site> repositorioSites;
+        IRepositorioGenerico<SiteOrganizacao> repositorioSitesOrganizacoes;
+        
         OrganizacaoValidacao validacao;
         CnpjValidacao cnpjValidacao;
         ContatoValidacao contatoValidacao;
@@ -25,11 +34,12 @@ namespace Organograma.Negocio
         SiteValidacao siteValidacao;
         TipoOrganizacaoValidacao tipoOrganizacaoValidacao;
         
-        
         public OrganizacaoNegocio(IOrganogramaRepositorios repositorios)
         {
             unitOfWork = repositorios.UnitOfWork;
             repositorioOrganizacoes = repositorios.Organizacoes;
+            repositorioContatos = repositorios.Contatos;
+                                    
             validacao = new OrganizacaoValidacao(repositorioOrganizacoes);
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
             contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContatos);
@@ -39,6 +49,7 @@ namespace Organograma.Negocio
             poderValidacao = new PoderValidacao(repositorios.Poderes);
             siteValidacao = new SiteValidacao();
             tipoOrganizacaoValidacao = new TipoOrganizacaoValidacao(repositorios.TiposOrganizacoes);
+
             
         }
 
@@ -49,7 +60,19 @@ namespace Organograma.Negocio
 
         public void Excluir(int id)
         {
-            throw new NotImplementedException();
+            validacao.IdPreenchido(id);
+            validacao.Existe(id);
+            validacao.PossuiFilho(id);
+            validacao.PossuiUnidade(id);
+
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == id)
+                .Include(i => i.Endereco)
+                .Include(i => i.ContatosOrganizacao).ThenInclude(c => c.Contato)
+                .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
+                .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email).Single();
+
+            repositorioOrganizacoes.Remove(organizacao);
+            unitOfWork.Save();
         }
 
         public OrganizacaoModeloNegocio Inserir(OrganizacaoModeloNegocio organizacaoNegocio)
@@ -102,6 +125,11 @@ namespace Organograma.Negocio
             Organizacao organizacao = new Organizacao();
             organizacao = Mapper.Map<OrganizacaoModeloNegocio, Organizacao>(organizacaoNegocio);
             return organizacao;
+        }
+
+        private void ExcluiRelacionamentos(OrganizacaoNegocio organizacaoNegocio)
+        {
+
         }
     }
 }

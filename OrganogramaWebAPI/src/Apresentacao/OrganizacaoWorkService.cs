@@ -24,7 +24,7 @@ namespace Organograma.Apresentacao
 
         public void Excluir(int id)
         {
-            throw new NotImplementedException();
+            organizacaoNegocio.Excluir(id);
         }
 
         public OrganizacaoModeloGet Inserir(OrganizacaoModeloPost organizacaoPost)
