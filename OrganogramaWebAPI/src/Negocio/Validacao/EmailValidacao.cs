@@ -2,6 +2,8 @@
 using Organograma.Negocio.Modelos;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System;
+using System.Linq;
 
 namespace Organograma.Negocio.Validacao
 {
@@ -29,6 +31,8 @@ namespace Organograma.Negocio.Validacao
                 {
                     Valido(email);
                 }
+
+                Repetido(emails);
             }
         }
 
@@ -56,5 +60,16 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
+        private void Repetido(List<EmailModeloNegocio> emails)
+        {
+            var duplicados = emails.GroupBy(e => e.Endereco)
+                                   .Where(g => g.Count() > 1)
+                                   .Select(g => g.Key)
+                                   .ToList(); ;
+
+            if (duplicados != null && duplicados.Count > 0)
+                throw new OrganogramaRequisicaoInvalidaException("Existe email duplicado.");
+
+        }
     }
 }

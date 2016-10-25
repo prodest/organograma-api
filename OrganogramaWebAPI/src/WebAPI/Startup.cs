@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Organograma.WebAPI.Config;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -30,7 +31,12 @@ namespace Organograma.WebAPI
             services.Configure<AutenticacaoIdentityServer>(Configuration.GetSection("AutenticacaoIdentityServer"));
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opt =>
+                {
+                    opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                });
+
             ConfiguracaoDependencias.InjetarDependencias(services);
             ConfiguracaoAutoMapper.CriarMapeamento();
         }

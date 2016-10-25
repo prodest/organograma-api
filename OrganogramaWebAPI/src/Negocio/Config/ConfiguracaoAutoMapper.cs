@@ -21,19 +21,47 @@ namespace Organograma.Negocio.Config
         public NegocioProfile()
         {
             #region Mapeamento de Contato
-            CreateMap<ContatoModeloNegocio, Contato>().ForMember(dest => dest.IdTipoContato, opt => opt.MapFrom(s => s.TipoContato.Id));
-            CreateMap<ContatoModeloNegocio, ContatoOrganizacao>().ForMember(dest => dest.Contato, opt => opt.MapFrom(s => s));
-            CreateMap<ContatoModeloNegocio, ContatoUnidade>().ForMember(dest => dest.Contato, opt => opt.MapFrom(s => s));
+            CreateMap<ContatoModeloNegocio, Contato>()
+                .ForMember(dest => dest.IdTipoContato, opt => opt.MapFrom(s => s.TipoContato.Id));
+
+            CreateMap<ContatoModeloNegocio, ContatoOrganizacao>()
+                .ForMember(dest => dest.Contato, opt => opt.MapFrom(s => s));
+
+            CreateMap<ContatoModeloNegocio, ContatoUnidade>()
+                .ForMember(dest => dest.Contato, opt => opt.MapFrom(s => s));
+
+            CreateMap<Contato, ContatoModeloNegocio>()
+                .ForMember(dest => dest.TipoContato, opt => opt.MapFrom(s => s.TipoContato != null ? Mapper.Map<TipoContato, TipoContatoModeloNegocio>(s.TipoContato) : null));
+
+            CreateMap<ContatoOrganizacao, ContatoModeloNegocio>()
+                .ConvertUsing(s => s.Contato != null ? Mapper.Map<Contato, ContatoModeloNegocio>(s.Contato) : null);
+
+            CreateMap<ContatoUnidade, ContatoModeloNegocio>()
+                .ConvertUsing(s => s.Contato != null ? Mapper.Map<Contato, ContatoModeloNegocio>(s.Contato) : null);
             #endregion
 
             #region Mapeamento de Email
-            CreateMap<EmailModeloNegocio, Email>().ReverseMap();
-            CreateMap<EmailModeloNegocio, EmailOrganizacao>().ForMember(dest => dest.Email, opt => opt.MapFrom(s => s));
-            CreateMap<EmailModeloNegocio, EmailUnidade>().ForMember(dest => dest.Email, opt => opt.MapFrom(s => s));
+            CreateMap<EmailModeloNegocio, Email>()
+                .ReverseMap();
+
+            CreateMap<EmailModeloNegocio, EmailOrganizacao>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(s => s));
+
+            CreateMap<EmailModeloNegocio, EmailUnidade>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(s => s));
+
+            CreateMap<EmailOrganizacao, EmailModeloNegocio>()
+                .ConvertUsing(s => s.Email != null ? Mapper.Map<Email, EmailModeloNegocio>(s.Email) : null);
+
+            CreateMap<EmailUnidade, EmailModeloNegocio>()
+                .ConvertUsing(s => s.Email != null ? Mapper.Map<Email, EmailModeloNegocio>(s.Email) : null);
             #endregion
 
             #region Mapeamento de Endereço
-            CreateMap<Endereco, EnderecoModeloNegocio>();
+            CreateMap<Endereco, EnderecoModeloNegocio>()
+                .ForMember(dest => dest.Organizacoes, opt => opt.Ignore())
+                .ForMember(dest => dest.Unidades, opt => opt.Ignore());
+
             CreateMap<EnderecoModeloNegocio, Endereco>().ForMember(dest => dest.IdMunicipio, opt => opt.MapFrom(s => s.Municipio.Id));
             #endregion
 
@@ -42,7 +70,9 @@ namespace Organograma.Negocio.Config
             #endregion
 
             #region Mapeamento de Municipio
-            CreateMap<Municipio, MunicipioModeloNegocio>().ReverseMap();
+            CreateMap<MunicipioModeloNegocio, Municipio>().ReverseMap();
+
+            //CreateMap<Municipio, MunicipioModeloNegocio>();
             #endregion
 
             #region Mapeamento de Organização
@@ -64,9 +94,20 @@ namespace Organograma.Negocio.Config
             #endregion
 
             #region Mapeamento de Site
-            CreateMap<SiteModeloNegocio, Site>().ReverseMap();
-            CreateMap<SiteModeloNegocio, SiteOrganizacao>().ForMember(dest => dest.Site, opt => opt.MapFrom(s => s));
-            CreateMap<SiteModeloNegocio, SiteUnidade>().ForMember(dest => dest.Site, opt => opt.MapFrom(s => s));
+            CreateMap<SiteModeloNegocio, Site>()
+                .ReverseMap();
+
+            CreateMap<SiteModeloNegocio, SiteOrganizacao>()
+                .ForMember(dest => dest.Site, opt => opt.MapFrom(s => s));
+
+            CreateMap<SiteModeloNegocio, SiteUnidade>()
+                .ForMember(dest => dest.Site, opt => opt.MapFrom(s => s));
+
+            CreateMap<SiteOrganizacao, SiteModeloNegocio>()
+                .ConvertUsing(s => s.Site != null ? Mapper.Map<Site, SiteModeloNegocio>(s.Site) : null);
+
+            CreateMap<SiteUnidade, SiteModeloNegocio>()
+                .ConvertUsing(s => s.Site != null ? Mapper.Map<Site, SiteModeloNegocio>(s.Site) : null);
             #endregion
 
             #region Mapeamento de Tipo de Contato
@@ -82,7 +123,15 @@ namespace Organograma.Negocio.Config
             #endregion
 
             #region Mapeamento de Unidade
-            CreateMap<Unidade, UnidadeModeloNegocio>();
+            CreateMap<Unidade, UnidadeModeloNegocio>()
+                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<Endereco, EnderecoModeloNegocio>(s.Endereco) : null))
+                .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.ContatosUnidade != null ? Mapper.Map<List<ContatoUnidade>, List<ContatoModeloNegocio>>(s.ContatosUnidade.ToList()) : null))
+                .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.EmailsUnidade != null ? Mapper.Map<List<EmailUnidade>, List<EmailModeloNegocio>>(s.EmailsUnidade.ToList()) : null))
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.SitesUnidade != null ? Mapper.Map<List<SiteUnidade>, List<SiteModeloNegocio>>(s.SitesUnidade.ToList()) : null))
+                .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.SitesUnidade != null ? Mapper.Map<Unidade, UnidadeModeloNegocio>(s.UnidadePai) : null))
+                .MaxDepth(1);
+            ;
+
             CreateMap<UnidadeModeloNegocio, Unidade>()
                 .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(s => s.Organizacao != null ? s.Organizacao.Id : default(int)))
                 .ForMember(dest => dest.IdTipoUnidade, opt => opt.MapFrom(s => s.TipoUnidade != null ? s.TipoUnidade.Id : default(int)))

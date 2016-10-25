@@ -16,73 +16,47 @@ namespace Organograma.Apresentacao.Config
             {
                 cfg.AllowNullCollections = true;
 
-                #region Mapeamento de EsferaOrganizacao
-                cfg.CreateMap<EsferaOrganizacaoModeloNegocio, EsferaOrganizacaoModelo>();
+                #region Mapeamento de Contato
+                cfg.CreateMap<ContatoModelo, ContatoModeloNegocio>()
+                   .ForMember(dest => dest.TipoContato, opt => opt.MapFrom(s => new TipoContatoModeloNegocio { Id = s.IdTipoContato }));
 
-                cfg.CreateMap<EsferaOrganizacaoModelo, EsferaOrganizacaoModeloNegocio>();
-                cfg.CreateMap<EsferaOrganizacaoModeloPost, EsferaOrganizacaoModeloNegocio>();
+                cfg.CreateMap<ContatoModeloNegocio, ContatoModelo>()
+                   .ForMember(dest => dest.IdTipoContato, opt => opt.MapFrom(s => s.TipoContato.Id));
                 #endregion
 
-                #region Município
-
-                cfg.CreateMap<MunicipioModeloNegocio, MunicipioModeloGet>()
-                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.HasValue ? src.InicioVigencia.Value.ToString("dd/MM/yyyy") : null))
-                .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
-
-                cfg.CreateMap<MunicipioModeloPost, MunicipioModeloNegocio>();
-                cfg.CreateMap<MunicipioModeloPut, MunicipioModeloNegocio>();
-
-
-                #endregion
-
-                #region Tipo Organização
-
-                #region Mapeamento de TipoOrganizacao
-                cfg.CreateMap<TipoOrganizacaoModeloNegocio, TipoOrganizacaoModelo>()
-                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.ToString("dd/MM/yyyy")))
-                .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
-
-                cfg.CreateMap<TipoOrganizacaoModeloPut, TipoOrganizacaoModeloNegocio>();
-                cfg.CreateMap<TipoOrganizacaoModeloPost, TipoOrganizacaoModeloNegocio>();
-                #endregion
-
-                #region Mapeamento de TipoUnidade
-                cfg.CreateMap<TipoUnidadeModeloNegocio, TipoUnidadeModelo>()
-                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.ToString("dd/MM/yyyy")))
-                .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
-
-                cfg.CreateMap<TipoUnidadeModeloPut, TipoUnidadeModeloNegocio>();
-                cfg.CreateMap<TipoUnidadeModeloPost, TipoUnidadeModeloNegocio>();
-                #endregion
-
-                #endregion
-
-                #region Poder
-
-                cfg.CreateMap<PoderModeloPut, PoderModeloNegocio>();
-                cfg.CreateMap<PoderModeloPost, PoderModeloNegocio>();
-                cfg.CreateMap<PoderModeloNegocio, PoderModeloGet>();
-
-                #endregion
-
+                #region Mapeamento de Email
                 cfg.CreateMap<EmailModelo, EmailModeloNegocio>().ReverseMap();
+                #endregion
 
-                #region Endereco
+                #region Mapeamento de Endereço
+                cfg.CreateMap<EnderecoModeloNegocio, EnderecoModelo>()
+                   .ForMember(dest => dest.IdMunicipio, opt => opt.MapFrom(s => s.Municipio.Id));
+
                 cfg.CreateMap<EnderecoModelo, EnderecoModeloNegocio>()
                    .ForMember(dest => dest.Municipio, opt => opt.MapFrom(s => s.IdMunicipio != default(int) ? new MunicipioModeloNegocio() { Id = s.IdMunicipio } : null));
                 #endregion
 
-                cfg.CreateMap<SiteModelo, SiteModeloNegocio>().ReverseMap();
+                #region Mapeamento de Esfera de Organização
+                cfg.CreateMap<EsferaOrganizacaoModeloNegocio, EsferaOrganizacaoModelo>();
 
-                #region Contato
-                cfg.CreateMap<ContatoModelo, ContatoModeloNegocio>()
-                   .ForMember(dest => dest.TipoContato, opt => opt.MapFrom(s => new TipoContatoModeloNegocio { Id = s.IdTipoContato }));
+                cfg.CreateMap<EsferaOrganizacaoModelo, EsferaOrganizacaoModeloNegocio>();
+
+                cfg.CreateMap<EsferaOrganizacaoModeloPost, EsferaOrganizacaoModeloNegocio>();
                 #endregion
 
-                #region Organizacao
+                #region Mapeamento de Município
+                cfg.CreateMap<MunicipioModeloNegocio, MunicipioModeloGet>()
+                   .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.HasValue ? src.InicioVigencia.Value.ToString("dd/MM/yyyy") : null))
+                   .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
 
+                cfg.CreateMap<MunicipioModeloPost, MunicipioModeloNegocio>();
+
+                cfg.CreateMap<MunicipioModeloPut, MunicipioModeloNegocio>();
+                #endregion
+
+                #region Mapeamento de Organização
                 cfg.CreateMap<OrganizacaoModeloPost, OrganizacaoModeloNegocio>()
-                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null? Mapper.Map<EnderecoModelo, EnderecoModeloNegocio>(s.Endereco) : null))
+                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<EnderecoModelo, EnderecoModeloNegocio>(s.Endereco) : null))
                  .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => Mapper.Map<List<EmailModelo>, List<EmailModeloNegocio>>(s.Emails)))
                  .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModelo>, List<SiteModeloNegocio>>(s.Sites)))
                  .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModelo>, List<ContatoModeloNegocio>>(s.Contatos)))
@@ -96,12 +70,48 @@ namespace Organograma.Apresentacao.Config
                  .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailModelo>>(s.Emails)))
                  .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteModelo>>(s.Sites)))
                  .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoModelo>>(s.Contatos)));
-
-
                 #endregion
 
-                #region Unidade
-                cfg.CreateMap<UnidadeModeloNegocio, UnidadeModelo>();
+                #region Mapeamento de Poder
+                cfg.CreateMap<PoderModeloPut, PoderModeloNegocio>();
+
+                cfg.CreateMap<PoderModeloPost, PoderModeloNegocio>();
+
+                cfg.CreateMap<PoderModeloNegocio, PoderModeloGet>();
+                #endregion
+
+                #region Mapeamento de Site
+                cfg.CreateMap<SiteModelo, SiteModeloNegocio>().ReverseMap();
+                #endregion
+
+                #region Mapeamento de Tipo de Organização
+                cfg.CreateMap<TipoOrganizacaoModeloNegocio, TipoOrganizacaoModelo>()
+                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
+
+                cfg.CreateMap<TipoOrganizacaoModeloPut, TipoOrganizacaoModeloNegocio>();
+
+                cfg.CreateMap<TipoOrganizacaoModeloPost, TipoOrganizacaoModeloNegocio>();
+                #endregion
+
+                #region Mapeamento de Tipo de Unidade
+                cfg.CreateMap<TipoUnidadeModeloNegocio, TipoUnidadeModelo>()
+                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
+
+                cfg.CreateMap<TipoUnidadeModeloPut, TipoUnidadeModeloNegocio>();
+
+                cfg.CreateMap<TipoUnidadeModeloPost, TipoUnidadeModeloNegocio>();
+                #endregion
+
+                #region Mapeamento de Unidade
+                cfg.CreateMap<UnidadeModeloNegocio, UnidadeModelo>()
+                   .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(s => s.Organizacao.Id))
+                   .ForMember(dest => dest.IdTipoUnidade, opt => opt.MapFrom(s => s.TipoUnidade.Id))
+                   .ForMember(dest => dest.IdUnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? s.UnidadePai.Id : (int?)null))
+                   .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<EnderecoModeloNegocio, EnderecoModelo>(s.Endereco) : null))
+                ;
+
                 cfg.CreateMap<UnidadeModeloPost, UnidadeModeloNegocio>()
                    .ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => s.IdOrganizacao != default(int) ? new OrganizacaoModeloNegocio() { Id = s.IdOrganizacao } : null))
                    .ForMember(dest => dest.TipoUnidade, opt => opt.MapFrom(s => s.IdTipoUnidade != default(int) ? new TipoUnidadeModeloNegocio() { Id = s.IdTipoUnidade } : null))
@@ -112,10 +122,8 @@ namespace Organograma.Apresentacao.Config
                    .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.Sites != null ? Mapper.Map<List<SiteModelo>, List<SiteModeloNegocio>>(s.Sites) : null));
                 #endregion
 
-                #region Negócio   
-
+                #region Importação do mapeamento do Negócio   
                 cfg.AddProfile<NegocioProfile>();
-
                 #endregion
             });
 
