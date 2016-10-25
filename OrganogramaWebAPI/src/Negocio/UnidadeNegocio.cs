@@ -8,6 +8,7 @@ using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
 using Organograma.Negocio.Validacao;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.Negocio
 {
@@ -15,6 +16,13 @@ namespace Organograma.Negocio
     {
         private IUnitOfWork unitOfWork;
         private IRepositorioGenerico<Unidade> repositorioUnidades;
+        private IRepositorioGenerico<Endereco> repositorioEnderecos;
+        private IRepositorioGenerico<Contato> repositorioContatos;
+        private IRepositorioGenerico<ContatoUnidade> repositorioContatosUnidades;
+        private IRepositorioGenerico<Email> repositorioEmails;
+        private IRepositorioGenerico<EmailUnidade> repositorioEmailsUnidades;
+        private IRepositorioGenerico<Site> repositorioSites;
+        private IRepositorioGenerico<SiteUnidade> repositorioSitesUnidades;
         private UnidadeValidacao unidadeValidacao;
         private TipoUnidadeValidacao tipoUnidadeValidacao;
         private OrganizacaoValidacao organizacaoValidacao;
@@ -28,6 +36,15 @@ namespace Organograma.Negocio
         {
             unitOfWork = repositorios.UnitOfWork;
             repositorioUnidades = repositorios.Unidades;
+            repositorioEnderecos = repositorios.Enderecos;
+            repositorioContatos = repositorios.Contatos;
+            repositorioContatosUnidades = repositorios.ContatosUnidades;
+            repositorioEmails = repositorios.Emails;
+            repositorioEmailsUnidades = repositorios.EmailsUnidades;
+            repositorioSites = repositorios.Sites;
+            repositorioSitesUnidades = repositorios.SitesUnidades;
+
+
             unidadeValidacao = new UnidadeValidacao(repositorioUnidades, repositorios.TiposUnidades, repositorios.Organizacoes);
             tipoUnidadeValidacao = new TipoUnidadeValidacao(repositorios.TiposUnidades);
             organizacaoValidacao = new OrganizacaoValidacao(repositorios.Organizacoes);
@@ -61,10 +78,41 @@ namespace Organograma.Negocio
 
         public void Excluir(int id)
         {
-            //unidadeValidacao.IdPreenchido(id);
+            unidadeValidacao.IdPreenchido(id);
 
-            var unidade = repositorioUnidades.SingleOrDefault(eo => eo.Id == id);
+            unidadeValidacao.IdValido(id);
+
+            var unidade = repositorioUnidades.Where(un => un.Id == id)
+                                             .Include(u => u.Endereco)
+                                             .Include(u => u.ContatosUnidade).ThenInclude(cu => cu.Contato)
+                                             .Include(u => u.EmailsUnidade).ThenInclude(eu => eu.Email)
+                                             .Include(u => u.SitesUnidade).ThenInclude(su => su.Site)
+                                             .SingleOrDefault();
+
             unidadeValidacao.NaoEncontrado(unidade);
+
+            unidadeValidacao.PossuiFilho(id);
+
+            if (unidade.Endereco != null)
+                repositorioEnderecos.Remove(unidade.Endereco);
+
+            foreach (var cu in unidade.ContatosUnidade)
+            {
+                repositorioContatos.Remove(cu.Contato);
+                repositorioContatosUnidades.Remove(cu);
+            }
+
+            foreach (var eu in unidade.EmailsUnidade)
+            {
+                repositorioEmails.Remove(eu.Email);
+                repositorioEmailsUnidades.Remove(eu);
+            }
+
+            foreach (var su in unidade.SitesUnidade)
+            {
+                repositorioSites.Remove(su.Site);
+                repositorioSitesUnidades.Remove(su);
+            }
 
             repositorioUnidades.Remove(unidade);
 

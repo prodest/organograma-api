@@ -23,18 +23,24 @@ namespace Organograma.Negocio.Validacao
             this.repositorioOrganizacoes = repositorioOrganizacoes;
         }
 
+        #region Verificação de unidade não nula
         internal void NaoNula(UnidadeModeloNegocio unidade)
         {
             if (unidade == null)
                 throw new OrganogramaRequisicaoInvalidaException("Unidade não pode ser nula.");
         }
+        #endregion
 
         #region Verificações de preenchimento de campos obrigatórios
+        internal void IdPreenchido(int id)
+        {
+            if (id == default(int))
+                throw new OrganogramaRequisicaoInvalidaException("O id da unidade deve ser preenchido.");
+        }
 
         internal void IdPreenchido(UnidadeModeloNegocio unidade)
         {
-            if (unidade.Id == default(int))
-                throw new OrganogramaRequisicaoInvalidaException("O id da unidade deve ser preenchido.");
+            IdPreenchido(unidade.Id);
         }
 
         internal void IdUnidadePaiPreenchido(UnidadeModeloNegocio unidadePai)
@@ -62,6 +68,15 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaRequisicaoInvalidaException("A sigla da unidade deve ser preenchida.");
         }
 
+        internal void PossuiFilho(int id)
+        {
+            var unidadesFilhas = repositorioUnidades.Where(u => u.IdUnidadePai == id)
+                                                    .ToList();
+
+            if (unidadesFilhas != null && unidadesFilhas.Count > 0)
+                throw new OrganogramaRequisicaoInvalidaException("A unidade possui unidades filhas.");
+        }
+
         internal void UnidadePaiPreenchida(UnidadeModeloNegocio unidadePai)
         {
             if (unidadePai != null)
@@ -71,11 +86,15 @@ namespace Organograma.Negocio.Validacao
         #endregion
 
         #region Validações de negócio
+        internal void IdValido(int id)
+        {
+            if (id <= 0)
+                throw new OrganogramaRequisicaoInvalidaException("O id da unidade é inválido.");
+        }
 
         internal void IdValido(UnidadeModeloNegocio unidade)
         {
-            if (unidade.Id <= 0)
-                throw new OrganogramaRequisicaoInvalidaException("O id da unidade é inválido.");
+            IdValido(unidade.Id);
         }
 
         internal void IdUnidadePaiValido(UnidadeModeloNegocio unidade)
