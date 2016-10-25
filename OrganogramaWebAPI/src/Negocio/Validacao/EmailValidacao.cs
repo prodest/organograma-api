@@ -69,7 +69,6 @@ namespace Organograma.Negocio.Validacao
 
             if (duplicados != null && duplicados.Count > 0)
                 throw new OrganogramaRequisicaoInvalidaException("Existe email duplicado.");
-
         }
     }
 }

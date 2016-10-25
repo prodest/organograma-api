@@ -28,6 +28,8 @@ namespace Organograma.Negocio.Validacao
                 {
                     Valido(site);
                 }
+
+                Repetido(sites);
             }
         }
 
@@ -53,5 +55,15 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
+        private void Repetido(List<SiteModeloNegocio> sites)
+        {
+            var duplicados = sites.GroupBy(e => e.Url)
+                                   .Where(g => g.Count() > 1)
+                                   .Select(g => g.Key)
+                                   .ToList(); ;
+
+            if (duplicados != null && duplicados.Count > 0)
+                throw new OrganogramaRequisicaoInvalidaException("Existe site duplicado.");
+        }
     }
 }
