@@ -7,7 +7,7 @@ namespace Organograma.Apresentacao.Base
     {
         List<UnidadeModelo> Listar();
 
-        UnidadeModelo Pesquisar(int id);
+        UnidadeModeloGet Pesquisar(int id);
 
         UnidadeModelo Inserir(UnidadeModeloPost esferaOrganizacao);
 

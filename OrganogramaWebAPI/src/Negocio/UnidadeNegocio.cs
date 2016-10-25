@@ -184,8 +184,15 @@ namespace Organograma.Negocio
 
         public UnidadeModeloNegocio Pesquisar(int id)
         {
-            var unidade = repositorioUnidades.OrderBy(eo => eo.Nome)
-                                             .SingleOrDefault(eo => eo.Id == id);
+            var unidade = repositorioUnidades.Where(u => u.Id == id)
+                                             .Include(u => u.TipoUnidade)
+                                             .Include(u => u.Organizacao)
+                                             .Include(u => u.UnidadePai)
+                                             .Include(u => u.Endereco).ThenInclude(u => u.Municipio)
+                                             .Include(u => u.ContatosUnidade).ThenInclude(u => u.Contato).ThenInclude(u => u.TipoContato)
+                                             .Include(u => u.EmailsUnidade).ThenInclude(u => u.Email)
+                                             .Include(u => u.SitesUnidade).ThenInclude(u => u.Site)
+                                             .SingleOrDefault();
 
             unidadeValidacao.NaoEncontrado(unidade);
 

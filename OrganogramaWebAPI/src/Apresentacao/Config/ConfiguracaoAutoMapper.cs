@@ -32,6 +32,8 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<EnderecoModeloNegocio, EnderecoModelo>()
                    .ForMember(dest => dest.IdMunicipio, opt => opt.MapFrom(s => s.Municipio.Id));
 
+                cfg.CreateMap<EnderecoModeloNegocio, EnderecoModeloGet>();
+
                 cfg.CreateMap<EnderecoModelo, EnderecoModeloNegocio>()
                    .ForMember(dest => dest.Municipio, opt => opt.MapFrom(s => s.IdMunicipio != default(int) ? new MunicipioModeloNegocio() { Id = s.IdMunicipio } : null));
                 #endregion
@@ -51,7 +53,7 @@ namespace Organograma.Apresentacao.Config
 
                 cfg.CreateMap<MunicipioModeloPost, MunicipioModeloNegocio>();
 
-                cfg.CreateMap<MunicipioModeloPut, MunicipioModeloNegocio>();
+                cfg.CreateMap<MunicipioModeloPut, MunicipioModeloNegocio>().ReverseMap();
                 #endregion
 
                 #region Mapeamento de Organização
@@ -76,6 +78,7 @@ namespace Organograma.Apresentacao.Config
                  .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteModelo>>(s.Sites)))
                  .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoModelo>>(s.Contatos)));
 
+                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoUnidadeModeloGet>();
                 #endregion
 
                 #region Mapeamento de Poder
@@ -105,7 +108,7 @@ namespace Organograma.Apresentacao.Config
                 .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.ToString("dd/MM/yyyy")))
                 .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
 
-                cfg.CreateMap<TipoUnidadeModeloPut, TipoUnidadeModeloNegocio>();
+                cfg.CreateMap<TipoUnidadeModeloPut, TipoUnidadeModeloNegocio>().ReverseMap();
 
                 cfg.CreateMap<TipoUnidadeModeloPost, TipoUnidadeModeloNegocio>();
                 #endregion
@@ -118,6 +121,13 @@ namespace Organograma.Apresentacao.Config
                    .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<EnderecoModeloNegocio, EnderecoModelo>(s.Endereco) : null))
                 ;
 
+                cfg.CreateMap<UnidadeModeloNegocio, UnidadeModeloGet>()
+                   .ForMember(dest => dest.TipoUnidade, opt => opt.MapFrom(s => s.TipoUnidade != null ? Mapper.Map<TipoUnidadeModeloNegocio, TipoUnidadeModeloPut>(s.TipoUnidade) : null))
+                   .ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => s.Organizacao != null ? Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoUnidadeModeloGet>(s.Organizacao) : null))
+                   .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? Mapper.Map<UnidadeModeloNegocio, UnidadePaiModeloGet>(s.UnidadePai) : null))
+                   .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<EnderecoModeloNegocio, EnderecoModeloGet>(s.Endereco) : null))
+                ;
+
                 cfg.CreateMap<UnidadeModeloPost, UnidadeModeloNegocio>()
                    .ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => s.IdOrganizacao != default(int) ? new OrganizacaoModeloNegocio() { Id = s.IdOrganizacao } : null))
                    .ForMember(dest => dest.TipoUnidade, opt => opt.MapFrom(s => s.IdTipoUnidade != default(int) ? new TipoUnidadeModeloNegocio() { Id = s.IdTipoUnidade } : null))
@@ -126,6 +136,8 @@ namespace Organograma.Apresentacao.Config
                    .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.Contatos != null ? Mapper.Map<List<ContatoModelo>, List<ContatoModeloNegocio>>(s.Contatos) : null))
                    .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.Emails != null ? Mapper.Map<List<EmailModelo>, List<EmailModeloNegocio>>(s.Emails) : null))
                    .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.Sites != null ? Mapper.Map<List<SiteModelo>, List<SiteModeloNegocio>>(s.Sites) : null));
+
+                cfg.CreateMap<UnidadeModeloNegocio, UnidadePaiModeloGet>();
                 #endregion
 
                 #region Importação do mapeamento do Negócio   

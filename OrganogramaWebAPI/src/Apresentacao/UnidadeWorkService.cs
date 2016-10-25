@@ -30,11 +30,11 @@ namespace Organograma.Apresentacao
 
         public UnidadeModelo Inserir(UnidadeModeloPost unidade)
         {
-            UnidadeModeloNegocio eomn = Mapper.Map<UnidadeModeloPost, UnidadeModeloNegocio>(unidade);
+            UnidadeModeloNegocio umn = Mapper.Map<UnidadeModeloPost, UnidadeModeloNegocio>(unidade);
 
-            eomn = unidadeNegocio.Inserir(eomn);
+            umn = unidadeNegocio.Inserir(umn);
 
-            return Mapper.Map<UnidadeModeloNegocio, UnidadeModelo>(eomn);
+            return Mapper.Map<UnidadeModeloNegocio, UnidadeModelo>(umn);
         }
 
         public List<UnidadeModelo> Listar()
@@ -44,11 +44,11 @@ namespace Organograma.Apresentacao
             return Mapper.Map<List<UnidadeModeloNegocio>, List<UnidadeModelo>>(unidades);
         }
 
-        public UnidadeModelo Pesquisar(int id)
+        public UnidadeModeloGet Pesquisar(int id)
         {
-            var unidade = unidadeNegocio.Pesquisar(id);
+            var umn = unidadeNegocio.Pesquisar(id);
 
-            return Mapper.Map<UnidadeModeloNegocio, UnidadeModelo>(unidade); ;
+            return Mapper.Map<UnidadeModeloNegocio, UnidadeModeloGet>(umn); ;
         }
     }
 }

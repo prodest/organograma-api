@@ -22,4 +22,26 @@ namespace Organograma.Apresentacao.Modelos
         public virtual List<SiteModelo> Sites { get; set; }
         
     }
+
+    public class UnidadeModeloGet
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public string Sigla { get; set; }
+
+        public TipoUnidadeModeloPut TipoUnidade { get; set; }
+        public OrganizacaoUnidadeModeloGet Organizacao { get; set; }
+        public UnidadePaiModeloGet UnidadePai { get; set; }
+        public EnderecoModeloGet Endereco { get; set; }
+        public List<ContatoModelo> Contatos { get; set; }
+        public List<EmailModelo> Emails { get; set; }
+        public List<SiteModelo> Sites { get; set; }
+    }
+
+    public class UnidadePaiModeloGet
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public string Sigla { get; set; }
+    }
 }
