@@ -128,7 +128,7 @@ namespace Organograma.Negocio.Validacao
                 var uniPai = repositorioUnidades.Where(u => u.Id == unidadePai.Id)
                                                 .SingleOrDefault();
 
-                if (uniPai != null)
+                if (uniPai == null)
                     throw new OrganogramaNaoEncontradoException("Unidade pai não encontrada.");
             }
         }
@@ -152,14 +152,5 @@ namespace Organograma.Negocio.Validacao
             if (unidades == null || unidades.Count <= 0)
                 throw new OrganogramaNaoEncontradoException("Unidade não encontrada.");
         }
-
-        //internal void DescricaoExistente(string descricao)
-        //{
-        //    var unidade = repositorioUnidades.SingleOrDefault(td => td.Descricao.ToUpper().Equals(descricao.ToUpper()));
-
-        //    if (unidade != null)
-        //        throw new OrganogramaRequisicaoInvalidaException("Já existe uma unidade com esta descrição.");
-        //}
-
     }
 }
