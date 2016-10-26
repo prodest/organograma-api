@@ -39,7 +39,13 @@ namespace Organograma.Negocio
             unitOfWork = repositorios.UnitOfWork;
             repositorioOrganizacoes = repositorios.Organizacoes;
             repositorioContatos = repositorios.Contatos;
-                                    
+            repositorioContatosOrganizacoes = repositorios.ContatosOrganizacoes;
+            repositorioEmails = repositorios.Emails;
+            repositorioEmailsOrganizacoes = repositorios.EmailsOrganizacoes;
+            repositorioEnderecos = repositorios.Enderecos;
+            repositorioSites = repositorios.Sites;
+            repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
+
             validacao = new OrganizacaoValidacao(repositorioOrganizacoes);
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
             contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContatos);
@@ -50,7 +56,6 @@ namespace Organograma.Negocio
             siteValidacao = new SiteValidacao();
             tipoOrganizacaoValidacao = new TipoOrganizacaoValidacao(repositorios.TiposOrganizacoes);
 
-            
         }
 
         public void Alterar(int id, OrganizacaoModeloNegocio poderNegocio)
@@ -71,6 +76,8 @@ namespace Organograma.Negocio
                 .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
                 .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email).Single();
 
+
+            ExcluiRelacionamentos(organizacao);
             repositorioOrganizacoes.Remove(organizacao);
             unitOfWork.Save();
         }
@@ -127,9 +134,44 @@ namespace Organograma.Negocio
             return organizacao;
         }
 
-        private void ExcluiRelacionamentos(OrganizacaoNegocio organizacaoNegocio)
+        private void ExcluiRelacionamentos(Organizacao organizacao)
         {
+            //Contatos
+            if (organizacao.ContatosOrganizacao != null)
+            {
+                foreach (var contatoOrganizacao in organizacao.ContatosOrganizacao)
+                {
+                    repositorioContatosOrganizacoes.Remove(contatoOrganizacao);
+                    repositorioContatos.Remove(contatoOrganizacao.Contato);
+                }
 
+            }
+            //Endereco
+            if (organizacao.Endereco != null)
+            {
+                repositorioEnderecos.Remove(organizacao.Endereco);
+
+            }
+            //Emails
+            if (organizacao.EmailsOrganizacao != null)
+            {
+                foreach (var emailOrganizacao in organizacao.EmailsOrganizacao)
+                {
+                    repositorioEmailsOrganizacoes.Remove(emailOrganizacao);
+                    repositorioEmails.Remove(emailOrganizacao.Email);
+                }
+
+            }
+            //Sites
+            if (organizacao.SitesOrganizacao != null)
+            {
+                foreach (var siteOrganizacao in organizacao.SitesOrganizacao)
+                {
+                    repositorioSitesOrganizacoes.Remove(siteOrganizacao);
+                    repositorioSites.Remove(siteOrganizacao.Site);
+                }
+
+            }
         }
     }
 }
