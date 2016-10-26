@@ -98,8 +98,26 @@ namespace Organograma.WebAPI.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        //[Authorize]
+        public IActionResult Excluir(int id)
         {
+            try
+            {
+                service.Excluir(id);
+                return Ok();
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
     }
 }

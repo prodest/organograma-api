@@ -7,6 +7,7 @@ using Organograma.Negocio.Modelos;
 using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
 using Organograma.Negocio.Validacao;
+using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.Negocio
 {
@@ -15,6 +16,14 @@ namespace Organograma.Negocio
 
         IUnitOfWork unitOfWork;
         IRepositorioGenerico<Organizacao> repositorioOrganizacoes;
+        IRepositorioGenerico<Contato> repositorioContatos;
+        IRepositorioGenerico<ContatoOrganizacao> repositorioContatosOrganizacoes;
+        IRepositorioGenerico<Email> repositorioEmails;
+        IRepositorioGenerico<EmailOrganizacao> repositorioEmailsOrganizacoes;
+        IRepositorioGenerico<Endereco> repositorioEnderecos;
+        IRepositorioGenerico<Site> repositorioSites;
+        IRepositorioGenerico<SiteOrganizacao> repositorioSitesOrganizacoes;
+        
         OrganizacaoValidacao validacao;
         CnpjValidacao cnpjValidacao;
         ContatoValidacao contatoValidacao;
@@ -25,11 +34,18 @@ namespace Organograma.Negocio
         SiteValidacao siteValidacao;
         TipoOrganizacaoValidacao tipoOrganizacaoValidacao;
         
-        
         public OrganizacaoNegocio(IOrganogramaRepositorios repositorios)
         {
             unitOfWork = repositorios.UnitOfWork;
             repositorioOrganizacoes = repositorios.Organizacoes;
+            repositorioContatos = repositorios.Contatos;
+            repositorioContatosOrganizacoes = repositorios.ContatosOrganizacoes;
+            repositorioEmails = repositorios.Emails;
+            repositorioEmailsOrganizacoes = repositorios.EmailsOrganizacoes;
+            repositorioEnderecos = repositorios.Enderecos;
+            repositorioSites = repositorios.Sites;
+            repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
+
             validacao = new OrganizacaoValidacao(repositorioOrganizacoes);
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
             contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContatos);
@@ -39,7 +55,7 @@ namespace Organograma.Negocio
             poderValidacao = new PoderValidacao(repositorios.Poderes);
             siteValidacao = new SiteValidacao();
             tipoOrganizacaoValidacao = new TipoOrganizacaoValidacao(repositorios.TiposOrganizacoes);
-            
+
         }
 
         public void Alterar(int id, OrganizacaoModeloNegocio poderNegocio)
@@ -49,7 +65,21 @@ namespace Organograma.Negocio
 
         public void Excluir(int id)
         {
-            throw new NotImplementedException();
+            validacao.IdPreenchido(id);
+            validacao.Existe(id);
+            validacao.PossuiFilho(id);
+            validacao.PossuiUnidade(id);
+
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == id)
+                .Include(i => i.Endereco)
+                .Include(i => i.ContatosOrganizacao).ThenInclude(c => c.Contato)
+                .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
+                .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email).Single();
+
+
+            ExcluiRelacionamentos(organizacao);
+            repositorioOrganizacoes.Remove(organizacao);
+            unitOfWork.Save();
         }
 
         public OrganizacaoModeloNegocio Inserir(OrganizacaoModeloNegocio organizacaoNegocio)
@@ -102,6 +132,46 @@ namespace Organograma.Negocio
             Organizacao organizacao = new Organizacao();
             organizacao = Mapper.Map<OrganizacaoModeloNegocio, Organizacao>(organizacaoNegocio);
             return organizacao;
+        }
+
+        private void ExcluiRelacionamentos(Organizacao organizacao)
+        {
+            //Contatos
+            if (organizacao.ContatosOrganizacao != null)
+            {
+                foreach (var contatoOrganizacao in organizacao.ContatosOrganizacao)
+                {
+                    repositorioContatosOrganizacoes.Remove(contatoOrganizacao);
+                    repositorioContatos.Remove(contatoOrganizacao.Contato);
+                }
+
+            }
+            //Endereco
+            if (organizacao.Endereco != null)
+            {
+                repositorioEnderecos.Remove(organizacao.Endereco);
+
+            }
+            //Emails
+            if (organizacao.EmailsOrganizacao != null)
+            {
+                foreach (var emailOrganizacao in organizacao.EmailsOrganizacao)
+                {
+                    repositorioEmailsOrganizacoes.Remove(emailOrganizacao);
+                    repositorioEmails.Remove(emailOrganizacao.Email);
+                }
+
+            }
+            //Sites
+            if (organizacao.SitesOrganizacao != null)
+            {
+                foreach (var siteOrganizacao in organizacao.SitesOrganizacao)
+                {
+                    repositorioSitesOrganizacoes.Remove(siteOrganizacao);
+                    repositorioSites.Remove(siteOrganizacao.Site);
+                }
+
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Organograma.Dominio.Base;
+﻿using Microsoft.EntityFrameworkCore;
+using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
 using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Modelos;
@@ -19,12 +20,17 @@ namespace Organograma.Negocio.Validacao
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
         }
 
-        internal void IdPreenchido(OrganizacaoModeloNegocio organizacao)
+        internal void IdPreenchido(int id)
         {
-            if (organizacao.Id == default(int))
+            if (id == default(int))
             {
                 throw new OrganogramaRequisicaoInvalidaException("Id da organização não preenchido.");
             }
+        }
+
+        internal void IdPreenchido(OrganizacaoModeloNegocio organizacao)
+        {
+            IdPreenchido(organizacao.Id);
         }
 
         internal void IdValido(OrganizacaoModeloNegocio organizacao)
@@ -42,7 +48,7 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaRequisicaoInvalidaException("Id da organização pai não é valido");
             }
         }
-        
+
 
         internal void Preenchido(OrganizacaoModeloNegocio organizacao)
         {
@@ -62,12 +68,39 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
-        internal void Existe(OrganizacaoModeloNegocio organizacao)
+        internal void PossuiFilho(int id)
         {
-            if (repositorioOrganizacoes.Where(o => o.Id == organizacao.Id).SingleOrDefault() == null)
+            if (repositorioOrganizacoes.Where(o => o.IdOrganizacaoPai == id).ToList().Count > 0)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Organização possui organizações filhas.");
+            }
+
+        }
+
+        internal void PossuiUnidade(int id)
+        {
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == id).Include(i => i.Unidades).SingleOrDefault();
+
+            if (organizacao != null)
+            {
+                if (organizacao.Unidades.ToList().Count > 0)
+                {
+                    throw new OrganogramaRequisicaoInvalidaException("Organização possui unidades");
+                }
+            }
+        }
+
+        internal void Existe(int id)
+        {
+            if (repositorioOrganizacoes.Where(o => o.Id == id).SingleOrDefault() == null)
             {
                 throw new OrganogramaNaoEncontradoException("Organização não existe.");
-            };
+            }
+        }
+
+        internal void Existe(OrganizacaoModeloNegocio organizacao)
+        {
+            Existe(organizacao.Id);
         }
 
         internal void PaiExiste(OrganizacaoModeloNegocio organizacao)
@@ -80,16 +113,16 @@ namespace Organograma.Negocio.Validacao
 
         internal void PaiValido(OrganizacaoModeloNegocio organizacaoPai)
         {
-            
+
             if (organizacaoPai != null)
             {
                 IdPaiValido(organizacaoPai);
                 PaiExiste(organizacaoPai);
             }
-                      
+
         }
 
-        internal void Valido (OrganizacaoModeloNegocio organizacao)
+        internal void Valido(OrganizacaoModeloNegocio organizacao)
         {
             cnpjValidacao.CnpjExiste(organizacao);
             cnpjValidacao.CnpjValido(organizacao.Cnpj);

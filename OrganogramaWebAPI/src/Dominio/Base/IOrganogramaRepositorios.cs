@@ -9,14 +9,17 @@ namespace Organograma.Dominio.Base
 
         IRepositorioGenerico<Contato> Contatos { get; }
         IRepositorioGenerico<ContatoUnidade> ContatosUnidades { get; }
+        IRepositorioGenerico<ContatoOrganizacao> ContatosOrganizacoes { get; }
         IRepositorioGenerico<Email> Emails { get; }
         IRepositorioGenerico<Endereco> Enderecos { get; }
+        IRepositorioGenerico<EmailOrganizacao> EmailsOrganizacoes { get; }
         IRepositorioGenerico<EmailUnidade> EmailsUnidades { get; }
         IRepositorioGenerico<EsferaOrganizacao> EsferasOrganizacoes { get; }
         IRepositorioGenerico<Municipio> Municipios { get; }
         IRepositorioGenerico<Organizacao> Organizacoes { get; }
         IRepositorioGenerico<Poder> Poderes { get; }
         IRepositorioGenerico<Site> Sites { get; }
+        IRepositorioGenerico<SiteOrganizacao> SitesOrganizacoes { get; }
         IRepositorioGenerico<SiteUnidade> SitesUnidades { get; }
         IRepositorioGenerico<TipoContato> TiposContatos { get; }
         IRepositorioGenerico<TipoOrganizacao> TiposOrganizacoes { get; }
