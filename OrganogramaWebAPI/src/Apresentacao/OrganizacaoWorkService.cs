@@ -19,7 +19,7 @@ namespace Organograma.Apresentacao
 
         public void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch)
         {
-            throw new NotImplementedException();
+            organizacaoNegocio.Alterar(id, Mapper.Map<OrganizacaoModeloPatch, OrganizacaoModeloNegocio>(organizacaoPatch));
         }
 
         public void Excluir(int id)

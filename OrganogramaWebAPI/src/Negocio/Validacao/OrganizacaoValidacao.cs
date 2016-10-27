@@ -90,6 +90,14 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
+        internal void IdAlteracaoValido(int id, OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            if (id != organizacaoNegocio.Id)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Identificadores de Organização diferentes.");
+            }
+        }
+
         internal void Existe(int id)
         {
             if (repositorioOrganizacoes.Where(o => o.Id == id).SingleOrDefault() == null)

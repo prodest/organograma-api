@@ -93,6 +93,13 @@ namespace Organograma.Apresentacao.Config
 
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoPaiModeloGet>();
 
+                cfg.CreateMap<OrganizacaoModeloPatch, OrganizacaoModeloNegocio>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(s => s.Id))
+                .ForMember(dest => dest.Esfera, opt => opt.MapFrom(s => s.IdEsfera.HasValue ? new EsferaOrganizacaoModeloNegocio() { Id = s.IdEsfera.Value } : null))
+                .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.IdOrganizacaoPai.HasValue ? new OrganizacaoModeloNegocio() { Id = s.IdOrganizacaoPai.Value } : null))
+                .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.IdPoder.HasValue ? new PoderModeloNegocio() { Id = s.IdPoder.Value } : null))
+                .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.IdTipoOrganizacao.HasValue ? new TipoOrganizacaoModeloNegocio() { Id = s.IdTipoOrganizacao.Value } : null));
+                
                 #endregion
 
                 #region Mapeamento de Poder

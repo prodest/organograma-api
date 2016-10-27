@@ -25,8 +25,16 @@ namespace Organograma.Negocio.Validacao
 
         internal void IdValido(int id)
         {
-            if (id == default(int))
+            if (id <= default(int))
                 throw new OrganogramaRequisicaoInvalidaException("Identificador da esfera de organização inválido.");
+        }
+
+        internal void IdValido(EsferaOrganizacaoModeloNegocio esfera)
+        {
+            if (esfera != null)
+            {
+                IdValido(esfera.Id);
+            }
         }
 
         internal void IdAlteracaoValido(int id, EsferaOrganizacaoModeloNegocio esferaOrganizacao)
@@ -61,19 +69,24 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaNaoEncontradoException("Esfera de organização não encontrada.");
         }
 
-        internal void IdPreenchido (EsferaOrganizacaoModeloNegocio esfera)
+        internal void IdPreenchido(EsferaOrganizacaoModeloNegocio esfera)
         {
-            if (esfera.Id == default(int))
-                throw new OrganogramaRequisicaoInvalidaException("Esfera da organização não preenchido.");
+            if (esfera != null)
+            {
+                if (esfera.Id == default(int))
+                    throw new OrganogramaRequisicaoInvalidaException("Esfera da organização não preenchido.");
+            }
+
         }
 
-        internal void Existe (EsferaOrganizacaoModeloNegocio esfera)
+        internal void Existe(EsferaOrganizacaoModeloNegocio esfera)
         {
-            if (repositorioEsferasOrganizacoes.Where(e => e.Id == esfera.Id).SingleOrDefault() == null) {
+            if (repositorioEsferasOrganizacoes.Where(e => e.Id == esfera.Id).SingleOrDefault() == null)
+            {
                 throw new OrganogramaNaoEncontradoException("Esfera de organização não existe");
             }
         }
 
-        
+
     }
 }

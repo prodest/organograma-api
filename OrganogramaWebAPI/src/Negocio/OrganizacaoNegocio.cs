@@ -58,9 +58,15 @@ namespace Organograma.Negocio
 
         }
 
-        public void Alterar(int id, OrganizacaoModeloNegocio poderNegocio)
+        public void Alterar(int id, OrganizacaoModeloNegocio organizacaoNegocio)
         {
-            throw new NotImplementedException();
+            validacao.IdPreenchido(id);
+            validacao.IdPreenchido(organizacaoNegocio);
+            validacao.IdAlteracaoValido(id, organizacaoNegocio);
+            esferaValidacao.IdPreenchido(organizacaoNegocio.Esfera);
+            esferaValidacao.IdValido(organizacaoNegocio.Esfera);
+            poderValidacao.IdPreenchido(organizacaoNegocio.Poder);
+
         }
 
         public void Excluir(int id)
