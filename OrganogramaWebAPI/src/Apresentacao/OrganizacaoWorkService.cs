@@ -17,7 +17,7 @@ namespace Organograma.Apresentacao
             this.organizacaoNegocio = organizacaoNegocio;
         }
 
-        public void Alterar(int id, OrganizacaoModeloPut organizacaoPut)
+        public void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch)
         {
             throw new NotImplementedException();
         }
@@ -27,12 +27,13 @@ namespace Organograma.Apresentacao
             organizacaoNegocio.Excluir(id);
         }
 
-        public OrganizacaoModeloGet Inserir(OrganizacaoModeloPost organizacaoPost)
+        public OrganizacaoModeloPut Inserir(OrganizacaoModeloPost organizacaoPost)
         {
             OrganizacaoModeloNegocio organizacaoModeloNegocio = new OrganizacaoModeloNegocio();
             Mapper.Map(organizacaoPost, organizacaoModeloNegocio);
-
-            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Inserir(organizacaoModeloNegocio));
+                        
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloPut>(organizacaoNegocio.Inserir(organizacaoModeloNegocio));
+            
         }
 
         public List<OrganizacaoModeloGet> Listar()
@@ -42,7 +43,7 @@ namespace Organograma.Apresentacao
 
         public OrganizacaoModeloGet Pesquisar(int id)
         {
-            throw new NotImplementedException();
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(id));
         }
     }
 }

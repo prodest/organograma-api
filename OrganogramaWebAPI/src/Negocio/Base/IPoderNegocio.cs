@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Organograma.Negocio.Base
 {
-    public interface IOrganizacaoNegocio
+    public interface IPoderNegocio
     {
-        List<OrganizacaoModeloNegocio> Listar();
-        OrganizacaoModeloNegocio Pesquisar(int id);
-        OrganizacaoModeloNegocio Inserir(OrganizacaoModeloNegocio OrganizacaoNegocio);
+        List<PoderModeloNegocio> Listar();
+        PoderModeloNegocio Pesquisar(int id);
+        PoderModeloNegocio Inserir(PoderModeloNegocio poderNegocio);
 
-        void Alterar(int id, OrganizacaoModeloNegocio poderNegocio);
+        void Alterar(int id, PoderModeloNegocio poderNegocio);
 
         void Excluir (int id);
     }

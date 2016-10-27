@@ -76,8 +76,17 @@ namespace Organograma.Negocio.Config
             #endregion
 
             #region Mapeamento de Organização
-            CreateMap<Organizacao, OrganizacaoModeloNegocio>();
-
+            CreateMap<Organizacao, OrganizacaoModeloNegocio>()
+                .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.ContatosOrganizacao != null ? Mapper.Map<List<ContatoOrganizacao>, List<ContatoModeloNegocio>>(s.ContatosOrganizacao.ToList()) : null))
+                .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.EmailsOrganizacao != null ? Mapper.Map<List<EmailOrganizacao>, List<EmailModeloNegocio>>(s.EmailsOrganizacao.ToList()) : null))
+                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco))
+                .ForMember(dest => dest.Esfera, opt => opt.MapFrom(s => s.Esfera))
+                .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? Mapper.Map<Organizacao, OrganizacaoModeloNegocio>(s.OrganizacaoPai) : null))
+                .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.Poder))
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.SitesOrganizacao != null ? Mapper.Map<List<SiteOrganizacao>, List<SiteModeloNegocio>>(s.SitesOrganizacao.ToList()) : null))
+                .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao))
+                .MaxDepth(1);
+            
             CreateMap<OrganizacaoModeloNegocio, Organizacao>()
                 .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? s.OrganizacaoPai.Id : (int?)null))
                 .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
@@ -128,7 +137,7 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => (s.ContatosUnidade != null && s.ContatosUnidade.Count > 0) ? Mapper.Map<List<ContatoUnidade>, List<ContatoModeloNegocio>>(s.ContatosUnidade.ToList()) : null))
                 .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => (s.EmailsUnidade != null && s.EmailsUnidade.Count > 0) ? Mapper.Map<List<EmailUnidade>, List<EmailModeloNegocio>>(s.EmailsUnidade.ToList()) : null))
                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => (s.SitesUnidade != null && s.SitesUnidade.Count > 0) ? Mapper.Map<List<SiteUnidade>, List<SiteModeloNegocio>>(s.SitesUnidade.ToList()) : null))
-                .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.SitesUnidade != null ? Mapper.Map<Unidade, UnidadeModeloNegocio>(s.UnidadePai) : null))
+                .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? Mapper.Map<Unidade, UnidadeModeloNegocio>(s.UnidadePai) : null))
                 .MaxDepth(1);
             ;
 

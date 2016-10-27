@@ -43,7 +43,7 @@ namespace Organograma.Apresentacao.Config
 
                 cfg.CreateMap<EsferaOrganizacaoModelo, EsferaOrganizacaoModeloNegocio>();
 
-                cfg.CreateMap<EsferaOrganizacaoModeloPost, EsferaOrganizacaoModeloNegocio>();
+                cfg.CreateMap<EsferaOrganizacaoModeloPost, EsferaOrganizacaoModeloNegocio>().ReverseMap();
                 #endregion
 
                 #region Mapeamento de Município
@@ -67,7 +67,7 @@ namespace Organograma.Apresentacao.Config
                  .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.IdOrganizacaoPai != default(int) ? new OrganizacaoModeloNegocio() { Id = s.IdOrganizacaoPai } : null))
                  .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => Mapper.Map<TipoOrganizacaoModeloNegocio>(new TipoOrganizacaoModelo { Id = s.IdTipoOrganizacao })));
 
-                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoModeloGet>()
+                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoModeloPut>()
                  .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
                  .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder.Id))
                  .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? s.OrganizacaoPai.Id : 0))
@@ -78,13 +78,27 @@ namespace Organograma.Apresentacao.Config
                  .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteModelo>>(s.Sites)))
                  .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoModelo>>(s.Contatos)));
 
+                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoModeloGet>()
+                .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.Contatos))
+                .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.Emails))
+                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco))
+                .ForMember(dest => dest.Esfera, opt => opt.MapFrom(s => s.Esfera))
+                .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.Poder))
+                .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai))
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.Sites))
+                .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao))
+                ;
+
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoUnidadeModeloGet>();
+
+                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoPaiModeloGet>();
+
                 #endregion
 
                 #region Mapeamento de Poder
                 cfg.CreateMap<PoderModeloPut, PoderModeloNegocio>();
 
-                cfg.CreateMap<PoderModeloPost, PoderModeloNegocio>();
+                cfg.CreateMap<PoderModeloPost, PoderModeloNegocio>().ReverseMap(); ;
 
                 cfg.CreateMap<PoderModeloNegocio, PoderModeloGet>();
                 #endregion
@@ -101,6 +115,8 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<TipoOrganizacaoModeloPut, TipoOrganizacaoModeloNegocio>();
 
                 cfg.CreateMap<TipoOrganizacaoModeloPost, TipoOrganizacaoModeloNegocio>();
+
+                cfg.CreateMap<TipoOrganizacaoModeloNegocio, TipoOrganizacaoModeloPost>();
                 #endregion
 
                 #region Mapeamento de Tipo de Unidade

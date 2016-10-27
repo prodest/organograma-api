@@ -142,5 +142,13 @@ namespace Organograma.Negocio.Validacao
             if (organizacao == null)
                 throw new OrganogramaRequisicaoInvalidaException("Organização não pode ser nulo.");
         }
+
+        internal void NaoEncontrado(Organizacao organizacao)
+        {
+            if (organizacao == null)
+            {
+                throw new OrganogramaNaoEncontradoException("Organização não encontrada.");
+            }
+        }
     }
 }

@@ -114,7 +114,7 @@ namespace Organograma.Negocio
             unitOfWork.Attach(organizacao.Poder);
             unitOfWork.Save();
 
-            return Mapper.Map(organizacao, organizacaoNegocio);
+            return Mapper.Map<Organizacao, OrganizacaoModeloNegocio>(organizacao);
         }
 
         public List<OrganizacaoModeloNegocio> Listar()
@@ -124,7 +124,23 @@ namespace Organograma.Negocio
 
         public OrganizacaoModeloNegocio Pesquisar(int id)
         {
-            throw new NotImplementedException();
+            OrganizacaoModeloNegocio organizacaoNegocio = new OrganizacaoModeloNegocio();
+
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == id)
+                .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato)
+                .Include(eo => eo.EmailsOrganizacao).ThenInclude(e => e.Email)
+                .Include(e => e.Endereco)
+                .Include(e => e.Esfera)
+                .Include(op => op.OrganizacaoPai)
+                .Include(p => p.Poder)
+                .Include(so => so.SitesOrganizacao).ThenInclude(s => s.Site)
+                .Include(to => to.TipoOrganizacao)
+                .SingleOrDefault();
+
+            validacao.NaoEncontrado(organizacao);
+            
+            return Mapper.Map(organizacao,organizacaoNegocio);
+
         }
 
         private Organizacao PreparaInsercao(OrganizacaoModeloNegocio organizacaoNegocio)

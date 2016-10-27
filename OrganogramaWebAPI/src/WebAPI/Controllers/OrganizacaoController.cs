@@ -65,7 +65,7 @@ namespace Organograma.WebAPI.Controllers
 
         // POST api/organizacao
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
         {
 
@@ -90,10 +90,30 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        // Patch api/organizacao/{id}
+        [HttpPatch("{id}")]
+        public IActionResult AlterarOrganizacao(int id, [FromBody]OrganizacaoModeloPatch organizacao)
         {
+            try
+            {
+                service.Alterar(id, organizacao);
+                return Ok();
+            }
+
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
         // DELETE api/values/5
