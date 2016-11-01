@@ -65,7 +65,7 @@ namespace Organograma.WebAPI.Controllers
 
         // POST api/organizacao
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
         {
 
@@ -92,6 +92,7 @@ namespace Organograma.WebAPI.Controllers
 
         // Patch api/organizacao/{id}
         [HttpPatch("{id}")]
+        [Authorize]
         public IActionResult AlterarOrganizacao(int id, [FromBody]OrganizacaoModeloPatch organizacao)
         {
             try
@@ -118,7 +119,7 @@ namespace Organograma.WebAPI.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Excluir(int id)
         {
             try
