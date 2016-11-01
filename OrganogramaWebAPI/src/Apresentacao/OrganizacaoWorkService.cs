@@ -17,16 +17,22 @@ namespace Organograma.Apresentacao
             this.organizacaoNegocio = organizacaoNegocio;
         }
 
+        #region Alterar
         public void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch)
         {
             organizacaoNegocio.Alterar(id, Mapper.Map<OrganizacaoModeloPatch, OrganizacaoModeloNegocio>(organizacaoPatch));
         }
 
+        #endregion
+
+        #region Excluir
         public void Excluir(int id)
         {
             organizacaoNegocio.Excluir(id);
         }
+        #endregion
 
+        #region Inserir
         public OrganizacaoModeloPut Inserir(OrganizacaoModeloPost organizacaoPost)
         {
             OrganizacaoModeloNegocio organizacaoModeloNegocio = new OrganizacaoModeloNegocio();
@@ -36,14 +42,34 @@ namespace Organograma.Apresentacao
             
         }
 
+        public SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost)
+        {
+            SiteModeloNegocio siteModeloNegocio = new SiteModeloNegocio();
+            Mapper.Map(sitePost, siteModeloNegocio);
+            
+            SiteModeloPatch site = Mapper.Map<SiteModeloNegocio,SiteModeloPatch>(organizacaoNegocio.InserirSite(siteModeloNegocio));
+
+            return site;
+            
+
+        }
+
+        #endregion
+
+        #region Listar
         public List<OrganizacaoModeloGet> Listar()
         {
             return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacaoNegocio.Listar());
         }
 
+        #endregion
+
+        #region Pesquisar
         public OrganizacaoModeloGet Pesquisar(int id)
         {
            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(id));
         }
+
+        #endregion
     }
 }

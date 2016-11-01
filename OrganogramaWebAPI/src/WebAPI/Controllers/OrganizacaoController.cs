@@ -89,14 +89,41 @@ namespace Organograma.WebAPI.Controllers
             {
                 return BadRequest(e.Message);
             }
-            
+
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        //Post api/organizacao/[idOrganizacao]/site
+        [HttpPost("{idOrganizacao}/site")]
+        //[Authorize]
+        public IActionResult PostSite(int idOrganizacao, [FromBody]SiteModelo sitePost)
+        {
+
+            try
+            {
+                return new ObjectResult(service.InserirSite(idOrganizacao, sitePost));
+            }
+
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
+
             catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
         #endregion
-                
+
         #region PATCH
         // Patch api/organizacao/{id}
         [HttpPatch("{id}")]

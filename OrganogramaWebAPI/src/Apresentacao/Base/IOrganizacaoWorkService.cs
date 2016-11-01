@@ -10,7 +10,7 @@ namespace Apresentacao.Base
         OrganizacaoModeloPut Inserir(OrganizacaoModeloPost organizacaoPost);
         void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch);
         void Excluir(int id);
-    
+        SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost);
     }
 
 }

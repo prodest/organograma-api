@@ -5,4 +5,9 @@
     {
         public string Url { get; set; }
     }
+
+    public class SiteModeloPatch : SiteModelo
+    {
+        public int Id { get; set; }
+    }
 }

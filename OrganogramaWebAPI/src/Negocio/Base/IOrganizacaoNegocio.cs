@@ -12,5 +12,6 @@ namespace Organograma.Negocio.Base
         void Alterar(int id, OrganizacaoModeloNegocio poderNegocio);
 
         void Excluir (int id);
+        SiteModeloNegocio InserirSite(SiteModeloNegocio siteModeloNegocio);
     }
 }

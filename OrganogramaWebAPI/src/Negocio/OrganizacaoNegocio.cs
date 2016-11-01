@@ -58,6 +58,7 @@ namespace Organograma.Negocio
 
         }
 
+        #region Alterar
         public void Alterar(int id, OrganizacaoModeloNegocio organizacaoNegocio)
         {
             validacao.IdPreenchido(id);
@@ -89,28 +90,9 @@ namespace Organograma.Negocio
 
         }
 
-        private Organizacao BuscaObjetoDominio(OrganizacaoModeloNegocio organizacaoNegocio)
-        {
-            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == organizacaoNegocio.Id)
-                .Include(e => e.Esfera)
-                .Include(p => p.Poder)
-                .Include(to => to.TipoOrganizacao)
-                .Single();
+        #endregion
 
-            PreencheOrganizacaoPai(organizacao);
-
-            Mapper.Map(organizacao, organizacaoNegocio);
-            return organizacao;
-        }
-
-        private void PreencheOrganizacaoPai(Organizacao organizacao)
-        {
-            if (organizacao.IdOrganizacaoPai.HasValue)
-            {
-                organizacao.OrganizacaoPai = repositorioOrganizacoes.Where(op => op.Id == organizacao.IdOrganizacaoPai.Value).Single();
-            }
-        }
-
+        #region Excluir
         public void Excluir(int id)
         {
             validacao.IdPreenchido(id);
@@ -124,11 +106,16 @@ namespace Organograma.Negocio
                 .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
                 .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email).Single();
             
-            ExcluiRelacionamentos(organizacao);
+            ExcluiContatos(organizacao);
+            ExcluiEndereco(organizacao);
+            ExcluiEmails(organizacao);
+            ExcluiSites(organizacao);
             repositorioOrganizacoes.Remove(organizacao);
             unitOfWork.Save();
         }
+        #endregion
 
+        #region Inserir
         public OrganizacaoModeloNegocio Inserir(OrganizacaoModeloNegocio organizacaoNegocio)
         {
             //Preenchimentos primeiro (pois não interagem com banco de dados nem fazem validações complexas)
@@ -163,6 +150,15 @@ namespace Organograma.Negocio
             return Mapper.Map<Organizacao, OrganizacaoModeloNegocio>(organizacao);
         }
 
+        public SiteModeloNegocio InserirSite(SiteModeloNegocio siteModeloNegocio)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Listar
+
         public List<OrganizacaoModeloNegocio> Listar()
         {
             List<Organizacao> organizacoes = repositorioOrganizacoes.ToList();
@@ -171,6 +167,10 @@ namespace Organograma.Negocio
             return Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoes);
 
         }
+
+        #endregion
+
+        #region Pesquisar
 
         public OrganizacaoModeloNegocio Pesquisar(int id)
         {
@@ -194,6 +194,24 @@ namespace Organograma.Negocio
 
         }
 
+        #endregion
+
+        #region Funções Auxiliares
+
+        private Organizacao BuscaObjetoDominio(OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == organizacaoNegocio.Id)
+                .Include(e => e.Esfera)
+                .Include(p => p.Poder)
+                .Include(to => to.TipoOrganizacao)
+                .Single();
+
+            PreencheOrganizacaoPai(organizacao);
+
+            Mapper.Map(organizacao, organizacaoNegocio);
+            return organizacao;
+        }
+
         private Organizacao PreparaInsercao(OrganizacaoModeloNegocio organizacaoNegocio)
         {
             Organizacao organizacao = new Organizacao();
@@ -201,9 +219,16 @@ namespace Organograma.Negocio
             return organizacao;
         }
 
-        private void ExcluiRelacionamentos(Organizacao organizacao)
+        private void PreencheOrganizacaoPai(Organizacao organizacao)
         {
-            //Contatos
+            if (organizacao.IdOrganizacaoPai.HasValue)
+            {
+                organizacao.OrganizacaoPai = repositorioOrganizacoes.Where(op => op.Id == organizacao.IdOrganizacaoPai.Value).Single();
+            }
+        }
+
+        private void ExcluiContatos(Organizacao organizacao)
+        {
             if (organizacao.ContatosOrganizacao != null)
             {
                 foreach (var contatoOrganizacao in organizacao.ContatosOrganizacao)
@@ -213,13 +238,18 @@ namespace Organograma.Negocio
                 }
 
             }
-            //Endereco
+        }
+
+        private void ExcluiEndereco (Organizacao organizacao)
+        {
             if (organizacao.Endereco != null)
             {
                 repositorioEnderecos.Remove(organizacao.Endereco);
-
             }
-            //Emails
+        }
+
+        private void ExcluiEmails (Organizacao organizacao)
+        {
             if (organizacao.EmailsOrganizacao != null)
             {
                 foreach (var emailOrganizacao in organizacao.EmailsOrganizacao)
@@ -229,7 +259,11 @@ namespace Organograma.Negocio
                 }
 
             }
-            //Sites
+
+        }
+
+        private void ExcluiSites (Organizacao organizacao)
+        {
             if (organizacao.SitesOrganizacao != null)
             {
                 foreach (var siteOrganizacao in organizacao.SitesOrganizacao)
@@ -240,5 +274,8 @@ namespace Organograma.Negocio
 
             }
         }
+              
+
+        #endregion
     }
 }
