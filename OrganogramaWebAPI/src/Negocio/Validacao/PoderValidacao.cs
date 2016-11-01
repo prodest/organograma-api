@@ -19,8 +19,16 @@ namespace Organograma.Negocio.Validacao
 
         internal void IdValido(int id)
         {
-            if (id == default(int))
+            if (id <= default(int))
                 throw new OrganogramaRequisicaoInvalidaException("Identificador do poder inválido.");
+        }
+
+        internal void IdValido (PoderModeloNegocio poder)
+        {
+            if (poder != null)
+            {
+                IdValido(poder.Id);
+            }
         }
 
         internal void IdAlteracaoValido(int id, PoderModeloNegocio poderOrganizacao)
@@ -46,15 +54,20 @@ namespace Organograma.Negocio.Validacao
 
         internal Poder PoderExiste(PoderModeloNegocio poderNegocio)
         {
-            Poder poder = repositorioPoderes.Where(p => p.Id == poderNegocio.Id).SingleOrDefault();
-
-            if ( poder == null)
+            if (poderNegocio != null)
             {
-                throw new OrganogramaRequisicaoInvalidaException("O Poder informado não está cadastrado");
+
+                Poder poder = repositorioPoderes.Where(p => p.Id == poderNegocio.Id).SingleOrDefault();
+
+                if (poder == null)
+                {
+                    throw new OrganogramaRequisicaoInvalidaException("O Poder informado não está cadastrado");
+                }
+
+                return poder;
             }
 
-            return poder;
-
+            return null;
         }
 
         internal void PoderValido(PoderModeloNegocio poderNegocio)
@@ -78,15 +91,21 @@ namespace Organograma.Negocio.Validacao
 
         internal void IdPreenchido(PoderModeloNegocio poder)
         {
-            if (poder.Id == default(int))
-                throw new OrganogramaRequisicaoInvalidaException("Poder não preenchido.");
+            if (poder != null)
+            {
+                if (poder.Id == default(int))
+                    throw new OrganogramaRequisicaoInvalidaException("Poder não preenchido.");
+            }
         }
 
         internal void Existe(PoderModeloNegocio poder)
         {
-            if (repositorioPoderes.Where(e => e.Id == poder.Id).SingleOrDefault() == null)
+            if (poder != null)
             {
-                throw new OrganogramaNaoEncontradoException("Poder não existe");
+                if (repositorioPoderes.Where(e => e.Id == poder.Id).SingleOrDefault() == null)
+                {
+                    throw new OrganogramaNaoEncontradoException("Poder não existe");
+                }
             }
         }
     }

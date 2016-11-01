@@ -81,6 +81,9 @@ namespace Organograma.Negocio.Validacao
 
         internal void Existe(EsferaOrganizacaoModeloNegocio esfera)
         {
+
+            
+
             if (repositorioEsferasOrganizacoes.Where(e => e.Id == esfera.Id).SingleOrDefault() == null)
             {
                 throw new OrganogramaNaoEncontradoException("Esfera de organização não existe");

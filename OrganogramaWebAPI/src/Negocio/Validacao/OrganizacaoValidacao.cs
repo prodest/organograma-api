@@ -43,9 +43,14 @@ namespace Organograma.Negocio.Validacao
 
         internal void IdPaiValido(OrganizacaoModeloNegocio organizacao)
         {
-            if (organizacao.Id <= 0)
+            if (organizacao != null)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Id da organização pai não é valido");
+
+                if (organizacao.Id <= 0)
+                {
+                    throw new OrganogramaRequisicaoInvalidaException("Id da organização pai não é valido");
+                }
+
             }
         }
 
@@ -111,13 +116,28 @@ namespace Organograma.Negocio.Validacao
             Existe(organizacao.Id);
         }
 
-        internal void PaiExiste(OrganizacaoModeloNegocio organizacao)
+        internal void PaiExiste(OrganizacaoModeloNegocio organizacaoPai)
         {
-            if (repositorioOrganizacoes.Where(o => o.Id == organizacao.Id).SingleOrDefault() == null)
+            if (organizacaoPai != null)
             {
-                throw new OrganogramaNaoEncontradoException("Organização pai não existe.");
-            };
+                if (repositorioOrganizacoes.Where(o => o.Id == organizacaoPai.Id).SingleOrDefault() == null)
+                {
+                    throw new OrganogramaNaoEncontradoException("Organização pai não existe.");
+                }
+            }
         }
+
+        internal void PaiDiferente(OrganizacaoModeloNegocio organizacao)
+        {
+            if (organizacao != null && organizacao.OrganizacaoPai != null)
+            {
+                if (organizacao.Id == organizacao.OrganizacaoPai.Id)
+                {
+                    throw new OrganogramaNaoEncontradoException("A organização pai deve ser diferente.");
+                }
+            }
+        }
+
 
         internal void PaiValido(OrganizacaoModeloNegocio organizacaoPai)
         {
@@ -126,6 +146,7 @@ namespace Organograma.Negocio.Validacao
             {
                 IdPaiValido(organizacaoPai);
                 PaiExiste(organizacaoPai);
+                PaiDiferente(organizacaoPai);
             }
 
         }
@@ -156,6 +177,14 @@ namespace Organograma.Negocio.Validacao
             if (organizacao == null)
             {
                 throw new OrganogramaNaoEncontradoException("Organização não encontrada.");
+            }
+        }
+
+        internal void NaoEncontrado(List<Organizacao> organizacoes)
+        {
+            if (organizacoes.Count == 0)
+            {
+                throw new OrganogramaNaoEncontradoException("Não há organizações cadastradas");
             }
         }
     }

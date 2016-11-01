@@ -79,7 +79,7 @@ namespace Organograma.Negocio
             validacao.MunicipioNaoExistente(municipioDominio);
 
             municipioNegocio.InicioVigencia = municipioDominio.InicioVigencia;            
-            municipioDominio = Mapper.Map<MunicipioModeloNegocio, Municipio>(municipioNegocio, municipioDominio);
+            municipioDominio = Mapper.Map(municipioNegocio, municipioDominio);
             unitOfWork.Save();
 
 

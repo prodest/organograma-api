@@ -7,4 +7,9 @@
         public string Nome { get; set; }
     }
 
+    public class ContatoModeloGet : ContatoModelo
+    {
+        
+    }
+
 }

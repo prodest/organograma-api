@@ -38,12 +38,12 @@ namespace Organograma.Apresentacao
 
         public List<OrganizacaoModeloGet> Listar()
         {
-            throw new NotImplementedException();
+            return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacaoNegocio.Listar());
         }
 
         public OrganizacaoModeloGet Pesquisar(int id)
         {
-            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(id));
+           return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(id));
         }
     }
 }

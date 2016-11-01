@@ -32,7 +32,8 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<EnderecoModeloNegocio, EnderecoModelo>()
                    .ForMember(dest => dest.IdMunicipio, opt => opt.MapFrom(s => s.Municipio.Id));
 
-                cfg.CreateMap<EnderecoModeloNegocio, EnderecoModeloGet>();
+                cfg.CreateMap<EnderecoModeloNegocio, EnderecoModeloGet>()
+                .ForMember(dest => dest.Municipio, opt => opt.MapFrom(src => src.Municipio));
 
                 cfg.CreateMap<EnderecoModelo, EnderecoModeloNegocio>()
                    .ForMember(dest => dest.Municipio, opt => opt.MapFrom(s => s.IdMunicipio != default(int) ? new MunicipioModeloNegocio() { Id = s.IdMunicipio } : null));

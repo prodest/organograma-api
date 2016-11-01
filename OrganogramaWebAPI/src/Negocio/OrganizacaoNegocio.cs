@@ -63,10 +63,52 @@ namespace Organograma.Negocio
             validacao.IdPreenchido(id);
             validacao.IdPreenchido(organizacaoNegocio);
             validacao.IdAlteracaoValido(id, organizacaoNegocio);
+
+            Organizacao organizacao = BuscaObjetoDominio(organizacaoNegocio);
+
+            validacao.Preenchido(organizacaoNegocio);
+            validacao.Valido(organizacaoNegocio);
+            validacao.PaiValido(organizacaoNegocio.OrganizacaoPai);
+
+            cnpjValidacao.CnpjExiste(organizacaoNegocio);
+            cnpjValidacao.CnpjValido(organizacaoNegocio.Cnpj);
             esferaValidacao.IdPreenchido(organizacaoNegocio.Esfera);
             esferaValidacao.IdValido(organizacaoNegocio.Esfera);
             poderValidacao.IdPreenchido(organizacaoNegocio.Poder);
+            poderValidacao.IdValido(organizacaoNegocio.Poder);
+            tipoOrganizacaoValidacao.IdPreenchido(organizacaoNegocio.TipoOrganizacao);
+            tipoOrganizacaoValidacao.IdValido(organizacaoNegocio.TipoOrganizacao);
 
+            validacao.Existe(organizacaoNegocio);
+            esferaValidacao.Existe(organizacaoNegocio.Esfera);
+            poderValidacao.Existe(organizacaoNegocio.Poder);
+            tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
+
+            Mapper.Map(organizacaoNegocio, organizacao);
+            unitOfWork.Save();
+
+        }
+
+        private Organizacao BuscaObjetoDominio(OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == organizacaoNegocio.Id)
+                .Include(e => e.Esfera)
+                .Include(p => p.Poder)
+                .Include(to => to.TipoOrganizacao)
+                .Single();
+
+            PreencheOrganizacaoPai(organizacao);
+
+            Mapper.Map(organizacao, organizacaoNegocio);
+            return organizacao;
+        }
+
+        private void PreencheOrganizacaoPai(Organizacao organizacao)
+        {
+            if (organizacao.IdOrganizacaoPai.HasValue)
+            {
+                organizacao.OrganizacaoPai = repositorioOrganizacoes.Where(op => op.Id == organizacao.IdOrganizacaoPai.Value).Single();
+            }
         }
 
         public void Excluir(int id)
@@ -81,8 +123,7 @@ namespace Organograma.Negocio
                 .Include(i => i.ContatosOrganizacao).ThenInclude(c => c.Contato)
                 .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
                 .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email).Single();
-
-
+            
             ExcluiRelacionamentos(organizacao);
             repositorioOrganizacoes.Remove(organizacao);
             unitOfWork.Save();
@@ -111,8 +152,7 @@ namespace Organograma.Negocio
             poderValidacao.Existe(organizacaoNegocio.Poder);
             siteValidacao.Valido(organizacaoNegocio.Sites);
             tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
-
-
+            
             Organizacao organizacao = PreparaInsercao(organizacaoNegocio);
             repositorioOrganizacoes.Add(organizacao);
             unitOfWork.Attach(organizacao.TipoOrganizacao);
@@ -125,7 +165,11 @@ namespace Organograma.Negocio
 
         public List<OrganizacaoModeloNegocio> Listar()
         {
-            throw new NotImplementedException();
+            List<Organizacao> organizacoes = repositorioOrganizacoes.ToList();
+            validacao.NaoEncontrado(organizacoes);
+
+            return Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoes);
+
         }
 
         public OrganizacaoModeloNegocio Pesquisar(int id)
@@ -133,18 +177,19 @@ namespace Organograma.Negocio
             OrganizacaoModeloNegocio organizacaoNegocio = new OrganizacaoModeloNegocio();
 
             Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == id)
-                .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato)
-                .Include(eo => eo.EmailsOrganizacao).ThenInclude(e => e.Email)
-                .Include(e => e.Endereco)
+                .Include(e => e.Endereco).ThenInclude(m => m.Municipio)
                 .Include(e => e.Esfera)
-                .Include(op => op.OrganizacaoPai)
                 .Include(p => p.Poder)
+                .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato).ThenInclude(tc => tc.TipoContato)
+                .Include(eo => eo.EmailsOrganizacao).ThenInclude(e => e.Email)
                 .Include(so => so.SitesOrganizacao).ThenInclude(s => s.Site)
                 .Include(to => to.TipoOrganizacao)
                 .SingleOrDefault();
 
             validacao.NaoEncontrado(organizacao);
-            
+
+            PreencheOrganizacaoPai(organizacao);
+                                    
             return Mapper.Map(organizacao,organizacaoNegocio);
 
         }
