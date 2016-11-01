@@ -20,7 +20,10 @@ namespace Organograma.WebAPI.Controllers
         {
             this.service = service;
         }
-        
+
+        #region GET
+
+
         // GET: api/organizacao
         [HttpGet]
         public IActionResult Listar()
@@ -63,6 +66,9 @@ namespace Organograma.WebAPI.Controllers
 
         }
 
+        #endregion
+
+        #region POST
         // POST api/organizacao
         [HttpPost]
         [Authorize]
@@ -89,7 +95,9 @@ namespace Organograma.WebAPI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        #endregion
+                
+        #region PATCH
         // Patch api/organizacao/{id}
         [HttpPatch("{id}")]
         [Authorize]
@@ -117,6 +125,9 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
+        #endregion
+
+        #region DELETE
         // DELETE api/values/5
         [HttpDelete("{id}")]
         [Authorize]
@@ -140,5 +151,6 @@ namespace Organograma.WebAPI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        #endregion
     }
 }
