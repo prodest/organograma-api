@@ -7,4 +7,8 @@
         public string Nome { get; set; }
     }
 
+    public class ContatoModeloPut : ContatoModelo
+    {
+        public bool? Excluir { get; set; }
+    }
 }

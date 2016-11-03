@@ -24,4 +24,9 @@ namespace Organograma.Apresentacao.Modelos
         public string Cep { get; set; }
         public MunicipioModeloPut Municipio { get; set; }
     }
+
+    public class EnderecoModeloPut : EnderecoModelo
+    {
+        public bool? Excluir { get; set; }
+    }
 }

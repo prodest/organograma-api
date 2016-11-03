@@ -56,22 +56,54 @@ namespace Organograma.Negocio
 
         public void Alterar(int id, UnidadeModeloNegocio unidade)
         {
+            #region Verificação básica de Id
             unidadeValidacao.NaoNula(unidade);
 
-            //unidadeValidacao.IdPreenchido(id);
-            //unidadeValidacao.IdPreenchido(unidade.Id);
-
+            unidadeValidacao.IdPreenchido(unidade.Id);
+            unidadeValidacao.IdValido(unidade.Id);
             unidadeValidacao.IdAlteracaoValido(id, unidade);
+            #endregion
 
-            //validacao.DescricaoValida(unidade.Descricao);
+            var unidadeDominio = repositorioUnidades.Where(un => un.Id == id)
+                                        .Include(un => un.Organizacao)
+                                        .Include(un => un.TipoUnidade)
+                                        .Include(un => un.UnidadePai)
+                                        .SingleOrDefault();
 
-            //validacao.DescricaoExistente(unidade.Descricao);
+            //Verificação da unidade na base de dados
+            unidadeValidacao.NaoEncontrado(unidadeDominio);
+            Mapper.Map(unidadeDominio, unidade);
 
-            Unidade eo = repositorioUnidades.Where(e => e.Id == unidade.Id).SingleOrDefault();
+            #region Verificação de campos obrigatórios
+            unidadeValidacao.NaoNula(unidade);
+            unidadeValidacao.Preenchida(unidade);
 
-            unidadeValidacao.NaoEncontrado(eo);
+            tipoUnidadeValidacao.NaoNulo(unidade.TipoUnidade);
+            tipoUnidadeValidacao.IdPreenchido(unidade.TipoUnidade);
 
-            //eo.Descricao = unidade.Descricao;
+            organizacaoValidacao.NaoNulo(unidade.Organizacao);
+            organizacaoValidacao.IdPreenchido(unidade.Organizacao);
+
+            unidadeValidacao.UnidadePaiPreenchida(unidade.UnidadePai);
+            #endregion
+
+            #region Validação de Negócio
+            unidadeValidacao.Valida(unidade);
+
+            tipoUnidadeValidacao.Existe(unidade.TipoUnidade);
+
+            organizacaoValidacao.Existe(unidade.Organizacao);
+
+            unidadeValidacao.UnidadePaiValida(unidade.UnidadePai);
+            #endregion
+
+            Mapper.Map(unidade, unidadeDominio);
+
+            //unidadeDominio.Organizacao = 
+
+            unitOfWork.Attach(unidadeDominio.Organizacao);
+            unitOfWork.Attach(unidadeDominio.TipoUnidade);
+            unitOfWork.Attach(unidadeDominio.UnidadePai);
 
             unitOfWork.Save();
         }
@@ -94,24 +126,21 @@ namespace Organograma.Negocio
             unidadeValidacao.PossuiFilho(id);
 
             if (unidade.Endereco != null)
-                repositorioEnderecos.Remove(unidade.Endereco);
+                ExcluirEndereco(unidade);
 
             foreach (var cu in unidade.ContatosUnidade)
             {
-                repositorioContatos.Remove(cu.Contato);
-                repositorioContatosUnidades.Remove(cu);
+                ExcluirContato(cu);
             }
 
             foreach (var eu in unidade.EmailsUnidade)
             {
-                repositorioEmails.Remove(eu.Email);
-                repositorioEmailsUnidades.Remove(eu);
+                ExcluirEmail(eu);
             }
 
             foreach (var su in unidade.SitesUnidade)
             {
-                repositorioSites.Remove(su.Site);
-                repositorioSitesUnidades.Remove(su);
+                ExcluirSite(su);
             }
 
             repositorioUnidades.Remove(unidade);
@@ -197,6 +226,29 @@ namespace Organograma.Negocio
             unidadeValidacao.NaoEncontrado(unidade);
 
             return Mapper.Map<Unidade, UnidadeModeloNegocio>(unidade); ;
+        }
+
+        private void ExcluirEndereco(Unidade unidade)
+        {
+            repositorioEnderecos.Remove(unidade.Endereco);
+        }
+
+        private void ExcluirContato(ContatoUnidade contatoUnidade)
+        {
+            repositorioContatos.Remove(contatoUnidade.Contato);
+            repositorioContatosUnidades.Remove(contatoUnidade);
+        }
+
+        private void ExcluirEmail(EmailUnidade emailUnidade)
+        {
+            repositorioEmails.Remove(emailUnidade.Email);
+            repositorioEmailsUnidades.Remove(emailUnidade);
+        }
+
+        private void ExcluirSite(SiteUnidade siteUnidade)
+        {
+            repositorioSites.Remove(siteUnidade.Site);
+            repositorioSitesUnidades.Remove(siteUnidade);
         }
     }
 }

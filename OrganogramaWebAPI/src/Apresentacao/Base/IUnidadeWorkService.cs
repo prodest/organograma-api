@@ -5,15 +5,16 @@ namespace Organograma.Apresentacao.Base
 {
     public interface IUnidadeWorkService
     {
-        List<UnidadeModelo> Listar();
+        List<UnidadeModeloRetornoPost> Listar();
 
         UnidadeModeloGet Pesquisar(int id);
 
-        UnidadeModelo Inserir(UnidadeModeloPost esferaOrganizacao);
+        UnidadeModeloRetornoPost Inserir(UnidadeModeloPost unidade);
 
-        //TODO:Refazer a estrutura que será recebida na alteração
-        void Alterar(int id, UnidadeModelo esferaOrganizacao);
+        void Alterar(int id, UnidadeModeloPatch unidade);
 
         void Excluir(int id);
+
+        void ExcluirEmail(int id, List<EmailModelo> emails);
     }
 }

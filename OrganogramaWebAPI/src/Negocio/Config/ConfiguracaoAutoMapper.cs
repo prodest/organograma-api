@@ -124,12 +124,41 @@ namespace Organograma.Negocio.Config
 
             #region Mapeamento de Unidade
             CreateMap<Unidade, UnidadeModeloNegocio>()
+                //.ForMember(dest => dest.Nome, opt => opt.Condition((src, dest) => dest.Nome == null))
+                //.ForMember(dest => dest.Sigla, opt => opt.Condition((src, dest) => dest.Sigla == null))
+                //.ForMember(dest => dest.Organizacao, opt => opt.Condition((src, dest) => dest.Organizacao == null))
+                //.ForMember(dest => dest.TipoUnidade, opt => opt.Condition((src, dest) => dest.TipoUnidade == null))
+                //.ForMember(dest => dest.UnidadePai, opt => opt.Condition((src, dest) =>  dest.UnidadePai == null))
+
+                //.ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => s.Organizacao != null ? Mapper.Map<Organizacao, OrganizacaoModeloNegocio>(s.Organizacao) : null))
                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<Endereco, EnderecoModeloNegocio>(s.Endereco) : null))
                 .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => (s.ContatosUnidade != null && s.ContatosUnidade.Count > 0) ? Mapper.Map<List<ContatoUnidade>, List<ContatoModeloNegocio>>(s.ContatosUnidade.ToList()) : null))
                 .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => (s.EmailsUnidade != null && s.EmailsUnidade.Count > 0) ? Mapper.Map<List<EmailUnidade>, List<EmailModeloNegocio>>(s.EmailsUnidade.ToList()) : null))
                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => (s.SitesUnidade != null && s.SitesUnidade.Count > 0) ? Mapper.Map<List<SiteUnidade>, List<SiteModeloNegocio>>(s.SitesUnidade.ToList()) : null))
-                .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.SitesUnidade != null ? Mapper.Map<Unidade, UnidadeModeloNegocio>(s.UnidadePai) : null))
-                .MaxDepth(1);
+                .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? Mapper.Map<Unidade, UnidadeModeloNegocio>(s.UnidadePai) : null))
+                .MaxDepth(1)
+                //.ForAllMembers(opt => opt.Condition((src, dest, srcMember, destMember) => destMember == null));
+                .ForAllMembers(opt =>
+                {
+                    opt.Condition((src, dest, srcMember, destMember) =>
+                    {
+                        bool mapear = false;
+                        if (destMember == null)
+                            mapear = true;
+                        else
+                        {
+                            try
+                            {
+                                int a = (int)destMember;
+                                if (a == 0)
+                                    mapear = true;
+                            }
+                            catch (Exception)
+                            { }
+                        }
+                        return mapear;
+                    });
+                });
             ;
 
             CreateMap<UnidadeModeloNegocio, Unidade>()

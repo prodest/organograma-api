@@ -13,6 +13,7 @@ namespace Organograma.Dominio.Base
         void AddRange(IEnumerable<T> entities);
         T Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
+        T Update(T entity);
         IQueryable<T> Include<TProperty>(Expression<Func<T, TProperty>> path)
             where TProperty : class;
     }

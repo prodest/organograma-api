@@ -38,6 +38,11 @@ namespace Organograma.Infraestrutura.Repositorios
             _set.RemoveRange(entities);
         }
 
+        public TEntity Update(TEntity entity)
+        {
+            return _set.Update(entity).Entity;
+        }
+
         public IQueryable<TEntity> Include<TProperty>(Expression<Func<TEntity, TProperty>> path) where TProperty : class
         {
             return _set.Include(path);

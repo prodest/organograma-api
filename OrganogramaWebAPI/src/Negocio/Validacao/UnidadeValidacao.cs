@@ -109,6 +109,17 @@ namespace Organograma.Negocio.Validacao
             SiglaExiste(unidade);
         }
 
+        internal void EnderecoNaoExiste(UnidadeModeloNegocio unidade)
+        {
+            var endereco = repositorioUnidades.Where(u => u.Id == unidade.Id)
+                                              .Select(u => u.Endereco)
+                                              .SingleOrDefault();
+
+            if (endereco == null)
+                throw new OrganogramaRequisicaoInvalidaException("A unidade não possui endereço.");
+
+        }
+
         internal void NomeExiste(UnidadeModeloNegocio unidade)
         {
             var uni = repositorioUnidades.Where(u => u.Nome.ToUpper().Equals(unidade.Nome.ToUpper())

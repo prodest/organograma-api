@@ -4,6 +4,7 @@ using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Infraestrutura.Comum;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Organograma.WebAPI.Controllers
@@ -74,9 +75,9 @@ namespace Organograma.WebAPI.Controllers
         }
 
         // PUT api/unidade/5
-        [Authorize]
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]UnidadeModelo unidade)
+        //[Authorize]
+        [HttpPatch("{id}")]
+        public IActionResult Patch(int id, [FromBody]UnidadeModeloPatch unidade)
         {
             try
             {
@@ -118,7 +119,43 @@ namespace Organograma.WebAPI.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
+        }
 
+        [HttpPost("{id}/email")]
+        public IActionResult InserirEmail(int id, [FromBody]List<EmailModelo> emails)
+        {
+            try
+            {
+                //service.ExcluirEmail(id, emails);
+
+                return Ok();
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+        [HttpDelete("{id}/email")]
+        public IActionResult DeleteEmail(int id, [FromBody]List<EmailModelo> emails)
+        {
+            try
+            {
+                service.ExcluirEmail(id, emails);
+
+                return Ok();
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Organograma.Negocio.Modelos
         public string Complemento { get; set; }
         public string Bairro { get; set; }
         public string Cep { get; set; }
+        public bool? Excluir { get; set; }
 
         public virtual List<OrganizacaoModeloNegocio> Organizacoes { get; set; }
         public virtual List<UnidadeModeloNegocio> Unidades { get; set; }

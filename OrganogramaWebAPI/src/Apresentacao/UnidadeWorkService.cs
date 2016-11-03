@@ -4,6 +4,7 @@ using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Base;
 using Organograma.Negocio.Modelos;
 using System.Collections.Generic;
+using System;
 
 namespace Organograma.Apresentacao
 {
@@ -16,11 +17,11 @@ namespace Organograma.Apresentacao
             this.unidadeNegocio = unidadeNegocio;
         }
 
-        public void Alterar(int id, UnidadeModelo unidade)
+        public void Alterar(int id, UnidadeModeloPatch unidade)
         {
-            UnidadeModeloNegocio eomn = Mapper.Map<UnidadeModelo, UnidadeModeloNegocio>(unidade);
+            UnidadeModeloNegocio umn = Mapper.Map<UnidadeModeloPatch, UnidadeModeloNegocio>(unidade);
 
-            unidadeNegocio.Alterar(id, eomn);
+            unidadeNegocio.Alterar(id, umn);
         }
 
         public void Excluir(int id)
@@ -28,20 +29,20 @@ namespace Organograma.Apresentacao
             unidadeNegocio.Excluir(id);
         }
 
-        public UnidadeModelo Inserir(UnidadeModeloPost unidade)
+        public UnidadeModeloRetornoPost Inserir(UnidadeModeloPost unidade)
         {
             UnidadeModeloNegocio umn = Mapper.Map<UnidadeModeloPost, UnidadeModeloNegocio>(unidade);
 
             umn = unidadeNegocio.Inserir(umn);
 
-            return Mapper.Map<UnidadeModeloNegocio, UnidadeModelo>(umn);
+            return Mapper.Map<UnidadeModeloNegocio, UnidadeModeloRetornoPost>(umn);
         }
 
-        public List<UnidadeModelo> Listar()
+        public List<UnidadeModeloRetornoPost> Listar()
         {
             var unidades = unidadeNegocio.Listar();
 
-            return Mapper.Map<List<UnidadeModeloNegocio>, List<UnidadeModelo>>(unidades);
+            return Mapper.Map<List<UnidadeModeloNegocio>, List<UnidadeModeloRetornoPost>>(unidades);
         }
 
         public UnidadeModeloGet Pesquisar(int id)
@@ -49,6 +50,11 @@ namespace Organograma.Apresentacao
             var umn = unidadeNegocio.Pesquisar(id);
 
             return Mapper.Map<UnidadeModeloNegocio, UnidadeModeloGet>(umn); ;
+        }
+
+        public void ExcluirEmail(int id, List<EmailModelo> emails)
+        {
+            throw new NotImplementedException();
         }
     }
 }
