@@ -5,8 +5,8 @@
         public string Url { get; set; }
     }
 
-    public class SiteModeloPut
+    public class SiteModeloPatch : SiteModelo
     {
-        public bool? Excluir { get; set; }
+        public int Id { get; set; }
     }
 }

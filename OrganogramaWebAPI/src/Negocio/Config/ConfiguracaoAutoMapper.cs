@@ -76,14 +76,53 @@ namespace Organograma.Negocio.Config
             #endregion
 
             #region Mapeamento de Organização
-            CreateMap<Organizacao, OrganizacaoModeloNegocio>();
+            CreateMap<Organizacao, OrganizacaoModeloNegocio>()
+                .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.ContatosOrganizacao != null ? Mapper.Map<List<ContatoOrganizacao>, List<ContatoModeloNegocio>>(s.ContatosOrganizacao.ToList()) : null))
+                .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.EmailsOrganizacao != null ? Mapper.Map<List<EmailOrganizacao>, List<EmailModeloNegocio>>(s.EmailsOrganizacao.ToList()) : null))
+                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco))
+                .ForMember(dest => dest.Esfera, opt => opt.MapFrom(s => s.Esfera))
+                .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? Mapper.Map<Organizacao, OrganizacaoModeloNegocio>(s.OrganizacaoPai) : null))
+                .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.Poder))
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.SitesOrganizacao != null ? Mapper.Map<List<SiteOrganizacao>, List<SiteModeloNegocio>>(s.SitesOrganizacao.ToList()) : null))
+                .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao))
+                .MaxDepth(1)
+                .ForAllMembers(opt =>
+                {
+                    /*O mapeamento só deve ser feito caso o objeto de destino seja nulo ou, para o caso de ser um inteiro, 0
+                      Caso o objeto de destino esteja preenchido, o mapeamento não deve ser feito.
+                     */
+                    opt.Condition((src, dest, srcMember, destMember) =>
+                    {
+                        bool mapear = false;
+                        if (destMember == null)
+                            mapear = true;
+                        else
+                        {
+                            //destMember é do tipo object. Esse cast irá falhar quando o tipo não for inteiro.
+                            try
+                            {
+                                int valor = (int)destMember;
+                                if (valor == 0)
+                                    mapear = true;
+                            }
+                            catch (Exception)
+                            { }
+                        }
+
+                        return mapear;
+                    });
+                });
 
             CreateMap<OrganizacaoModeloNegocio, Organizacao>()
                 .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? s.OrganizacaoPai.Id : (int?)null))
-                .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
-                .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder.Id))
-                .ForMember(dest => dest.IdTipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao.Id))
+                .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera != null ? s.Esfera.Id : 0))
+                .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder != null ? s.Poder.Id : 0))
+                .ForMember(dest => dest.IdTipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao != null ? s.TipoOrganizacao.Id : 0))
                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco))
+                .ForMember(dest => dest.Esfera, opt => opt.Ignore())
+                .ForMember(dest => dest.OrganizacaoPai, opt => opt.Ignore())
+                .ForMember(dest => dest.Poder, opt => opt.Ignore())
+                .ForMember(dest => dest.TipoOrganizacao, opt => opt.Ignore())
                 .ForMember(dest => dest.EmailsOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailOrganizacao>>(s.Emails)))
                 .ForMember(dest => dest.SitesOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteOrganizacao>>(s.Sites)))
                 .ForMember(dest => dest.ContatosOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoOrganizacao>>(s.Contatos)));
@@ -176,4 +215,20 @@ namespace Organograma.Negocio.Config
             #endregion
         }
     }
+
+    /*
+    public class EsferaOrganizacaoCustomResolver : IValueResolver<OrganizacaoModeloNegocio, Organizacao, int>
+    {
+        public int Resolve(OrganizacaoModeloNegocio source, Organizacao destination, int destMember, ResolutionContext context)
+        {
+            if (source.Esfera != null)
+            {
+                return source.Esfera.Id;
+            } else {
+                return destination.IdEsfera;
+            }
+        }
+    }
+    */
+
 }

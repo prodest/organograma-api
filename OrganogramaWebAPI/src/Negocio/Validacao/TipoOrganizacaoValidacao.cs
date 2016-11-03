@@ -28,6 +28,14 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaRequisicaoInvalidaException("Identificador do tipo de organização inválido.");
         }
 
+        internal void IdValido(TipoOrganizacaoModeloNegocio tipoOrganizacao)
+        {
+            if (tipoOrganizacao != null)
+            {
+                IdValido(tipoOrganizacao.Id);
+            }
+        }
+
         internal void IdAlteracaoValido(int id, TipoOrganizacaoModeloNegocio tipoOrganizacao)
         {
             if (id != tipoOrganizacao.Id)
@@ -58,15 +66,22 @@ namespace Organograma.Negocio.Validacao
 
         internal void IdPreenchido(TipoOrganizacaoModeloNegocio tipoOrganizacao)
         {
-            if (tipoOrganizacao.Id == default(int))
-                throw new OrganogramaRequisicaoInvalidaException("Tipo da organização não preenchido.");
+            if (tipoOrganizacao != null)
+            {
+                if (tipoOrganizacao.Id == default(int))
+                    throw new OrganogramaRequisicaoInvalidaException("Tipo da organização não preenchido.");
+            }
         }
 
         internal void Existe(TipoOrganizacaoModeloNegocio tipoOrganizacao)
         {
-            if (repositorioTiposOrganizacoes.Where(e => e.Id == tipoOrganizacao.Id).SingleOrDefault() == null)
+
+            if (tipoOrganizacao != null)
             {
-                throw new OrganogramaNaoEncontradoException("Tipo da organização não existe");
+                if (repositorioTiposOrganizacoes.Where(e => e.Id == tipoOrganizacao.Id).SingleOrDefault() == null)
+                {
+                    throw new OrganogramaNaoEncontradoException("Tipo da organização não existe");
+                }
             }
         }
     }

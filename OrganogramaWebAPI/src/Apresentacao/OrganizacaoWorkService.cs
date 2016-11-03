@@ -17,32 +17,59 @@ namespace Organograma.Apresentacao
             this.organizacaoNegocio = organizacaoNegocio;
         }
 
-        public void Alterar(int id, OrganizacaoModeloPut organizacaoPut)
+        #region Alterar
+        public void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch)
         {
-            throw new NotImplementedException();
+            organizacaoNegocio.Alterar(id, Mapper.Map<OrganizacaoModeloPatch, OrganizacaoModeloNegocio>(organizacaoPatch));
         }
 
+        #endregion
+
+        #region Excluir
         public void Excluir(int id)
         {
-            throw new NotImplementedException();
+            organizacaoNegocio.Excluir(id);
         }
+        #endregion
 
-        public OrganizacaoModeloGet Inserir(OrganizacaoModeloPost organizacaoPost)
+        #region Inserir
+        public OrganizacaoModeloPut Inserir(OrganizacaoModeloPost organizacaoPost)
         {
             OrganizacaoModeloNegocio organizacaoModeloNegocio = new OrganizacaoModeloNegocio();
             Mapper.Map(organizacaoPost, organizacaoModeloNegocio);
-
-            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Inserir(organizacaoModeloNegocio));
+                        
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloPut>(organizacaoNegocio.Inserir(organizacaoModeloNegocio));
+            
         }
 
+        public SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost)
+        {
+            SiteModeloNegocio siteModeloNegocio = new SiteModeloNegocio();
+            Mapper.Map(sitePost, siteModeloNegocio);
+            
+            SiteModeloPatch site = Mapper.Map<SiteModeloNegocio,SiteModeloPatch>(organizacaoNegocio.InserirSite(siteModeloNegocio));
+
+            return site;
+            
+
+        }
+
+        #endregion
+
+        #region Listar
         public List<OrganizacaoModeloGet> Listar()
         {
-            throw new NotImplementedException();
+            return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacaoNegocio.Listar());
         }
 
+        #endregion
+
+        #region Pesquisar
         public OrganizacaoModeloGet Pesquisar(int id)
         {
-            throw new NotImplementedException();
+           return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(id));
         }
+
+        #endregion
     }
 }

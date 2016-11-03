@@ -7,10 +7,10 @@ namespace Apresentacao.Base
     {
         List<OrganizacaoModeloGet> Listar();
         OrganizacaoModeloGet Pesquisar(int id);
-        OrganizacaoModeloGet Inserir(OrganizacaoModeloPost organizacaoPost);
-        void Alterar(int id, OrganizacaoModeloPut organizacaoPut);
+        OrganizacaoModeloPut Inserir(OrganizacaoModeloPost organizacaoPost);
+        void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch);
         void Excluir(int id);
-    
+        SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost);
     }
 
 }

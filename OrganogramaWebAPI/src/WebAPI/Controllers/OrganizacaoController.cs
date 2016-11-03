@@ -20,7 +20,10 @@ namespace Organograma.WebAPI.Controllers
         {
             this.service = service;
         }
-        
+
+        #region GET
+
+
         // GET: api/organizacao
         [HttpGet]
         public IActionResult Listar()
@@ -63,6 +66,9 @@ namespace Organograma.WebAPI.Controllers
 
         }
 
+        #endregion
+
+        #region POST
         // POST api/organizacao
         [HttpPost]
         [Authorize]
@@ -83,23 +89,95 @@ namespace Organograma.WebAPI.Controllers
             {
                 return BadRequest(e.Message);
             }
-            
+
             catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        //Post api/organizacao/[idOrganizacao]/site
+        [HttpPost("{idOrganizacao}/site")]
+        //[Authorize]
+        public IActionResult PostSite(int idOrganizacao, [FromBody]SiteModelo sitePost)
         {
+
+            try
+            {
+                return new ObjectResult(service.InserirSite(idOrganizacao, sitePost));
+            }
+
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+        #endregion
+
+        #region PATCH
+        // Patch api/organizacao/{id}
+        [HttpPatch("{id}")]
+        [Authorize]
+        public IActionResult AlterarOrganizacao(int id, [FromBody]OrganizacaoModeloPatch organizacao)
+        {
+            try
+            {
+                service.Alterar(id, organizacao);
+                return Ok();
+            }
+
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
+        #endregion
+
+        #region DELETE
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize]
+        public IActionResult Excluir(int id)
         {
+            try
+            {
+                service.Excluir(id);
+                return Ok();
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
+        #endregion
     }
 }
