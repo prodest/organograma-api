@@ -20,8 +20,8 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<ContatoModelo, ContatoModeloNegocio>()
                    .ForMember(dest => dest.TipoContato, opt => opt.MapFrom(s => new TipoContatoModeloNegocio { Id = s.IdTipoContato }));
 
-                cfg.CreateMap<ContatoModeloPut, ContatoModeloNegocio>()
-                   .ForMember(dest => dest.TipoContato, opt => opt.MapFrom(s => new TipoContatoModeloNegocio { Id = s.IdTipoContato }));
+                //cfg.CreateMap<ContatoModeloPut, ContatoModeloNegocio>()
+                //   .ForMember(dest => dest.TipoContato, opt => opt.MapFrom(s => new TipoContatoModeloNegocio { Id = s.IdTipoContato }));
 
                 cfg.CreateMap<ContatoModeloNegocio, ContatoModelo>()
                    .ForMember(dest => dest.IdTipoContato, opt => opt.MapFrom(s => s.TipoContato.Id));
@@ -122,7 +122,7 @@ namespace Organograma.Apresentacao.Config
                 #region Mapeamento de Site
                 cfg.CreateMap<SiteModelo, SiteModeloNegocio>().ReverseMap();
 
-                cfg.CreateMap<SiteModeloPut, SiteModeloNegocio>();
+                //cfg.CreateMap<SiteModeloPut, SiteModeloNegocio>();
                 #endregion
 
                 #region Mapeamento de Tipo de Organização

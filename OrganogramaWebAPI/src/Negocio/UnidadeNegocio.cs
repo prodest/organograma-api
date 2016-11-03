@@ -99,12 +99,6 @@ namespace Organograma.Negocio
 
             Mapper.Map(unidade, unidadeDominio);
 
-            //unidadeDominio.Organizacao = 
-
-            unitOfWork.Attach(unidadeDominio.Organizacao);
-            unitOfWork.Attach(unidadeDominio.TipoUnidade);
-            unitOfWork.Attach(unidadeDominio.UnidadePai);
-
             unitOfWork.Save();
         }
 
