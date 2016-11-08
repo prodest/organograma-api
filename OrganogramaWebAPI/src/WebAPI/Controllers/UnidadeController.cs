@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Organograma.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/unidades")]
     public class UnidadeController : Controller
     {
         IUnidadeWorkService service;
@@ -18,7 +18,7 @@ namespace Organograma.WebAPI.Controllers
             this.service = service;
         }
 
-        // GET: api/unidade
+        // GET: api/unidades
         [HttpGet]
         public IActionResult Get()
         {
@@ -36,7 +36,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/unidade/5
+        // GET api/unidades/{id}
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -54,8 +54,8 @@ namespace Organograma.WebAPI.Controllers
             }   
         }
 
-        // POST api/unidade
-        //[Authorize]
+        // POST api/unidades
+        [Authorize]
         [HttpPost]
         public IActionResult Post([FromBody]UnidadeModeloPost unidade)
         {
@@ -73,7 +73,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // PUT api/unidade/5
+        // PUT api/unidades/{id}
         [Authorize]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]UnidadeModelo unidade)
@@ -99,8 +99,8 @@ namespace Organograma.WebAPI.Controllers
             
         }
 
-        // DELETE api/unidade/5
-        //[Authorize]
+        // DELETE api/unidade/{id}
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

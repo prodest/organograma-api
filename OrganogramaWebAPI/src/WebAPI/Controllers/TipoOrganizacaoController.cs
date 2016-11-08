@@ -7,11 +7,9 @@ using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Microsoft.AspNetCore.Authorization;
 
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Organograma.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tipos-organizacao")]
     public class TipoOrganizacaoController : Controller
     {
         ITipoOrganizacaoWorkService service;
@@ -21,21 +19,21 @@ namespace Organograma.WebAPI.Controllers
             this.service = service;
         }
 
-        // GET: api/tipoorganizacao
+        // GET: api/tipos-organizacao
         [HttpGet]
         public IEnumerable<TipoOrganizacaoModelo> Get()
         {
             return service.Listar();
         }
 
-        // GET api/tipoorganizacao/5
+        // GET api/tipos-organizacao/{id}
         [HttpGet("{id}")]
         public TipoOrganizacaoModelo Get(int id)
         {
             return service.Pesquisar(id);
         }
 
-        // POST api/tipoorganizacao
+        // POST api/tipos-organizacao
         [Authorize]
         [HttpPost]
         public TipoOrganizacaoModelo Post([FromBody]TipoOrganizacaoModeloPost tipoOrganizacao)
@@ -43,7 +41,7 @@ namespace Organograma.WebAPI.Controllers
             return service.Inserir(tipoOrganizacao);
         }
 
-        // PUT api/tipoorganizacao/5
+        // PUT api/tipos-organizacao/{id}
         [Authorize]
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]TipoOrganizacaoModeloPut tipoOrganizacao)
@@ -51,7 +49,7 @@ namespace Organograma.WebAPI.Controllers
             service.Alterar(id, tipoOrganizacao);
         }
 
-        // DELETE api/tipoorganizacao/5
+        // DELETE api/tipos-organizacao/{id}
         [Authorize]
         [HttpDelete("{id}")]
         public void Delete(int id)
