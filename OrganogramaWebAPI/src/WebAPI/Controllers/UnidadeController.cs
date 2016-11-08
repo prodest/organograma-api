@@ -74,8 +74,8 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // PUT api/unidade/5
-        //[Authorize]
+        // PATCH api/unidades/{id}
+        [Authorize]
         [HttpPatch("{id}")]
         public IActionResult Patch(int id, [FromBody]UnidadeModeloPatch unidade)
         {
@@ -100,7 +100,7 @@ namespace Organograma.WebAPI.Controllers
             
         }
 
-        // DELETE api/unidade/{id}
+        // DELETE api/unidades/{id}
         [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
