@@ -13,7 +13,7 @@ using System.Net;
 
 namespace Organograma.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/esferas-organizacao")]
     public class EsferaOrganizacaoController : Controller
     {
         IEsferaOrganizacaoWorkService service;
@@ -23,7 +23,7 @@ namespace Organograma.WebAPI.Controllers
             this.service = service;
         }
 
-        // GET: api/esferaorganizacao
+        // GET: api/esferas-organizaco
         [HttpGet]
         public IActionResult Get()
         {
@@ -41,7 +41,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/esferaorganizacao/5
+        // GET api/esferas-organizacao/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -59,7 +59,7 @@ namespace Organograma.WebAPI.Controllers
             }   
         }
 
-        // POST api/esferaorganizacao
+        // POST api/esferas-organizacao
         [Authorize]
         [HttpPost]
         public IActionResult Post([FromBody]EsferaOrganizacaoModeloPost esferaOrganizacao)
@@ -78,7 +78,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // PUT api/esferaorganizacao/5
+        // PUT api/esferas-organizacao/5
         [Authorize]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]EsferaOrganizacaoModelo esferaOrganizacao)
@@ -104,7 +104,7 @@ namespace Organograma.WebAPI.Controllers
             
         }
 
-        // DELETE api/esferaorganizacao/5
+        // DELETE api/esferas-organizacao/5
         [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

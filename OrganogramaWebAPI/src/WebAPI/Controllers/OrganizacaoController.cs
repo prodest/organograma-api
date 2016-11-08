@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Organograma.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/organizacoes")]
     public class OrganizacaoController : Controller
     {
 
@@ -24,7 +24,7 @@ namespace Organograma.WebAPI.Controllers
         #region GET
 
 
-        // GET: api/organizacao
+        // GET: api/organizacoes
         [HttpGet]
         public IActionResult Listar()
         {
@@ -45,7 +45,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/organizacao/5
+        // GET api/organizacoes/5
         [HttpGet("{id}")]
         public IActionResult Pesquisar(int id)
         {
@@ -69,7 +69,7 @@ namespace Organograma.WebAPI.Controllers
         #endregion
 
         #region POST
-        // POST api/organizacao
+        // POST api/organizacoes
         [HttpPost]
         [Authorize]
         public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
@@ -96,7 +96,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        //Post api/organizacao/[idOrganizacao]/site
+        //Post api/organizacoes/{id}/site
         [HttpPost("{idOrganizacao}/site")]
         //[Authorize]
         public IActionResult PostSite(int idOrganizacao, [FromBody]SiteModelo sitePost)
@@ -125,7 +125,7 @@ namespace Organograma.WebAPI.Controllers
         #endregion
 
         #region PATCH
-        // Patch api/organizacao/{id}
+        // Patch api/organizacoes/{id}
         [HttpPatch("{id}")]
         [Authorize]
         public IActionResult AlterarOrganizacao(int id, [FromBody]OrganizacaoModeloPatch organizacao)
@@ -155,7 +155,7 @@ namespace Organograma.WebAPI.Controllers
         #endregion
 
         #region DELETE
-        // DELETE api/values/5
+        // DELETE api/organizacoes/{id}
         [HttpDelete("{id}")]
         [Authorize]
         public IActionResult Excluir(int id)

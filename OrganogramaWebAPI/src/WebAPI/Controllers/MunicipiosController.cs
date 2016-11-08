@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Organograma.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/municipios")]
     public class MunicipiosController : Controller
     {
 
@@ -39,7 +39,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/municipios/id
+        // GET api/municipios/{id}
         [HttpGet("{id}")]
         public IActionResult Pesquisar(int id)
         {
@@ -80,7 +80,7 @@ namespace Organograma.WebAPI.Controllers
             
         }
 
-        // PUT api/municipios/id
+        // PUT api/municipios/{id}
         [HttpPut("{id}")]
         [Authorize]
         public IActionResult Alterar(int id, [FromBody]MunicipioModeloPut municipioPut)
@@ -100,12 +100,11 @@ namespace Organograma.WebAPI.Controllers
             }
             catch (Exception e)
             {
-
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
 
-        // DELETE api/municipios/id
+        // DELETE api/municipios/{id}
         [HttpDelete("{id}")]
         [Authorize]
         public IActionResult Excluir(int id)

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Organograma.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/poderes")]
     public class PoderController : Controller
     {
 
@@ -20,7 +20,7 @@ namespace Organograma.WebAPI.Controllers
             this.service = service;
         }
 
-        // GET api/poder
+        // GET api/poderes
         [HttpGet]
         public IActionResult Listar()
         {
@@ -40,7 +40,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/poder/id
+        // GET api/poderes/{id}
         [HttpGet("{id}")]
         public IActionResult Pesquisar(int id)
         {
@@ -61,7 +61,7 @@ namespace Organograma.WebAPI.Controllers
 
         }
 
-        // POST api/poder
+        // POST api/poderes/{id}
         [HttpPost]
         [Authorize]
         public IActionResult Post([FromBody]PoderModeloPost poderPost)
@@ -82,7 +82,7 @@ namespace Organograma.WebAPI.Controllers
             
         }
 
-        // PUT api/poder/id
+        // PUT api/poderes/{id}
         [HttpPut("{id}")]
         [Authorize]
         public IActionResult Alterar(int id, [FromBody]PoderModeloPut poderPut)
@@ -107,7 +107,7 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // DELETE api/municipios/id
+        // DELETE api/poderes/{id}
         [HttpDelete("{id}")]
         [Authorize]
         public IActionResult Excluir(int id)

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Organograma.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tipos-unidade")]
     public class TipoUnidadeController : Controller
     {
         ITipoUnidadeWorkService service;
@@ -21,21 +21,21 @@ namespace Organograma.WebAPI.Controllers
             this.service = service;
         }
 
-        // GET: api/tipounidade
+        // GET: api/tipos-unidade
         [HttpGet]
         public IEnumerable<TipoUnidadeModelo> Get()
         {
             return service.Listar();
         }
 
-        // GET api/tipounidade/5
+        // GET api/tipos-unidade/{id}
         [HttpGet("{id}")]
         public TipoUnidadeModelo Get(int id)
         {
             return service.Pesquisar(id);
         }
 
-        // POST api/tipounidade
+        // POST api/tipos-unidade
         [Authorize]
         [HttpPost]
         public TipoUnidadeModelo Post([FromBody]TipoUnidadeModeloPost tipoUnidade)
@@ -43,7 +43,7 @@ namespace Organograma.WebAPI.Controllers
             return service.Inserir(tipoUnidade);
         }
 
-        // PUT api/tipounidade/5
+        // PUT api/tipos-unidade/{id}
         [Authorize]
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]TipoUnidadeModeloPut tipoUnidade)
@@ -51,7 +51,7 @@ namespace Organograma.WebAPI.Controllers
             service.Alterar(id, tipoUnidade);
         }
 
-        // DELETE api/tipounidade/5
+        // DELETE api/tipos-unidade/{id}
         [Authorize]
         [HttpDelete("{id}")]
         public void Delete(int id)
