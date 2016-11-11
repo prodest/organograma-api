@@ -21,11 +21,11 @@ namespace Organograma.WebAPI.Controllers
 
         // GET api/municipios
         [HttpGet]
-        public IActionResult Listar()
+        public IActionResult Listar([FromQuery] string uf)
         {
             try
             {
-                return new ObjectResult(service.Listar());
+                return new ObjectResult(service.Listar(uf));
             }
 
             catch (OrganogramaNaoEncontradoException e)

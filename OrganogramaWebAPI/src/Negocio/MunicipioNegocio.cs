@@ -38,17 +38,20 @@ namespace Organograma.Negocio
             return municipioNegocio;
         }
 
-        public List<MunicipioModeloNegocio> Listar()
+        public List<MunicipioModeloNegocio> Listar(string uf)
         {
             List<Municipio> municipiosDominio = new List<Municipio>();
-            List<MunicipioModeloNegocio> municipiosNegocio = new List<MunicipioModeloNegocio>();
+           
+            IQueryable<Municipio> query = repositorioMunicipios;
 
-            municipiosDominio = repositorioMunicipios.ToList();
-            validacao.MunicipioNaoExistente(municipiosDominio);
+            if (!string.IsNullOrWhiteSpace(uf))
+            {
+                query = query.Where(m => m.Uf.ToUpper().Equals(uf.ToUpper()));
+            }
+            
+            municipiosDominio = query.ToList();
 
-            municipiosNegocio = Mapper.Map<List<Municipio>, List<MunicipioModeloNegocio>>(municipiosDominio);
-
-            return municipiosNegocio;
+            return Mapper.Map<List<Municipio>, List<MunicipioModeloNegocio>>(municipiosDominio);
         }
 
         public MunicipioModeloNegocio Inserir(MunicipioModeloNegocio municipioNegocio)

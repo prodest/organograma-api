@@ -86,14 +86,7 @@ namespace Organograma.Negocio.Validacao
             }
 
          }
-
-        internal void MunicipioNaoExistente(List<Municipio> municipios)
-        {
-            if (municipios.Count <= 0 || municipios == null)
-            {
-                throw new OrganogramaRequisicaoInvalidaException("Não há municípios cadastrados.");
-            }
-        }
+             
 
         internal void IdAlteracaoValido(int id, MunicipioModeloNegocio municipioNegocio)
         {

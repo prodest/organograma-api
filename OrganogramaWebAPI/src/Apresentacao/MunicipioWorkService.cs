@@ -23,9 +23,9 @@ namespace Apresentacao
             return Mapper.Map<MunicipioModeloNegocio, MunicipioModeloGet>(municipioNegocio.Pesquisar(id));
         }
 
-        public List<MunicipioModeloGet> Listar()
+        public List<MunicipioModeloGet> Listar(string uf)
         {
-            return Mapper.Map<List<MunicipioModeloNegocio>, List<MunicipioModeloGet>>(municipioNegocio.Listar());
+            return Mapper.Map<List<MunicipioModeloNegocio>, List<MunicipioModeloGet>>(municipioNegocio.Listar(uf));
         }
 
         public MunicipioModeloGet Inserir(MunicipioModeloPost municipioPost)
