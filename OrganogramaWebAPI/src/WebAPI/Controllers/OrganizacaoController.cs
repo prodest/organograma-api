@@ -25,11 +25,11 @@ namespace Organograma.WebAPI.Controllers
 
         // GET: api/organizacoes
         [HttpGet]
-        public IActionResult Listar([FromQuery] string esfera, [FromQuery] string poder, [FromQuery] string uf, [FromQuery] int codIbgeMunicipio)
+        public IActionResult Listar([FromQuery] string esfera, [FromQuery] string poder, [FromQuery] string uf, [FromQuery] int cod_ibge_municipio)
         {
             try
             {
-                return new ObjectResult(service.Listar(esfera, poder, uf, codIbgeMunicipio));
+                return new ObjectResult(service.Listar(esfera, poder, uf, cod_ibge_municipio));
             }
 
             catch (OrganogramaNaoEncontradoException e)
