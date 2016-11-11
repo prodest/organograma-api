@@ -5,7 +5,7 @@ namespace Organograma.Negocio.Base
 {
     public interface IOrganizacaoNegocio
     {
-        List<OrganizacaoModeloNegocio> Listar();
+        List<OrganizacaoModeloNegocio> Listar(string esfera, string poder, string uf, int codIbgeMunicipio);
         OrganizacaoModeloNegocio Pesquisar(int id);
         OrganizacaoModeloNegocio Inserir(OrganizacaoModeloNegocio OrganizacaoNegocio);
 

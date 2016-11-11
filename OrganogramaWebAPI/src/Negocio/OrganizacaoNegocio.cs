@@ -23,7 +23,7 @@ namespace Organograma.Negocio
         IRepositorioGenerico<Endereco> repositorioEnderecos;
         IRepositorioGenerico<Site> repositorioSites;
         IRepositorioGenerico<SiteOrganizacao> repositorioSitesOrganizacoes;
-        
+
         OrganizacaoValidacao validacao;
         CnpjValidacao cnpjValidacao;
         ContatoValidacao contatoValidacao;
@@ -33,7 +33,7 @@ namespace Organograma.Negocio
         PoderValidacao poderValidacao;
         SiteValidacao siteValidacao;
         TipoOrganizacaoValidacao tipoOrganizacaoValidacao;
-        
+
         public OrganizacaoNegocio(IOrganogramaRepositorios repositorios)
         {
             unitOfWork = repositorios.UnitOfWork;
@@ -105,7 +105,7 @@ namespace Organograma.Negocio
                 .Include(i => i.ContatosOrganizacao).ThenInclude(c => c.Contato)
                 .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
                 .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email).Single();
-            
+
             ExcluiContatos(organizacao);
             ExcluiEndereco(organizacao);
             ExcluiEmails(organizacao);
@@ -139,7 +139,7 @@ namespace Organograma.Negocio
             poderValidacao.Existe(organizacaoNegocio.Poder);
             siteValidacao.Valido(organizacaoNegocio.Sites);
             tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
-            
+
             Organizacao organizacao = PreparaInsercao(organizacaoNegocio);
             repositorioOrganizacoes.Add(organizacao);
             unitOfWork.Attach(organizacao.TipoOrganizacao);
@@ -159,11 +159,35 @@ namespace Organograma.Negocio
 
         #region Listar
 
-        public List<OrganizacaoModeloNegocio> Listar()
+        public List<OrganizacaoModeloNegocio> Listar(string esfera, string poder, string uf, int codIbgeMunicipio)
         {
-            List<Organizacao> organizacoes = repositorioOrganizacoes.ToList();
-            validacao.NaoEncontrado(organizacoes);
+            IQueryable<Organizacao> query = repositorioOrganizacoes;
 
+            if (!string.IsNullOrWhiteSpace(esfera))
+            {
+                query = query.Where(o => o.Esfera.Descricao.ToUpper().Equals(esfera.ToUpper()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(poder))
+            {
+                query = query.Where(o => o.Poder.Descricao.ToUpper().Equals(poder.ToUpper()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(uf))
+            {
+                query = query.Where(o => o.Endereco.Municipio.Uf.ToUpper().Equals(uf.ToUpper()));
+            }
+
+            if (codIbgeMunicipio > 0)
+            {
+                query = query.Where(o => o.Endereco.Municipio.CodigoIbge == codIbgeMunicipio);
+            }
+
+            query = query.Include(o => o.Esfera).Include(o => o.Poder);
+            
+
+            List<Organizacao> organizacoes = query.ToList();
+           
             return Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoes);
 
         }
@@ -189,8 +213,8 @@ namespace Organograma.Negocio
             validacao.NaoEncontrado(organizacao);
 
             PreencheOrganizacaoPai(organizacao);
-                                    
-            return Mapper.Map(organizacao,organizacaoNegocio);
+
+            return Mapper.Map(organizacao, organizacaoNegocio);
 
         }
 
@@ -240,7 +264,7 @@ namespace Organograma.Negocio
             }
         }
 
-        private void ExcluiEndereco (Organizacao organizacao)
+        private void ExcluiEndereco(Organizacao organizacao)
         {
             if (organizacao.Endereco != null)
             {
@@ -248,7 +272,7 @@ namespace Organograma.Negocio
             }
         }
 
-        private void ExcluiEmails (Organizacao organizacao)
+        private void ExcluiEmails(Organizacao organizacao)
         {
             if (organizacao.EmailsOrganizacao != null)
             {
@@ -262,7 +286,7 @@ namespace Organograma.Negocio
 
         }
 
-        private void ExcluiSites (Organizacao organizacao)
+        private void ExcluiSites(Organizacao organizacao)
         {
             if (organizacao.SitesOrganizacao != null)
             {
@@ -274,7 +298,7 @@ namespace Organograma.Negocio
 
             }
         }
-              
+
 
         #endregion
     }

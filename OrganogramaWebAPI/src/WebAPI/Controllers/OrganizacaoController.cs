@@ -23,22 +23,20 @@ namespace Organograma.WebAPI.Controllers
 
         #region GET
 
-
         // GET: api/organizacoes
         [HttpGet]
-        public IActionResult Listar()
+        public IActionResult Listar([FromQuery] string esfera, [FromQuery] string poder, [FromQuery] string uf, [FromQuery] int codIbgeMunicipio)
         {
             try
             {
-                return new ObjectResult(service.Listar());
-                //return new ObjectResult("Get");
+                return new ObjectResult(service.Listar(esfera, poder, uf, codIbgeMunicipio));
             }
 
             catch (OrganogramaNaoEncontradoException e)
             {
                 return NotFound(e.Message);
             }
-
+            
             catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message); ;

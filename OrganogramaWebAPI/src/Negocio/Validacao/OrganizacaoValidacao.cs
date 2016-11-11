@@ -179,13 +179,6 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaNaoEncontradoException("Organização não encontrada.");
             }
         }
-
-        internal void NaoEncontrado(List<Organizacao> organizacoes)
-        {
-            if (organizacoes.Count == 0)
-            {
-                throw new OrganogramaNaoEncontradoException("Não há organizações cadastradas");
-            }
-        }
+               
     }
 }

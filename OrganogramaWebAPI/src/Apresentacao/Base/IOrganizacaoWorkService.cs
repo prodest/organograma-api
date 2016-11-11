@@ -5,7 +5,7 @@ namespace Apresentacao.Base
 {
     public interface IOrganizacaoWorkService
     {
-        List<OrganizacaoModeloGet> Listar();
+        List<OrganizacaoModeloGet> Listar(string esfera, string poder, string uf, int codIbgeMunicipio);
         OrganizacaoModeloGet Pesquisar(int id);
         OrganizacaoModeloPut Inserir(OrganizacaoModeloPost organizacaoPost);
         void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch);

@@ -57,9 +57,9 @@ namespace Organograma.Apresentacao
         #endregion
 
         #region Listar
-        public List<OrganizacaoModeloGet> Listar()
+        public List<OrganizacaoModeloGet> Listar(string esfera, string poder, string uf, int codIbgeMunicipio)
         {
-            return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacaoNegocio.Listar());
+            return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacaoNegocio.Listar(esfera, poder, uf, codIbgeMunicipio));
         }
 
         #endregion
