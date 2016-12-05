@@ -39,7 +39,7 @@ namespace Organograma.WebAPI.Controllers
             
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message); ;
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
 

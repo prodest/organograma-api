@@ -51,7 +51,6 @@ namespace Organograma.Negocio
             validacao.DescricaoValida(poderNegocio);
             validacao.DescricaoExistente(poderNegocio);
             
-
             Poder poder = repositorioPoderes.Where(p => p.Id == id).SingleOrDefault();
             Mapper.Map(poderNegocio, poder);
             unitOfWork.Save();

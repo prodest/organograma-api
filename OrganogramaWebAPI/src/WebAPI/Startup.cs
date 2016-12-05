@@ -4,8 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using Organograma.Infraestrutura.Mapeamento;
 using Organograma.WebAPI.Config;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Organograma.WebAPI
@@ -20,6 +21,8 @@ namespace Organograma.WebAPI
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            OrganogramaContext.ConnectionString = Environment.GetEnvironmentVariable("OrganogramaConnectionString");
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -62,6 +65,13 @@ namespace Organograma.WebAPI
             #endregion
 
             app.UseMvc();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint
+            app.UseSwagger();
+
+            var requestPath = Environment.GetEnvironmentVariable("REQUEST_PATH") ?? string.Empty;
+            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+            app.UseSwaggerUi("api/documentation", requestPath + "/swagger/v1/swagger.json");
         }
     }
 }

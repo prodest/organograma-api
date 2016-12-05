@@ -6,9 +6,30 @@ namespace Organograma.Infraestrutura.Mapeamento
 {
     public partial class OrganogramaContext : DbContext
     {
+
+        public static string ConnectionString { get; set; }
+        public virtual DbSet<Contato> Contato { get; set; }
+        public virtual DbSet<TipoContato> TipoContato { get; set; }
+        public virtual DbSet<ContatoOrganizacao> ContatoOrganizacao { get; set; }
+        public virtual DbSet<ContatoUnidade> ContatoUnidade { get; set; }
+        public virtual DbSet<Email> Email { get; set; }
+        public virtual DbSet<EmailOrganizacao> EmailOrganizacao { get; set; }
+        public virtual DbSet<EmailUnidade> EmailUnidade { get; set; }
+        public virtual DbSet<Endereco> Endereco { get; set; }
+        public virtual DbSet<EsferaOrganizacao> EsferaOrganizacao { get; set; }
+        public virtual DbSet<Municipio> Municipio { get; set; }
+        public virtual DbSet<Organizacao> Organizacao { get; set; }
+        public virtual DbSet<Poder> Poder { get; set; }
+        public virtual DbSet<Site> Site { get; set; }
+        public virtual DbSet<SiteOrganizacao> SiteOrganizacao { get; set; }
+        public virtual DbSet<SiteUnidade> SiteUnidade { get; set; }
+        public virtual DbSet<TipoOrganizacao> TipoOrganizacao { get; set; }
+        public virtual DbSet<TipoUnidade> TipoUnidade { get; set; }
+        public virtual DbSet<Unidade> Unidade { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=10.32.254.137;Database=Organograma;User Id=Apl_Organograma;Password=Um9gJ0;");
+            optionsBuilder.UseSqlServer(ConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -516,23 +537,6 @@ namespace Organograma.Infraestrutura.Mapeamento
             });
         }
 
-        public virtual DbSet<Contato> Contato { get; set; }
-        public virtual DbSet<TipoContato> TipoContato { get; set; }
-        public virtual DbSet<ContatoOrganizacao> ContatoOrganizacao { get; set; }
-        public virtual DbSet<ContatoUnidade> ContatoUnidade { get; set; }
-        public virtual DbSet<Email> Email { get; set; }
-        public virtual DbSet<EmailOrganizacao> EmailOrganizacao { get; set; }
-        public virtual DbSet<EmailUnidade> EmailUnidade { get; set; }
-        public virtual DbSet<Endereco> Endereco { get; set; }
-        public virtual DbSet<EsferaOrganizacao> EsferaOrganizacao { get; set; }
-        public virtual DbSet<Municipio> Municipio { get; set; }
-        public virtual DbSet<Organizacao> Organizacao { get; set; }
-        public virtual DbSet<Poder> Poder { get; set; }
-        public virtual DbSet<Site> Site { get; set; }
-        public virtual DbSet<SiteOrganizacao> SiteOrganizacao { get; set; }
-        public virtual DbSet<SiteUnidade> SiteUnidade { get; set; }
-        public virtual DbSet<TipoOrganizacao> TipoOrganizacao { get; set; }
-        public virtual DbSet<TipoUnidade> TipoUnidade { get; set; }
-        public virtual DbSet<Unidade> Unidade { get; set; }
+        
     }
 }

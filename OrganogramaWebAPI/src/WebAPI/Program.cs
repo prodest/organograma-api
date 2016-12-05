@@ -12,9 +12,13 @@ namespace Organograma.WebAPI
     {
         public static void Main(string[] args)
         {
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "3308";
+            var requestPath = Environment.GetEnvironmentVariable("REQUEST_PATH");
+            var url = $"http://*:{port}{requestPath}";
+
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseUrls("http://*:8935")
+                .UseUrls(url)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
