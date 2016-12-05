@@ -11,6 +11,7 @@ using Swashbuckle.Swagger.Model;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using Organograma.Infraestrutura.Mapeamento;
 
 namespace Organograma.WebAPI
 {
@@ -24,6 +25,7 @@ namespace Organograma.WebAPI
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
 
             OrganogramaContext.ConnectionString = Environment.GetEnvironmentVariable("OrganogramaConnectionString");
         }
