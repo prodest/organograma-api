@@ -12,12 +12,12 @@
         public int Id { get; set; }
     }
     
-    public class MunicipioModeloGet : MunicipioModeloPut
+    public class MunicipioModeloGet : MunicipioModeloPost
     {
         public string Guid { get; set; }
-        public string InicioVigencia { get; set; }
-        public string FimVigencia { get; set; }
-        public string ObservacaoFimVigencia { get; set; }
+        //public string InicioVigencia { get; set; }
+        //public string FimVigencia { get; set; }
+        //public string ObservacaoFimVigencia { get; set; }
     }
 
 

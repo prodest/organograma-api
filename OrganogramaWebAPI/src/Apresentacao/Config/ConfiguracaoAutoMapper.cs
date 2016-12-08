@@ -57,8 +57,9 @@ namespace Organograma.Apresentacao.Config
 
                 #region Mapeamento de Município
                 cfg.CreateMap<MunicipioModeloNegocio, MunicipioModeloGet>()
-                   .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.HasValue ? src.InicioVigencia.Value.ToString("dd/MM/yyyy") : null))
-                   .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
+                   //.ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.HasValue ? src.InicioVigencia.Value.ToString("dd/MM/yyyy") : null))
+                   //.ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null))
+                   ;
 
                 cfg.CreateMap<MunicipioModeloPost, MunicipioModeloNegocio>();
 

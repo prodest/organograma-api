@@ -50,7 +50,9 @@ namespace Organograma.Negocio
                 query = query.Where(m => m.Uf.ToUpper().Equals(uf.ToUpper()));
             }
 
-            query.Include(m => m.IdentificadorExterno);
+            query = query.Include(m => m.IdentificadorExterno)
+                         .OrderBy(m => m.Uf)
+                         .ThenBy(m => m.Nome);
             
             municipiosDominio = query.ToList();
 

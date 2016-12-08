@@ -19,20 +19,23 @@ namespace Organograma.WebAPI.Controllers
             this.service = service;
         }
 
-        // GET api/municipios
+        /// <summary>
+        /// Retorna os municípios todos os municípios, podendo ser filtrado por uma unidade da federação.
+        /// </summary>
+        /// <param name="uf">Sigla da unidade da federação a qual se deseja obter seus municípios.</param>
+        /// <returns>Municípios, caso tenha sido informada uma unidade da federação, somente seus municípios.</returns>
+        /// <response code="200">Retorna os municípios, caso tenha sido informada uma unidade da federação, somente seus municípios.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(MunicipioModeloGet), 200)]
+        [ProducesResponseType(typeof(string), 500)]
+        [Authorize]
         public IActionResult Listar([FromQuery] string uf)
         {
             try
             {
                 return new ObjectResult(service.Listar(uf));
             }
-
-            catch (OrganogramaNaoEncontradoException e)
-            {
-                return NotFound(e.Message);
-            }
-
             catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message); ;
