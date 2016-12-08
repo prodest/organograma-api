@@ -115,7 +115,7 @@ namespace Organograma.WebAPI.Controllers
         [HttpGet("{guid}/filhas")]
         [ProducesResponseType(typeof(List<OrganizacaoModeloGet>), 200)]
         [ProducesResponseType(typeof(string), 500)]
-        //[Authorize]
+        [Authorize]
         public IActionResult PesquisarFilhas(string guid)
         {
             try

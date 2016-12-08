@@ -66,7 +66,8 @@ namespace Organograma.WebAPI.Controllers
         [HttpGet("organizacao/{guid}")]
         [ProducesResponseType(typeof(UnidadeModeloGet), 200)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult Pesquisar(string guid)
+        [Authorize]
+        public IActionResult PesquisarPorOrganizacao(string guid)
         {
             try
             {
