@@ -24,7 +24,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class UnidadeModeloGet
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
         public string Nome { get; set; }
         public string Sigla { get; set; }
 
@@ -39,7 +39,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class UnidadePaiModeloGet
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
         public string Nome { get; set; }
         public string Sigla { get; set; }
     }

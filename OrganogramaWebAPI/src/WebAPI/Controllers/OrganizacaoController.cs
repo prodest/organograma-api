@@ -49,14 +49,14 @@ namespace Organograma.WebAPI.Controllers
         /// </summary>
         /// <param name="guid">Identificador da organização a qual se deseja obter suas informações.</param>
         /// <returns>Infomações da organização informada.</returns>
-        /// <response code="201">Retorna as informações da organização informada.</response>
-        /// <response code="404">Proceso não foi encontrado.</response>
+        /// <response code="200">Retorna as informações da organização informada.</response>
+        /// <response code="404">Organização não foi encontrada.</response>
         /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet("{guid}")]
-        [ProducesResponseType(typeof(OrganizacaoModeloGet), 201)]
+        [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        //[Authorize]
+        [Authorize]
         public IActionResult Pesquisar(string guid)
         {
             try
@@ -81,11 +81,11 @@ namespace Organograma.WebAPI.Controllers
         /// </summary>
         /// <param name="guid">Identificador da organização a qual se deseja obter a sua patriarca.</param>
         /// <returns>Organização patriarca da organização informada.</returns>
-        /// <response code="201">Retorna a organização patriarca da organização informada.</response>
-        /// <response code="404">Proceso não foi encontrado.</response>
+        /// <response code="200">Retorna a organização patriarca da organização informada.</response>
+        /// <response code="404">Organização não foi encontrada.</response>
         /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet("{guid}/patriarca")]
-        [ProducesResponseType(typeof(OrganizacaoModeloGet), 201)]
+        [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Authorize]
@@ -110,10 +110,10 @@ namespace Organograma.WebAPI.Controllers
         /// </summary>
         /// <param name="guid">Identificador da organização a qual se deseja obter a lista de organizações filhas e subfilhas.</param>
         /// <returns>Lista de organizações filhas e subfilhas da organização informada.</returns>
-        /// <response code="201">Retorna a lista de organizações filhas e subfilhas da organização informada.</response>
+        /// <response code="200">Retorna a lista de organizações filhas e subfilhas da organização informada.</response>
         /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet("{guid}/filhas")]
-        [ProducesResponseType(typeof(List<OrganizacaoModeloGet>), 201)]
+        [ProducesResponseType(typeof(List<OrganizacaoModeloGet>), 200)]
         [ProducesResponseType(typeof(string), 500)]
         //[Authorize]
         public IActionResult PesquisarFilhas(string guid)

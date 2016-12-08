@@ -224,6 +224,23 @@ namespace Organograma.Negocio
             return Mapper.Map<Unidade, UnidadeModeloNegocio>(unidade); ;
         }
 
+        public List<UnidadeModeloNegocio> PesquisarPorOrganizacao(string guid)
+        {
+            Guid g = new Guid(guid);
+            var unidades = repositorioUnidades.Where(u => u.Organizacao.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
+                                             .Include(u => u.TipoUnidade)
+                                             .Include(u => u.UnidadePai)
+                                             .Include(u => u.Endereco).ThenInclude(u => u.Municipio)
+                                             .Include(u => u.ContatosUnidade).ThenInclude(u => u.Contato).ThenInclude(u => u.TipoContato)
+                                             .Include(u => u.EmailsUnidade).ThenInclude(u => u.Email)
+                                             .Include(u => u.SitesUnidade).ThenInclude(u => u.Site)
+                                             .Include(u => u.IdentificadorExterno)
+                                             .OrderBy(u => u.Nome)
+                                             .ToList();
+
+            return Mapper.Map<List<Unidade>, List<UnidadeModeloNegocio>>(unidades);
+
+        }
         private void ExcluirEndereco(Unidade unidade)
         {
             repositorioEnderecos.Remove(unidade.Endereco);

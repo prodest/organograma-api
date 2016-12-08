@@ -181,6 +181,7 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.TipoUnidade, opt => opt.MapFrom(s => s.TipoUnidade))
                 .ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => s.Organizacao))
                 .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? Mapper.Map<Unidade, UnidadeModeloNegocio>(s.UnidadePai) : null))
+                .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno.SingleOrDefault() != null ? s.IdentificadorExterno.SingleOrDefault().Guid.ToString("D") : null))
                 .MaxDepth(1)
                 .ForAllMembers(opt =>
                 {

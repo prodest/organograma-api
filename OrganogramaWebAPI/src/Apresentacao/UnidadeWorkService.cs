@@ -52,6 +52,13 @@ namespace Organograma.Apresentacao
             return Mapper.Map<UnidadeModeloNegocio, UnidadeModeloGet>(umn); ;
         }
 
+        public List<UnidadeModeloGet> PesquisarPorOrganizacao(string guidOrganizacao)
+        {
+            var umn = unidadeNegocio.PesquisarPorOrganizacao(guidOrganizacao);
+
+            return Mapper.Map<List<UnidadeModeloNegocio>, List<UnidadeModeloGet>>(umn); ;
+        }
+
         public void ExcluirEmail(int id, List<EmailModelo> emails)
         {
             throw new NotImplementedException();

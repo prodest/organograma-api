@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Infraestrutura.Comum;
+using Organograma.WebAPI.Config;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -53,6 +54,28 @@ namespace Organograma.WebAPI.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }   
+        }
+
+        /// <summary>
+        /// Retorna as unidades da organização informada.
+        /// </summary>
+        /// <param name="guid">Identificador da organização a qual se deseja obter suas unidades.</param>
+        /// <returns>Unidades da organização informada.</returns>
+        /// <response code="200">Retorna as unidades da organização informada.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpGet("organizacao/{guid}")]
+        [ProducesResponseType(typeof(UnidadeModeloGet), 200)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Pesquisar(string guid)
+        {
+            try
+            {
+                return new ObjectResult(service.PesquisarPorOrganizacao(guid));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
         // POST api/unidades

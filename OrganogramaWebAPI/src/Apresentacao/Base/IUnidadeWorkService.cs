@@ -9,6 +9,8 @@ namespace Organograma.Apresentacao.Base
 
         UnidadeModeloGet Pesquisar(int id);
 
+        List<UnidadeModeloGet> PesquisarPorOrganizacao(string guidOrganziacao);
+
         UnidadeModeloRetornoPost Inserir(UnidadeModeloPost unidade);
 
         void Alterar(int id, UnidadeModeloPatch unidade);
