@@ -65,9 +65,9 @@ namespace Organograma.Apresentacao
         #endregion
 
         #region Pesquisar
-        public OrganizacaoModeloGet Pesquisar(int id)
+        public OrganizacaoModeloGet Pesquisar(string guid)
         {
-            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(id));
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(guid));
         }
 
         public OrganizacaoModeloGet PesquisarPatriarca(string guid)

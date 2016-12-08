@@ -44,13 +44,24 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/organizacoes/5
-        [HttpGet("{id}")]
-        public IActionResult Pesquisar(int id)
+        /// <summary>
+        /// Retorna as informações da organização informada.
+        /// </summary>
+        /// <param name="guid">Identificador da organização a qual se deseja obter suas informações.</param>
+        /// <returns>Infomações da organização informada.</returns>
+        /// <response code="201">Retorna as informações da organização informada.</response>
+        /// <response code="404">Proceso não foi encontrado.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpGet("{guid}")]
+        [ProducesResponseType(typeof(OrganizacaoModeloGet), 201)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        //[Authorize]
+        public IActionResult Pesquisar(string guid)
         {
             try
             {
-                return new ObjectResult(service.Pesquisar(id));
+                return new ObjectResult(service.Pesquisar(guid));
             }
 
             catch (OrganogramaNaoEncontradoException e)
