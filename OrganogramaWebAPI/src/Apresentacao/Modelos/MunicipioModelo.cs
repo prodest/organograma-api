@@ -14,6 +14,7 @@
     
     public class MunicipioModeloGet : MunicipioModeloPut
     {
+        public string Guid { get; set; }
         public string InicioVigencia { get; set; }
         public string FimVigencia { get; set; }
         public string ObservacaoFimVigencia { get; set; }

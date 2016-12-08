@@ -37,20 +37,20 @@ namespace Organograma.Apresentacao
         {
             OrganizacaoModeloNegocio organizacaoModeloNegocio = new OrganizacaoModeloNegocio();
             Mapper.Map(organizacaoPost, organizacaoModeloNegocio);
-                        
+
             return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloPut>(organizacaoNegocio.Inserir(organizacaoModeloNegocio));
-            
+
         }
 
         public SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost)
         {
             SiteModeloNegocio siteModeloNegocio = new SiteModeloNegocio();
             Mapper.Map(sitePost, siteModeloNegocio);
-            
-            SiteModeloPatch site = Mapper.Map<SiteModeloNegocio,SiteModeloPatch>(organizacaoNegocio.InserirSite(siteModeloNegocio));
+
+            SiteModeloPatch site = Mapper.Map<SiteModeloNegocio, SiteModeloPatch>(organizacaoNegocio.InserirSite(siteModeloNegocio));
 
             return site;
-            
+
 
         }
 
@@ -67,9 +67,19 @@ namespace Organograma.Apresentacao
         #region Pesquisar
         public OrganizacaoModeloGet Pesquisar(int id)
         {
-           return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(id));
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(id));
         }
 
-        #endregion
+        public OrganizacaoModeloGet PesquisarPatriarca(string guid)
+        {
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.PesquisarPatriarca(guid));
+        }
+
+        public List<OrganizacaoModeloGet> PesquisarFilhas(string guid)
+        {
+            return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacaoNegocio.PesquisarFilhas(guid));
+
+            #endregion
+        }
     }
 }

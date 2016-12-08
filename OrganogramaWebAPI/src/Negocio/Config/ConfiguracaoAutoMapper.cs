@@ -69,8 +69,17 @@ namespace Organograma.Negocio.Config
             CreateMap<EsferaOrganizacao, EsferaOrganizacaoModeloNegocio>().ReverseMap();
             #endregion
 
+            #region Mapeamento de identificador externo
+            CreateMap<IdentificadorExterno, Guid>()
+                .ConvertUsing(s => s.Guid);
+            #endregion
+
             #region Mapeamento de Municipio
-            CreateMap<MunicipioModeloNegocio, Municipio>().ReverseMap();
+            CreateMap<Municipio, MunicipioModeloNegocio>()
+                .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno.SingleOrDefault() != null ? s.IdentificadorExterno.SingleOrDefault().Guid.ToString("D") : null));
+
+            CreateMap<MunicipioModeloNegocio, Municipio>()
+                .ForMember(dest => dest.IdentificadorExterno, opt => opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) }));
 
             //CreateMap<Municipio, MunicipioModeloNegocio>();
             #endregion
@@ -85,6 +94,7 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.Poder))
                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.SitesOrganizacao != null ? Mapper.Map<List<SiteOrganizacao>, List<SiteModeloNegocio>>(s.SitesOrganizacao.ToList()) : null))
                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao))
+                .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno.SingleOrDefault() != null ? s.IdentificadorExterno.SingleOrDefault().Guid.ToString("D") : null))
                 .MaxDepth(1)
                 .ForAllMembers(opt =>
                 {
@@ -123,6 +133,7 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.OrganizacaoPai, opt => opt.Ignore())
                 .ForMember(dest => dest.Poder, opt => opt.Ignore())
                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.Ignore())
+                .ForMember(dest => dest.IdentificadorExterno, opt => opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) }))
                 .ForMember(dest => dest.EmailsOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailOrganizacao>>(s.Emails)))
                 .ForMember(dest => dest.SitesOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteOrganizacao>>(s.Sites)))
                 .ForMember(dest => dest.ContatosOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoOrganizacao>>(s.Contatos)));
@@ -205,7 +216,8 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.UnidadePai, opt => opt.Ignore())
                 .ForMember(dest => dest.ContatosUnidade, opt => opt.MapFrom(s => s.Contatos != null ? Mapper.Map<List<ContatoModeloNegocio>, List<ContatoUnidade>>(s.Contatos) : null))
                 .ForMember(dest => dest.EmailsUnidade, opt => opt.MapFrom(s => s.Emails != null ? Mapper.Map<List<EmailModeloNegocio>, List<EmailUnidade>>(s.Emails) : null))
-                .ForMember(dest => dest.SitesUnidade, opt => opt.MapFrom(s => s.Sites != null ? Mapper.Map<List<SiteModeloNegocio>, List<SiteUnidade>>(s.Sites) : null));
+                .ForMember(dest => dest.SitesUnidade, opt => opt.MapFrom(s => s.Sites != null ? Mapper.Map<List<SiteModeloNegocio>, List<SiteUnidade>>(s.Sites) : null))
+                .ForMember(dest => dest.IdentificadorExterno, opt => opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) }));
             #endregion
         }
     }

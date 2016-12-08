@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace Organograma.Negocio.Modelos
@@ -10,6 +11,7 @@ namespace Organograma.Negocio.Modelos
         public string RazaoSocial { get; set; }
         public string NomeFantasia { get; set; }
         public string Sigla { get; set; }
+        public string Guid { get; set; }
         public EsferaOrganizacaoModeloNegocio Esfera { get; set; }
         public PoderModeloNegocio Poder { get; set; }
         public TipoOrganizacaoModeloNegocio TipoOrganizacao { get; set; }

@@ -8,6 +8,7 @@ namespace Organograma.Dominio.Modelos
         public Municipio()
         {
             Enderecos = new HashSet<Endereco>();
+            IdentificadorExterno = new HashSet<IdentificadorExterno>();
         }
 
         public int Id { get; set; }
@@ -19,5 +20,6 @@ namespace Organograma.Dominio.Modelos
         public string ObservacaoFimVigencia { get; set; }
 
         public virtual ICollection<Endereco> Enderecos { get; set; }
+        public virtual ICollection<IdentificadorExterno> IdentificadorExterno { get; set; }
     }
 }

@@ -187,6 +187,8 @@ namespace Organograma.Negocio
 
             #endregion
 
+            unidade.Guid = Guid.NewGuid().ToString("D");
+
             var unid = Mapper.Map<UnidadeModeloNegocio, Unidade>(unidade);
 
             repositorioUnidades.Add(unid);

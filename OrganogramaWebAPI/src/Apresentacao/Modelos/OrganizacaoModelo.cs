@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Organograma.Apresentacao.Modelos
 {
@@ -27,7 +28,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class OrganizacaoModeloGet
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
         public string Cnpj { get; set; }
         public string RazaoSocial { get; set; }
         public string NomeFantasia { get; set; }
@@ -57,7 +58,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class OrganizacaoPaiModeloGet
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
         public string RazaoSocial { get; set; }
         public string Sigla { get; set; }
     }

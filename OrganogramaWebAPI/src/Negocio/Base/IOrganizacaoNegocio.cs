@@ -13,5 +13,7 @@ namespace Organograma.Negocio.Base
 
         void Excluir (int id);
         SiteModeloNegocio InserirSite(SiteModeloNegocio siteModeloNegocio);
+        OrganizacaoModeloNegocio PesquisarPatriarca(string guid);
+        List<OrganizacaoModeloNegocio> PesquisarFilhas(string guid);
     }
 }

@@ -7,6 +7,7 @@ using Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Organograma.WebAPI.Config;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -62,6 +63,58 @@ namespace Organograma.WebAPI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
 
+        }
+
+        /// <summary>
+        /// Retorna a organização patriarca da organização informada.
+        /// </summary>
+        /// <param name="guid">Identificador da organização a qual se deseja obter a sua patriarca.</param>
+        /// <returns>Organização patriarca da organização informada.</returns>
+        /// <response code="201">Retorna a organização patriarca da organização informada.</response>
+        /// <response code="404">Proceso não foi encontrado.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpGet("{guid}/patriarca")]
+        [ProducesResponseType(typeof(OrganizacaoModeloGet), 201)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        [Authorize]
+        public IActionResult PesquisarPatriarca(string guid)
+        {
+            try
+            {
+                return new ObjectResult(service.PesquisarPatriarca(guid));
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
+        }
+
+        /// <summary>
+        /// Retorna a lista de organizações filhas e subfilhas da organização informada.
+        /// </summary>
+        /// <param name="guid">Identificador da organização a qual se deseja obter a lista de organizações filhas e subfilhas.</param>
+        /// <returns>Lista de organizações filhas e subfilhas da organização informada.</returns>
+        /// <response code="201">Retorna a lista de organizações filhas e subfilhas da organização informada.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpGet("{guid}/filhas")]
+        [ProducesResponseType(typeof(List<OrganizacaoModeloGet>), 201)]
+        [ProducesResponseType(typeof(string), 500)]
+        //[Authorize]
+        public IActionResult PesquisarFilhas(string guid)
+        {
+            try
+            {
+                return new ObjectResult(service.PesquisarFilhas(guid));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
         #endregion

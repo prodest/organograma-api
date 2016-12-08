@@ -11,6 +11,8 @@ namespace Apresentacao.Base
         void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch);
         void Excluir(int id);
         SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost);
+        OrganizacaoModeloGet PesquisarPatriarca(string guid);
+        List<OrganizacaoModeloGet> PesquisarFilhas(string guid);
     }
 
 }

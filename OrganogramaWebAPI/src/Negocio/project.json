@@ -4,6 +4,7 @@
   "dependencies": {
     "Dominio": "1.0.0-*",
     "Infraestrutura": "1.0.0-*",
+    "Microsoft.EntityFrameworkCore": "1.1.0",
     "NETStandard.Library": "1.6.1"
   },
 

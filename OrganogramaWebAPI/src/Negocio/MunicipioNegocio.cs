@@ -7,6 +7,7 @@ using System.Linq;
 using AutoMapper;
 using System;
 using Organograma.Negocio.Validacao;
+using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.Negocio
 {
@@ -48,6 +49,8 @@ namespace Organograma.Negocio
             {
                 query = query.Where(m => m.Uf.ToUpper().Equals(uf.ToUpper()));
             }
+
+            query.Include(m => m.IdentificadorExterno);
             
             municipiosDominio = query.ToList();
 
@@ -102,8 +105,11 @@ namespace Organograma.Negocio
 
         private Municipio PreparaMunicipioParaInsercao (MunicipioModeloNegocio municipioNegocio)
         {
+            municipioNegocio.Guid = Guid.NewGuid().ToString("D");
+
             Municipio municipio = new Municipio();
             municipioNegocio.InicioVigencia = DateTime.Now;
+
             municipio = Mapper.Map<MunicipioModeloNegocio, Municipio>(municipioNegocio);
             
             return municipio;

@@ -183,12 +183,18 @@ namespace Organograma.Negocio
                 query = query.Where(o => o.Endereco.Municipio.CodigoIbge == codIbgeMunicipio);
             }
 
-            query = query.Include(o => o.Esfera).Include(o => o.Poder);
-            
+            query = query.Where(o => o.OrganizacaoPai == null);
+
+            query = query.Include(o => o.Esfera)
+                         .Include(o => o.Poder)
+                         .Include(o => o.IdentificadorExterno)
+                         .OrderBy(o => o.RazaoSocial);
 
             List<Organizacao> organizacoes = query.ToList();
-           
-            return Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoes);
+
+            var orgs = Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoes);
+
+            return orgs;
 
         }
 
@@ -218,6 +224,49 @@ namespace Organograma.Negocio
 
         }
 
+        public OrganizacaoModeloNegocio PesquisarPatriarca(string guid)
+        {
+            OrganizacaoModeloNegocio organizacaoNegocio = new OrganizacaoModeloNegocio();
+
+            Guid g = new Guid(guid);
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
+                                                             .SingleOrDefault();
+
+            validacao.NaoEncontrado(organizacao);
+
+            int idOrganizacaoPatriarca = ObterOrganizacaoPatriarca(organizacao);
+
+            Organizacao organizacaoPatriarca = repositorioOrganizacoes.Where(o => o.Id == idOrganizacaoPatriarca)
+                                                                      .Include(e => e.Endereco).ThenInclude(m => m.Municipio)
+                                                                      .Include(e => e.Esfera)
+                                                                      .Include(p => p.Poder)
+                                                                      .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato).ThenInclude(tc => tc.TipoContato)
+                                                                      .Include(eo => eo.EmailsOrganizacao).ThenInclude(e => e.Email)
+                                                                      .Include(so => so.SitesOrganizacao).ThenInclude(s => s.Site)
+                                                                      .Include(to => to.TipoOrganizacao)
+                                                                      .Include(to => to.IdentificadorExterno)
+                                                                      .SingleOrDefault();
+
+            return Mapper.Map(organizacaoPatriarca, organizacaoNegocio);
+        }
+
+        public List<OrganizacaoModeloNegocio> PesquisarFilhas(string guid)
+        {
+            Guid g = new Guid(guid);
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
+                                                             .Include(o => o.OrganizacoesFilhas)
+                                                             .Include(o => o.Esfera)
+                                                             .Include(o => o.Poder)
+                                                             .Include(o => o.IdentificadorExterno)
+                                                             .SingleOrDefault();
+
+            validacao.NaoEncontrado(organizacao);
+
+            List<Organizacao> organizacoesFilhas = ObterOrganizacoesFilhas(organizacao);
+
+            return Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoesFilhas);
+        }
+
         #endregion
 
         #region Funções Auxiliares
@@ -238,8 +287,11 @@ namespace Organograma.Negocio
 
         private Organizacao PreparaInsercao(OrganizacaoModeloNegocio organizacaoNegocio)
         {
+            organizacaoNegocio.Guid = Guid.NewGuid().ToString("D");
+
             Organizacao organizacao = new Organizacao();
             organizacao = Mapper.Map<OrganizacaoModeloNegocio, Organizacao>(organizacaoNegocio);
+
             return organizacao;
         }
 
@@ -297,6 +349,47 @@ namespace Organograma.Negocio
                 }
 
             }
+        }
+
+        private int ObterOrganizacaoPatriarca(Organizacao organizacao)
+        {
+            int idOrganizacaoPatriarca = organizacao.Id;
+
+            if (organizacao.IdOrganizacaoPai.HasValue)
+            {
+                Organizacao organizacaoPai = repositorioOrganizacoes.Where(o => o.Id == organizacao.IdOrganizacaoPai.Value)
+                                                                    .SingleOrDefault();
+
+                idOrganizacaoPatriarca = ObterOrganizacaoPatriarca(organizacaoPai);
+            }
+
+            return idOrganizacaoPatriarca;
+        }
+
+        private List<Organizacao> ObterOrganizacoesFilhas(Organizacao organizacao)
+        {
+            if (organizacao == null) throw new ArgumentNullException("organizacao");
+
+            List<Organizacao> organizacoesFilhas = new List<Organizacao>();
+
+            if (organizacao.OrganizacoesFilhas != null && organizacao.OrganizacoesFilhas.Count > 0)
+            {
+                foreach (Organizacao organizacaoFilha in organizacao.OrganizacoesFilhas)
+                {
+                    Organizacao org = repositorioOrganizacoes.Where(o => o.Id == organizacaoFilha.Id)
+                                                             .Include(o => o.OrganizacoesFilhas)
+                                                             .Include(o => o.Esfera)
+                                                             .Include(o => o.Poder)
+                                                             .Include(o => o.IdentificadorExterno)
+                                                             .Single();
+
+                    organizacoesFilhas.AddRange(ObterOrganizacoesFilhas(org));
+                }
+            }
+
+            organizacoesFilhas.Add(organizacao);
+
+            return organizacoesFilhas.OrderBy(o => o.RazaoSocial).ToList();
         }
 
 

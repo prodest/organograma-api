@@ -9,7 +9,6 @@ namespace Organograma.Infraestrutura.Mapeamento
 
         public static string ConnectionString { get; set; }
         public virtual DbSet<Contato> Contato { get; set; }
-        public virtual DbSet<TipoContato> TipoContato { get; set; }
         public virtual DbSet<ContatoOrganizacao> ContatoOrganizacao { get; set; }
         public virtual DbSet<ContatoUnidade> ContatoUnidade { get; set; }
         public virtual DbSet<Email> Email { get; set; }
@@ -17,12 +16,14 @@ namespace Organograma.Infraestrutura.Mapeamento
         public virtual DbSet<EmailUnidade> EmailUnidade { get; set; }
         public virtual DbSet<Endereco> Endereco { get; set; }
         public virtual DbSet<EsferaOrganizacao> EsferaOrganizacao { get; set; }
+        public virtual DbSet<IdentificadorExterno> IdentificadorExterno { get; set; }
         public virtual DbSet<Municipio> Municipio { get; set; }
         public virtual DbSet<Organizacao> Organizacao { get; set; }
         public virtual DbSet<Poder> Poder { get; set; }
         public virtual DbSet<Site> Site { get; set; }
         public virtual DbSet<SiteOrganizacao> SiteOrganizacao { get; set; }
         public virtual DbSet<SiteUnidade> SiteUnidade { get; set; }
+        public virtual DbSet<TipoContato> TipoContato { get; set; }
         public virtual DbSet<TipoOrganizacao> TipoOrganizacao { get; set; }
         public virtual DbSet<TipoUnidade> TipoUnidade { get; set; }
         public virtual DbSet<Unidade> Unidade { get; set; }
@@ -87,8 +88,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasName("UK_ContatoUnidade_Contato_Unidade")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.IdContato).HasColumnName("idContato");
 
@@ -148,8 +148,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasName("UK_EmailUnidade_Email_Unidade")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.IdEmail).HasColumnName("idEmail");
 
@@ -184,7 +183,7 @@ namespace Organograma.Infraestrutura.Mapeamento
 
                 entity.Property(e => e.Complemento)
                     .HasColumnName("complemento")
-                    .HasColumnType("varchar(50)");
+                    .HasColumnType("varchar(100)");
 
                 entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
 
@@ -216,6 +215,38 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .IsRequired()
                     .HasColumnName("descricao")
                     .HasColumnType("varchar(100)");
+            });
+
+            modelBuilder.Entity<IdentificadorExterno>(entity =>
+            {
+                entity.HasIndex(e => e.Guid)
+                    .HasName("UK_IdentificadorExternoGuid")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Guid).HasColumnName("guid");
+
+                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
+
+                entity.Property(e => e.IdOrganizacao).HasColumnName("idOrganizacao");
+
+                entity.Property(e => e.IdUnidade).HasColumnName("idUnidade");
+
+                entity.HasOne(d => d.Municipio)
+                    .WithMany(p => p.IdentificadorExterno)
+                    .HasForeignKey(d => d.IdMunicipio)
+                    .HasConstraintName("FK_IdentificadorExterno_Municipio");
+
+                entity.HasOne(d => d.Organizacao)
+                    .WithMany(p => p.IdentificadorExterno)
+                    .HasForeignKey(d => d.IdOrganizacao)
+                    .HasConstraintName("FK_IdentificadorExterno_Organizacao");
+
+                entity.HasOne(d => d.Unidade)
+                    .WithMany(p => p.IdentificadorExterno)
+                    .HasForeignKey(d => d.IdUnidade)
+                    .HasConstraintName("FK_IdentificadorExterno_Unidade");
             });
 
             modelBuilder.Entity<Municipio>(entity =>
@@ -280,6 +311,8 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("cnpj")
                     .HasColumnType("varchar(14)");
 
+                entity.Property(e => e.IdAntigo).HasColumnName("idAntigo");
+
                 entity.Property(e => e.IdEndereco).HasColumnName("idEndereco");
 
                 entity.Property(e => e.IdEsfera).HasColumnName("idEsfera");
@@ -299,12 +332,12 @@ namespace Organograma.Infraestrutura.Mapeamento
                 entity.Property(e => e.RazaoSocial)
                     .IsRequired()
                     .HasColumnName("razaoSocial")
-                    .HasColumnType("varchar(100)");
+                    .HasColumnType("varchar(200)");
 
                 entity.Property(e => e.Sigla)
                     .IsRequired()
                     .HasColumnName("sigla")
-                    .HasColumnType("varchar(10)");
+                    .HasColumnType("varchar(20)");
 
                 entity.HasOne(d => d.Endereco)
                     .WithMany(p => p.Organizacoes)
@@ -392,8 +425,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasName("UK_SiteUnidade_Site_Unidade")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.IdSite).HasColumnName("idSite");
 
@@ -418,8 +450,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasName("UK_TipoContatoDescricao")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Descricao)
                     .IsRequired()
@@ -491,8 +522,9 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasName("UK_UnidadeSigla")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.IdAntigo).HasColumnName("idAntigo");
 
                 entity.Property(e => e.IdEndereco).HasColumnName("idEndereco");
 
@@ -515,7 +547,6 @@ namespace Organograma.Infraestrutura.Mapeamento
                 entity.HasOne(d => d.Endereco)
                     .WithMany(p => p.Unidades)
                     .HasForeignKey(d => d.IdEndereco)
-                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Unidade_Endereco");
 
                 entity.HasOne(d => d.Organizacao)
@@ -537,6 +568,6 @@ namespace Organograma.Infraestrutura.Mapeamento
             });
         }
 
-        
+
     }
 }
