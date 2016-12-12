@@ -7,7 +7,7 @@ namespace Organograma.Apresentacao.Base
     {
         List<UnidadeModeloRetornoPost> Listar();
 
-        UnidadeModeloGet Pesquisar(int id);
+        UnidadeModeloGet Pesquisar(string guid);
 
         List<UnidadeModeloGet> PesquisarPorOrganizacao(string guidOrganziacao);
 

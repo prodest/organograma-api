@@ -45,9 +45,9 @@ namespace Organograma.Apresentacao
             return Mapper.Map<List<UnidadeModeloNegocio>, List<UnidadeModeloRetornoPost>>(unidades);
         }
 
-        public UnidadeModeloGet Pesquisar(int id)
+        public UnidadeModeloGet Pesquisar(string guid)
         {
-            var umn = unidadeNegocio.Pesquisar(id);
+            var umn = unidadeNegocio.Pesquisar(guid);
 
             return Mapper.Map<UnidadeModeloNegocio, UnidadeModeloGet>(umn); ;
         }

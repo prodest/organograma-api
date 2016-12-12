@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
@@ -38,17 +38,34 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/unidades/{id}
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        /// <summary>
+        /// Retorna as informações da unidade informada.
+        /// </summary>
+        /// <param name="guid">Identificador da organização a qual se deseja obter suas informações.</param>
+        /// <returns>Informações da unidade informada.</returns>
+        /// <response code="200">Retorna as informações da unidadeinformada.</response>
+        /// <response code="400">Retorna a descrição do problema encontrado.</response>
+        /// <response code="404">Unidade não encontrada.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpGet("{guid}")]
+        [ProducesResponseType(typeof(UnidadeModeloGet), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        [Authorize]
+        public IActionResult Get(string guid)
         {
             try
             {
-                return new ObjectResult(service.Pesquisar(id)); 
+                return new ObjectResult(service.Pesquisar(guid)); 
             }
             catch (OrganogramaNaoEncontradoException e)
             {
                 return NotFound(e.Message);
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
             }
             catch (Exception e)
             {
@@ -64,7 +81,7 @@ namespace Organograma.WebAPI.Controllers
         /// <response code="200">Retorna as unidades da organização informada.</response>
         /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet("organizacao/{guid}")]
-        [ProducesResponseType(typeof(UnidadeModeloGet), 200)]
+        [ProducesResponseType(typeof(List<UnidadeModeloGet>), 200)]
         [ProducesResponseType(typeof(string), 500)]
         [Authorize]
         public IActionResult PesquisarPorOrganizacao(string guid)

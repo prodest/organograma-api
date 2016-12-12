@@ -10,7 +10,7 @@ namespace Organograma.Negocio.Base
     {
         List<UnidadeModeloNegocio> Listar();
 
-        UnidadeModeloNegocio Pesquisar(int id);
+        UnidadeModeloNegocio Pesquisar(string guid);
 
         UnidadeModeloNegocio Inserir(UnidadeModeloNegocio esferaOrganizacao);
 
