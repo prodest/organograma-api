@@ -211,6 +211,8 @@ namespace Organograma.Negocio
         {
             unidadeValidacao.GuidValido(guid);
 
+            Guid g = new Guid(guid);
+
             var unidade = repositorioUnidades.Where(u => u.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
                                              .Include(u => u.TipoUnidade)
                                              .Include(u => u.Organizacao)
