@@ -69,6 +69,10 @@ namespace Organograma.Apresentacao
         {
             return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(guid));
         }
+        public OrganizacaoModeloGet PesquisarPorSigla(string sigla)
+        {
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.PesquisarPorSigla(sigla));
+        }
 
         public OrganizacaoModeloGet PesquisarPatriarca(string guid)
         {

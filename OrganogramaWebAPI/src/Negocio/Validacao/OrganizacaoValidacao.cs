@@ -179,6 +179,20 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaNaoEncontradoException("Organização não encontrada.");
             }
         }
-               
+
+        internal void GuidValido(string guid)
+        {
+            try
+            {
+                Guid g = new Guid(guid);
+
+                if (g.Equals(Guid.Empty))
+                    throw new OrganogramaRequisicaoInvalidaException("Identificador inválido.");
+            }
+            catch (FormatException)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Formato do identificador inválido.");
+            }
+        }
     }
 }

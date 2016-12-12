@@ -204,10 +204,11 @@ namespace Organograma.Negocio
 
         public OrganizacaoModeloNegocio Pesquisar(string guid)
         {
-            OrganizacaoModeloNegocio organizacaoNegocio = new OrganizacaoModeloNegocio();
+            validacao.GuidValido(guid);
 
-            //TODO: Substituir esta linha pelas duas linhas comentadas abaixo assim que o Acesso Cidadão estiver retornando o GUID da Organziação.
-            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Sigla.Trim().ToUpper().Equals(guid.Trim().ToUpper()))
+            Guid g = new Guid(guid);
+
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
                                                              .Include(e => e.Endereco).ThenInclude(m => m.Municipio)
                                                              .Include(e => e.Esfera)
                                                              .Include(p => p.Poder)
@@ -218,17 +219,30 @@ namespace Organograma.Negocio
                                                              .Include(to => to.IdentificadorExterno)
                                                              .SingleOrDefault();
 
-            //Guid g = new Guid(guid);
-            //Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
-            //                                                 .Include(e => e.Endereco).ThenInclude(m => m.Municipio)
-            //                                                 .Include(e => e.Esfera)
-            //                                                 .Include(p => p.Poder)
-            //                                                 .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato).ThenInclude(tc => tc.TipoContato)
-            //                                                 .Include(eo => eo.EmailsOrganizacao).ThenInclude(e => e.Email)
-            //                                                 .Include(so => so.SitesOrganizacao).ThenInclude(s => s.Site)
-            //                                                 .Include(to => to.TipoOrganizacao)
-            //                                                 .Include(to => to.IdentificadorExterno)
-            //                                                 .SingleOrDefault();
+            validacao.NaoEncontrado(organizacao);
+
+            PreencheOrganizacaoPai(organizacao);
+
+            OrganizacaoModeloNegocio organizacaoNegocio = new OrganizacaoModeloNegocio();
+
+            return Mapper.Map(organizacao, organizacaoNegocio);
+
+        }
+
+        public OrganizacaoModeloNegocio PesquisarPorSigla(string sigla)
+        {
+            OrganizacaoModeloNegocio organizacaoNegocio = new OrganizacaoModeloNegocio();
+
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Sigla.Trim().ToUpper().Equals(sigla.Trim().ToUpper()))
+                                                             .Include(e => e.Endereco).ThenInclude(m => m.Municipio)
+                                                             .Include(e => e.Esfera)
+                                                             .Include(p => p.Poder)
+                                                             .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato).ThenInclude(tc => tc.TipoContato)
+                                                             .Include(eo => eo.EmailsOrganizacao).ThenInclude(e => e.Email)
+                                                             .Include(so => so.SitesOrganizacao).ThenInclude(s => s.Site)
+                                                             .Include(to => to.TipoOrganizacao)
+                                                             .Include(to => to.IdentificadorExterno)
+                                                             .SingleOrDefault();
 
             validacao.NaoEncontrado(organizacao);
 

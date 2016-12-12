@@ -54,6 +54,7 @@ namespace Organograma.WebAPI.Controllers
         /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet("{guid}")]
         [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
+        [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Authorize]
@@ -62,6 +63,42 @@ namespace Organograma.WebAPI.Controllers
             try
             {
                 return new ObjectResult(service.Pesquisar(guid));
+            }
+
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// Retorna as informações da organização informada.
+        /// </summary>
+        /// <param name="sigla">Sigla da organização a qual se deseja obter suas informações.</param>
+        /// <returns>Infomações da organização informada.</returns>
+        /// <response code="200">Retorna as informações da organização informada.</response>
+        /// <response code="404">Organização não foi encontrada.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpGet("sigla/{sigla}")]
+        [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        [Authorize]
+        public IActionResult PesquisarPorSigla(string sigla)
+        {
+            try
+            {
+                return new ObjectResult(service.PesquisarPorSigla(sigla));
             }
 
             catch (OrganogramaNaoEncontradoException e)

@@ -13,6 +13,7 @@ namespace Apresentacao.Base
         SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost);
         OrganizacaoModeloGet PesquisarPatriarca(string guid);
         List<OrganizacaoModeloGet> PesquisarFilhas(string guid);
+        OrganizacaoModeloGet PesquisarPorSigla(string sigla);
     }
 
 }

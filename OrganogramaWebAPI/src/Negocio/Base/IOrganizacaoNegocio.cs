@@ -15,5 +15,6 @@ namespace Organograma.Negocio.Base
         SiteModeloNegocio InserirSite(SiteModeloNegocio siteModeloNegocio);
         OrganizacaoModeloNegocio PesquisarPatriarca(string guid);
         List<OrganizacaoModeloNegocio> PesquisarFilhas(string guid);
+        OrganizacaoModeloNegocio PesquisarPorSigla(string sigla);
     }
 }
