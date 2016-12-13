@@ -327,7 +327,9 @@ namespace Organograma.Negocio
         {
             if (organizacao.IdOrganizacaoPai.HasValue)
             {
-                organizacao.OrganizacaoPai = repositorioOrganizacoes.Where(op => op.Id == organizacao.IdOrganizacaoPai.Value).Single();
+                organizacao.OrganizacaoPai = repositorioOrganizacoes.Where(op => op.Id == organizacao.IdOrganizacaoPai.Value)
+                                                                    .Include(op => op.IdentificadorExterno)
+                                                                    .Single();
             }
         }
 
