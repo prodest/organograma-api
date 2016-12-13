@@ -215,7 +215,7 @@ namespace Organograma.Negocio
 
             var unidade = repositorioUnidades.Where(u => u.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
                                              .Include(u => u.TipoUnidade)
-                                             .Include(u => u.Organizacao)
+                                             .Include(u => u.Organizacao).ThenInclude(o => o.IdentificadorExterno)
                                              .Include(u => u.UnidadePai)
                                              .Include(u => u.Endereco).ThenInclude(u => u.Municipio)
                                              .Include(u => u.ContatosUnidade).ThenInclude(u => u.Contato).ThenInclude(u => u.TipoContato)

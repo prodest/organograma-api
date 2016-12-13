@@ -65,7 +65,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class OrganizacaoUnidadeModeloGet
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
         public string RazaoSocial { get; set; }
         public string NomeFantasia { get; set; }
         public string Sigla { get; set; }
