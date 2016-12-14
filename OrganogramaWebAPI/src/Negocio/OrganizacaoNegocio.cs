@@ -209,7 +209,7 @@ namespace Organograma.Negocio
             Guid g = new Guid(guid);
 
             Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
-                                                             .Include(e => e.Endereco).ThenInclude(m => m.Municipio)
+                                                             .Include(e => e.Endereco).ThenInclude(m => m.Municipio).ThenInclude(m => m.IdentificadorExterno)
                                                              .Include(e => e.Esfera)
                                                              .Include(p => p.Poder)
                                                              .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato).ThenInclude(tc => tc.TipoContato)

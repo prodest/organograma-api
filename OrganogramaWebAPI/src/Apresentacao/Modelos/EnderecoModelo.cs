@@ -22,7 +22,7 @@ namespace Organograma.Apresentacao.Modelos
         public string Complemento { get; set; }
         public string Bairro { get; set; }
         public string Cep { get; set; }
-        public MunicipioModeloPut Municipio { get; set; }
+        public MunicipioModeloGet Municipio { get; set; }
     }
 
     public class EnderecoModeloPut : EnderecoModelo
