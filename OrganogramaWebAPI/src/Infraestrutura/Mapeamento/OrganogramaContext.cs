@@ -1,6 +1,8 @@
 ﻿using Organograma.Dominio.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Organograma.Infraestrutura.Mapeamento
 {
@@ -31,6 +33,13 @@ namespace Organograma.Infraestrutura.Mapeamento
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(ConnectionString);
+
+            //optionsBuilder.EnableSensitiveDataLogging();
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                optionsBuilder.UseLoggerFactory(new OrganogramaLoggerFactory());
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -234,8 +243,8 @@ namespace Organograma.Infraestrutura.Mapeamento
                 entity.Property(e => e.IdUnidade).HasColumnName("idUnidade");
 
                 entity.HasOne(d => d.Municipio)
-                    .WithMany(p => p.IdentificadorExterno)
-                    .HasForeignKey(d => d.IdMunicipio)
+                    .WithOne(p => p.IdentificadorExterno)
+                    .HasForeignKey<IdentificadorExterno>(d => d.IdMunicipio)
                     .HasConstraintName("FK_IdentificadorExterno_Municipio");
 
                 entity.HasOne(d => d.Organizacao)

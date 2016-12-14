@@ -31,8 +31,10 @@ namespace Organograma.Negocio
 
             Municipio municipioDominio = new Municipio();
             MunicipioModeloNegocio municipioNegocio = new MunicipioModeloNegocio();
-                        
-            municipioDominio = repositorioMunicipios.Where(m => m.IdentificadorExterno.Any(ie => ie.Guid.Equals(new Guid(guid))))
+
+            Guid gMunicipio = new Guid(guid);
+
+            municipioDominio = repositorioMunicipios.Where(m => m.IdentificadorExterno.Guid.Equals(gMunicipio))
                                                     .Include(m => m.IdentificadorExterno)
                                                     .SingleOrDefault();
 
