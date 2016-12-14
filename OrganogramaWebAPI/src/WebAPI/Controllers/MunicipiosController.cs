@@ -42,20 +42,35 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // GET api/municipios/{id}
-        [HttpGet("{id}")]
-        public IActionResult Pesquisar(int id)
+        /// <summary>
+        /// Retorna as informações do município informado.
+        /// </summary>
+        /// <param name="guid">Identificador do município o qual se deseja obter suas informações.</param>
+        /// <returns>Infomações do município informado.</returns>
+        /// <response code="200">Retorna as informações do município informado.</response>
+        /// <response code="400">Retorna a mensagem de falha na validação.</response>
+        /// <response code="404">Município não foi encontrado.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpGet("{guid}")]
+        [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        [Authorize]
+        public IActionResult Pesquisar(string guid)
         {
             try
             {
-                return new ObjectResult(service.Pesquisar(id));
+                return new ObjectResult(service.Pesquisar(guid));
             }
-
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(e.Message);
+            }
             catch (OrganogramaNaoEncontradoException e)
             {
                 return NotFound(e.Message);
             }
-
             catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);

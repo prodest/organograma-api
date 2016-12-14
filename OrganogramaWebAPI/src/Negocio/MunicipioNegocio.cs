@@ -25,12 +25,16 @@ namespace Organograma.Negocio
         }
 
         
-        public MunicipioModeloNegocio Pesquisar(int id)
+        public MunicipioModeloNegocio Pesquisar(string guid)
         {
+            validacao.GuidValido(guid);
+
             Municipio municipioDominio = new Municipio();
             MunicipioModeloNegocio municipioNegocio = new MunicipioModeloNegocio();
                         
-            municipioDominio = repositorioMunicipios.Where(q => q.Id.Equals(id)).SingleOrDefault();
+            municipioDominio = repositorioMunicipios.Where(m => m.IdentificadorExterno.Any(ie => ie.Guid.Equals(new Guid(guid))))
+                                                    .Include(m => m.IdentificadorExterno)
+                                                    .SingleOrDefault();
 
             validacao.MunicipioNaoExistente(municipioDominio);
 

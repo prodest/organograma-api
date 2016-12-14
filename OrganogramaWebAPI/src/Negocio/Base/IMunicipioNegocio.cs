@@ -6,7 +6,7 @@ namespace Organograma.Negocio.Base
     public interface IMunicipioNegocio
     {
         List<MunicipioModeloNegocio> Listar(string uf);
-        MunicipioModeloNegocio Pesquisar(int id);
+        MunicipioModeloNegocio Pesquisar(string guid);
         MunicipioModeloNegocio Inserir(MunicipioModeloNegocio municipioNegocio);
 
         void Alterar(int id, MunicipioModeloNegocio municipioNegocio);

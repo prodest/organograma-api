@@ -18,9 +18,9 @@ namespace Apresentacao
             this.municipioNegocio = municipioNegocio;
         }
 
-        public MunicipioModeloGet Pesquisar(int id)
+        public MunicipioModeloGet Pesquisar(string guid)
         {
-            return Mapper.Map<MunicipioModeloNegocio, MunicipioModeloGet>(municipioNegocio.Pesquisar(id));
+            return Mapper.Map<MunicipioModeloNegocio, MunicipioModeloGet>(municipioNegocio.Pesquisar(guid));
         }
 
         public List<MunicipioModeloGet> Listar(string uf)

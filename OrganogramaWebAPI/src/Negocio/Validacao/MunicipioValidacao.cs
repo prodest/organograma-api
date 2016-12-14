@@ -32,6 +32,21 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaRequisicaoInvalidaException("Identificador do município inválido.");
         }
 
+        internal void GuidValido(string guid)
+        {
+            try
+            {
+                Guid g = new Guid(guid);
+
+                if (g.Equals(Guid.Empty))
+                    throw new OrganogramaRequisicaoInvalidaException("Identificador inválido.");
+            }
+            catch (FormatException)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Formato do identificador inválido.");
+            }
+        }
+
         internal void IdPreenchido(MunicipioModeloNegocio municipio)
         {
             NaoNulo(municipio);
@@ -62,7 +77,7 @@ namespace Organograma.Negocio.Validacao
         internal void MunicipioNaoExistente(Municipio municipioDominio)
         {
             if (municipioDominio == null) {
-                throw new OrganogramaNaoEncontradoException("Muicípio não encontrado.");
+                throw new OrganogramaNaoEncontradoException("Município não encontrado.");
             }
 
         }
