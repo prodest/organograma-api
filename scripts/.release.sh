@@ -16,4 +16,4 @@ export RANCHER_COMPOSE_URL=http://cloud.datacenter.es.gov.br.local/v1/projects/$
 git clone https://github.com/prodest/gerencio-upgrade.git
 cd gerencio-upgrade
 npm install
-node ./client $DOCKER_IMAGE 40000
+node ./client $RANCHER_SERVICE_NAME 40000
