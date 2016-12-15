@@ -5,9 +5,18 @@ services:
 env:
   - DOCKER_IMAGE=prodest/organograma-api
 script: 
-  /bin/sh .travis.sh
+  /bin/sh ./scripts/.travis.sh
 deploy:
-  provider: script
-  script: /bin/sh .develop.sh
-  on:
-    branch: develop
+  - provider: script
+    script: /bin/sh ./scripts/.develop.sh
+    on:
+      branch: develop
+  - provider: script
+    script: /bin/sh ./scripts/.release.sh
+    on:
+      all_branches: true
+      condition: "$TRAVIS_BRANCH =~ ^release.*$"
+  - provider: script
+    script: /bin/sh ./scripts/.master.sh
+    on:
+      branch: master
