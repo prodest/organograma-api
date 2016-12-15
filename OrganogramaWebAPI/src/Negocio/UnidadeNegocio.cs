@@ -213,11 +213,11 @@ namespace Organograma.Negocio
 
             Guid g = new Guid(guid);
 
-            var unidade = repositorioUnidades.Where(u => u.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
+            var unidade = repositorioUnidades.Where(u => u.IdentificadorExterno.Guid.Equals(g))
                                              .Include(u => u.TipoUnidade)
                                              .Include(u => u.Organizacao).ThenInclude(o => o.IdentificadorExterno)
                                              .Include(u => u.UnidadePai)
-                                             .Include(u => u.Endereco).ThenInclude(u => u.Municipio)
+                                             .Include(u => u.Endereco).ThenInclude(u => u.Municipio).ThenInclude(m => m.IdentificadorExterno)
                                              .Include(u => u.ContatosUnidade).ThenInclude(u => u.Contato).ThenInclude(u => u.TipoContato)
                                              .Include(u => u.EmailsUnidade).ThenInclude(u => u.Email)
                                              .Include(u => u.SitesUnidade).ThenInclude(u => u.Site)
@@ -232,10 +232,10 @@ namespace Organograma.Negocio
         public List<UnidadeModeloNegocio> PesquisarPorOrganizacao(string guid)
         {
             Guid g = new Guid(guid);
-            var unidades = repositorioUnidades.Where(u => u.Organizacao.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
+            var unidades = repositorioUnidades.Where(u => u.Organizacao.IdentificadorExterno.Guid.Equals(g))
                                              .Include(u => u.TipoUnidade)
                                              .Include(u => u.UnidadePai)
-                                             .Include(u => u.Endereco).ThenInclude(u => u.Municipio)
+                                             .Include(u => u.Endereco).ThenInclude(u => u.Municipio).ThenInclude(m => m.IdentificadorExterno)
                                              .Include(u => u.ContatosUnidade).ThenInclude(u => u.Contato).ThenInclude(u => u.TipoContato)
                                              .Include(u => u.EmailsUnidade).ThenInclude(u => u.Email)
                                              .Include(u => u.SitesUnidade).ThenInclude(u => u.Site)

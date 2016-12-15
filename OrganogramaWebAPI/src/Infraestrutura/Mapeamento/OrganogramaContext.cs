@@ -248,13 +248,13 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasConstraintName("FK_IdentificadorExterno_Municipio");
 
                 entity.HasOne(d => d.Organizacao)
-                    .WithMany(p => p.IdentificadorExterno)
-                    .HasForeignKey(d => d.IdOrganizacao)
+                    .WithOne(p => p.IdentificadorExterno)
+                    .HasForeignKey<IdentificadorExterno>(d => d.IdOrganizacao)
                     .HasConstraintName("FK_IdentificadorExterno_Organizacao");
 
                 entity.HasOne(d => d.Unidade)
-                    .WithMany(p => p.IdentificadorExterno)
-                    .HasForeignKey(d => d.IdUnidade)
+                    .WithOne(p => p.IdentificadorExterno)
+                    .HasForeignKey<IdentificadorExterno>(d => d.IdUnidade)
                     .HasConstraintName("FK_IdentificadorExterno_Unidade");
             });
 

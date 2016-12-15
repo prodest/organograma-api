@@ -9,7 +9,6 @@ namespace Organograma.Dominio.Modelos
         {
             ContatosUnidade = new HashSet<ContatoUnidade>();
             EmailsUnidade = new HashSet<EmailUnidade>();
-            IdentificadorExterno = new HashSet<IdentificadorExterno>();
             SitesUnidade = new HashSet<SiteUnidade>();
         }
 
@@ -24,7 +23,7 @@ namespace Organograma.Dominio.Modelos
 
         public virtual ICollection<ContatoUnidade> ContatosUnidade { get; set; }
         public virtual ICollection<EmailUnidade> EmailsUnidade { get; set; }
-        public virtual ICollection<IdentificadorExterno> IdentificadorExterno { get; set; }
+        public virtual IdentificadorExterno IdentificadorExterno { get; set; }
         public virtual ICollection<SiteUnidade> SitesUnidade { get; set; }
         public virtual Endereco Endereco { get; set; }
         public virtual Organizacao Organizacao { get; set; }

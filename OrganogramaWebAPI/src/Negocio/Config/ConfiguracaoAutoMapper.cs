@@ -94,7 +94,7 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.Poder))
                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.SitesOrganizacao != null ? Mapper.Map<List<SiteOrganizacao>, List<SiteModeloNegocio>>(s.SitesOrganizacao.ToList()) : null))
                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao))
-                .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno.SingleOrDefault() != null ? s.IdentificadorExterno.SingleOrDefault().Guid.ToString("D") : null))
+                .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno != null ? s.IdentificadorExterno.Guid.ToString("D") : null))
                 .MaxDepth(1)
                 .ForAllMembers(opt =>
                 {
@@ -181,7 +181,7 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.TipoUnidade, opt => opt.MapFrom(s => s.TipoUnidade))
                 .ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => s.Organizacao))
                 .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? Mapper.Map<Unidade, UnidadeModeloNegocio>(s.UnidadePai) : null))
-                .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno.SingleOrDefault() != null ? s.IdentificadorExterno.SingleOrDefault().Guid.ToString("D") : null))
+                .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno != null ? s.IdentificadorExterno.Guid.ToString("D") : null))
                 .MaxDepth(1)
                 .ForAllMembers(opt =>
                 {

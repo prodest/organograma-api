@@ -208,7 +208,7 @@ namespace Organograma.Negocio
 
             Guid g = new Guid(guid);
 
-            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
                                                              .Include(e => e.Endereco).ThenInclude(m => m.Municipio).ThenInclude(m => m.IdentificadorExterno)
                                                              .Include(e => e.Esfera)
                                                              .Include(p => p.Poder)
@@ -257,7 +257,7 @@ namespace Organograma.Negocio
             OrganizacaoModeloNegocio organizacaoNegocio = new OrganizacaoModeloNegocio();
 
             Guid g = new Guid(guid);
-            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
                                                              .SingleOrDefault();
 
             validacao.NaoEncontrado(organizacao);
@@ -265,7 +265,7 @@ namespace Organograma.Negocio
             int idOrganizacaoPatriarca = ObterOrganizacaoPatriarca(organizacao);
 
             Organizacao organizacaoPatriarca = repositorioOrganizacoes.Where(o => o.Id == idOrganizacaoPatriarca)
-                                                                      .Include(e => e.Endereco).ThenInclude(m => m.Municipio)
+                                                                      .Include(e => e.Endereco).ThenInclude(m => m.Municipio).ThenInclude(m => m.IdentificadorExterno)
                                                                       .Include(e => e.Esfera)
                                                                       .Include(p => p.Poder)
                                                                       .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato).ThenInclude(tc => tc.TipoContato)
@@ -281,7 +281,7 @@ namespace Organograma.Negocio
         public List<OrganizacaoModeloNegocio> PesquisarFilhas(string guid)
         {
             Guid g = new Guid(guid);
-            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Any(ie => ie.Guid.Equals(g)))
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
                                                              .Include(o => o.OrganizacoesFilhas)
                                                              .Include(o => o.Esfera)
                                                              .Include(o => o.Poder)
