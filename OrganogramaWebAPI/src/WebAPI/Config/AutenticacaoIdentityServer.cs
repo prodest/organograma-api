@@ -9,7 +9,7 @@ namespace Organograma.WebAPI.Config
     {
         public string Authority { get; set; }
         public bool RequireHttpsMetadata { get; set; }
-        public string ScopeName { get; set; }
+        public List<string> AllowedScopes { get; set; }
         public bool AutomaticAuthenticate { get; set; }
     }
 }

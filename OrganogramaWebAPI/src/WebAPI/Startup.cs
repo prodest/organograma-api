@@ -12,6 +12,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using Organograma.Infraestrutura.Mapeamento;
+using Organograma.WebAPI.Middleware;
 
 namespace Organograma.WebAPI
 {
@@ -48,6 +49,35 @@ namespace Organograma.WebAPI
             ConfiguracaoDependencias.InjetarDependencias(services);
             ConfiguracaoAutoMapper.CriarMapeamento();
 
+            #region Políticas que serão concedidas
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Esfera.Inserir", policy => policy.RequireClaim("Acao$Esfera", "Inserir"));
+                options.AddPolicy("Esfera.Alterar", policy => policy.RequireClaim("Acao$Esfera", "Alterar"));
+                options.AddPolicy("Esfera.Excluir", policy => policy.RequireClaim("Acao$Esfera", "Excluir"));
+                options.AddPolicy("Municipio.Inserir", policy => policy.RequireClaim("Acao$Municipio", "Inserir"));
+                options.AddPolicy("Municipio.Alterar", policy => policy.RequireClaim("Acao$Municipio", "Alterar"));
+                options.AddPolicy("Municipio.Excluir", policy => policy.RequireClaim("Acao$Municipio", "Excluir"));
+                options.AddPolicy("Organizacao.Inserir", policy => policy.RequireClaim("Acao$Organizacao", "Inserir"));
+                options.AddPolicy("Organizacao.Alterar", policy => policy.RequireClaim("Acao$Organizacao", "Alterar"));
+                options.AddPolicy("Organizacao.Excluir", policy => policy.RequireClaim("Acao$Organizacao", "Excluir"));
+                options.AddPolicy("Poder.Inserir", policy => policy.RequireClaim("Acao$Poder", "Inserir"));
+                options.AddPolicy("Poder.Alterar", policy => policy.RequireClaim("Acao$Poder", "Alterar"));
+                options.AddPolicy("Poder.Excluir", policy => policy.RequireClaim("Acao$Poder", "Excluir"));
+                options.AddPolicy("TipoOrganizacao.Inserir", policy => policy.RequireClaim("Acao$TipoOrganizacao", "Inserir"));
+                options.AddPolicy("TipoOrganizacao.Alterar", policy => policy.RequireClaim("Acao$TipoOrganizacao", "Alterar"));
+                options.AddPolicy("TipoOrganizacao.Excluir", policy => policy.RequireClaim("Acao$TipoOrganizacao", "Excluir"));
+                options.AddPolicy("TipoUnidade.Inserir", policy => policy.RequireClaim("Acao$TipoUnidade", "Inserir"));
+                options.AddPolicy("TipoUnidade.Alterar", policy => policy.RequireClaim("Acao$TipoUnidade", "Alterar"));
+                options.AddPolicy("TipoUnidade.Excluir", policy => policy.RequireClaim("Acao$TipoUnidade", "Excluir"));
+                options.AddPolicy("Unidade.Inserir", policy => policy.RequireClaim("Acao$Unidade", "Inserir"));
+                options.AddPolicy("Unidade.Alterar", policy => policy.RequireClaim("Acao$Unidade", "Alterar"));
+                options.AddPolicy("Unidade.Excluir", policy => policy.RequireClaim("Acao$Unidade", "Excluir"));
+            }
+            );
+            #endregion
+
+            #region Configuração do Swagger
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen();
 
@@ -74,6 +104,7 @@ namespace Organograma.WebAPI
                 var xmlPath = Path.Combine(basePath, "WebAPI.xml");
                 options.IncludeXmlComments(xmlPath);
             });
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,8 +122,15 @@ namespace Organograma.WebAPI
                 Authority = autenticacaoIdentityServer.Authority,
                 RequireHttpsMetadata = autenticacaoIdentityServer.RequireHttpsMetadata,
 
-                ScopeName = autenticacaoIdentityServer.ScopeName,
+                AllowedScopes = autenticacaoIdentityServer.AllowedScopes,
                 AutomaticAuthenticate = autenticacaoIdentityServer.AutomaticAuthenticate
+            });
+            #endregion
+
+            #region Configuração para buscar as permissões do usuário
+            app.UseRequestUserInfo(new RequestUserInfoOptions
+            {
+                UserInfoEndpoint = autenticacaoIdentityServer.Authority + "connect/userinfo"
             });
             #endregion
 

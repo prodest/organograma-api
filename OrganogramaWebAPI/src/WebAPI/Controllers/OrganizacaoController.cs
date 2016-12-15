@@ -8,11 +8,12 @@ using Organograma.Apresentacao.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Organograma.WebAPI.Config;
+using Organograma.WebAPI.Base;
 
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/organizacoes")]
-    public class OrganizacaoController : Controller
+    public class OrganizacaoController : BaseController
     {
 
         private IOrganizacaoWorkService service;
@@ -57,7 +58,6 @@ namespace Organograma.WebAPI.Controllers
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        [Authorize]
         public IActionResult Pesquisar(string guid)
         {
             try
@@ -93,7 +93,6 @@ namespace Organograma.WebAPI.Controllers
         [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        [Authorize]
         public IActionResult PesquisarPorSigla(string sigla)
         {
             try
@@ -125,7 +124,6 @@ namespace Organograma.WebAPI.Controllers
         [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        [Authorize]
         public IActionResult PesquisarPatriarca(string guid)
         {
             try
@@ -152,7 +150,6 @@ namespace Organograma.WebAPI.Controllers
         [HttpGet("{guid}/filhas")]
         [ProducesResponseType(typeof(List<OrganizacaoModeloGet>), 200)]
         [ProducesResponseType(typeof(string), 500)]
-        [Authorize]
         public IActionResult PesquisarFilhas(string guid)
         {
             try
@@ -170,7 +167,7 @@ namespace Organograma.WebAPI.Controllers
         #region POST
         // POST api/organizacoes
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "Organizacao.Inserir")]
         public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
         {
 
@@ -197,7 +194,7 @@ namespace Organograma.WebAPI.Controllers
 
         //Post api/organizacoes/{id}/site
         [HttpPost("{idOrganizacao}/site")]
-        //[Authorize]
+        [Authorize(Policy = "Organizacao.Alterar")]
         public IActionResult PostSite(int idOrganizacao, [FromBody]SiteModelo sitePost)
         {
 
@@ -226,7 +223,7 @@ namespace Organograma.WebAPI.Controllers
         #region PATCH
         // Patch api/organizacoes/{id}
         [HttpPatch("{id}")]
-        [Authorize]
+        [Authorize(Policy = "Organizacao.Alterar")]
         public IActionResult AlterarOrganizacao(int id, [FromBody]OrganizacaoModeloPatch organizacao)
         {
             try
@@ -256,7 +253,7 @@ namespace Organograma.WebAPI.Controllers
         #region DELETE
         // DELETE api/organizacoes/{id}
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Policy = "Organizacao.Excluir")]
         public IActionResult Excluir(int id)
         {
             try

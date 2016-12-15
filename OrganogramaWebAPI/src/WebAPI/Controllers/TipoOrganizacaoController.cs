@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Microsoft.AspNetCore.Authorization;
+using Organograma.WebAPI.Base;
 
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/tipos-organizacao")]
-    public class TipoOrganizacaoController : Controller
+    public class TipoOrganizacaoController : BaseController
     {
         ITipoOrganizacaoWorkService service;
 
@@ -34,24 +35,24 @@ namespace Organograma.WebAPI.Controllers
         }
 
         // POST api/tipos-organizacao
-        [Authorize]
         [HttpPost]
+        [Authorize(Policy = "TipoOrganizacao.Inserir")]
         public TipoOrganizacaoModelo Post([FromBody]TipoOrganizacaoModeloPost tipoOrganizacao)
         {
             return service.Inserir(tipoOrganizacao);
         }
 
         // PUT api/tipos-organizacao/{id}
-        [Authorize]
         [HttpPut("{id}")]
+        [Authorize(Policy = "TipoOrganizacao.Alterar")]
         public void Put(int id, [FromBody]TipoOrganizacaoModeloPut tipoOrganizacao)
         {
             service.Alterar(id, tipoOrganizacao);
         }
 
         // DELETE api/tipos-organizacao/{id}
-        [Authorize]
         [HttpDelete("{id}")]
+        [Authorize(Policy = "TipoOrganizacao.Excluir")]
         public void Delete(int id)
         {
             service.Excluir(id);

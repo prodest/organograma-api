@@ -5,11 +5,12 @@ using Organograma.Infraestrutura.Comum;
 using System;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using Organograma.WebAPI.Base;
 
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/municipios")]
-    public class MunicipiosController : Controller
+    public class MunicipiosController : BaseController
     {
 
         private IMunicipioWorkService service;
@@ -29,7 +30,6 @@ namespace Organograma.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(MunicipioModeloGet), 200)]
         [ProducesResponseType(typeof(string), 500)]
-        [Authorize]
         public IActionResult Listar([FromQuery] string uf)
         {
             try
@@ -56,7 +56,6 @@ namespace Organograma.WebAPI.Controllers
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        [Authorize]
         public IActionResult Pesquisar(string guid)
         {
             try
@@ -80,7 +79,7 @@ namespace Organograma.WebAPI.Controllers
 
         // POST api/municipios
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "Municipio.Inserir")]
         public IActionResult Post([FromBody]MunicipioModeloPost municipioPost)
         {
             try
@@ -100,7 +99,7 @@ namespace Organograma.WebAPI.Controllers
 
         // PUT api/municipios/{id}
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Policy = "Municipio.Alterar")]
         public IActionResult Alterar(int id, [FromBody]MunicipioModeloPut municipioPut)
         {
             try
@@ -124,7 +123,7 @@ namespace Organograma.WebAPI.Controllers
 
         // DELETE api/municipios/{id}
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Policy = "Municipio.Excluir")]
         public IActionResult Excluir(int id)
         {
             try

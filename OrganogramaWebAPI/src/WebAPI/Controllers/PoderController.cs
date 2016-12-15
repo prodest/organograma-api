@@ -6,13 +6,13 @@ using Organograma.Infraestrutura.Comum;
 using System;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using Organograma.WebAPI.Base;
 
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/poderes")]
-    public class PoderController : Controller
+    public class PoderController : BaseController
     {
-
         private IPoderWorkService service;
 
         public PoderController(IPoderWorkService service)
@@ -63,7 +63,7 @@ namespace Organograma.WebAPI.Controllers
 
         // POST api/poderes/{id}
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "Poder.Inserir")]
         public IActionResult Post([FromBody]PoderModeloPost poderPost)
         {
             try
@@ -84,7 +84,7 @@ namespace Organograma.WebAPI.Controllers
 
         // PUT api/poderes/{id}
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Policy = "Poder.Alterar")]
         public IActionResult Alterar(int id, [FromBody]PoderModeloPut poderPut)
         {
             try
@@ -109,7 +109,7 @@ namespace Organograma.WebAPI.Controllers
 
         // DELETE api/poderes/{id}
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Policy = "Poder.Excluir")]
         public IActionResult Excluir(int id)
         {
             try

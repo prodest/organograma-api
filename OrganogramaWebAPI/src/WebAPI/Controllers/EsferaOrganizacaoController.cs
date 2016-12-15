@@ -8,13 +8,14 @@ using Organograma.Apresentacao.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Organograma.Infraestrutura.Comum;
 using System.Net;
+using Organograma.WebAPI.Base;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/esferas-organizacao")]
-    public class EsferaOrganizacaoController : Controller
+    public class EsferaOrganizacaoController : BaseController
     {
         IEsferaOrganizacaoWorkService service;
 
@@ -37,7 +38,7 @@ namespace Organograma.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode((int) HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
 
@@ -47,7 +48,7 @@ namespace Organograma.WebAPI.Controllers
         {
             try
             {
-                return new ObjectResult(service.Pesquisar(id)); 
+                return new ObjectResult(service.Pesquisar(id));
             }
             catch (OrganogramaNaoEncontradoException e)
             {
@@ -56,11 +57,11 @@ namespace Organograma.WebAPI.Controllers
             catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-            }   
+            }
         }
 
         // POST api/esferas-organizacao
-        [Authorize]
+        [Authorize(Policy = "Esfera.Inserir")]
         [HttpPost]
         public IActionResult Post([FromBody]EsferaOrganizacaoModeloPost esferaOrganizacao)
         {
@@ -79,7 +80,7 @@ namespace Organograma.WebAPI.Controllers
         }
 
         // PUT api/esferas-organizacao/5
-        [Authorize]
+        [Authorize(Policy = "Esfera.Alterar")]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]EsferaOrganizacaoModelo esferaOrganizacao)
         {
@@ -101,11 +102,11 @@ namespace Organograma.WebAPI.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
-            
+
         }
 
         // DELETE api/esferas-organizacao/5
-        [Authorize]
+        [Authorize(Policy = "Esfera.Excluir")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

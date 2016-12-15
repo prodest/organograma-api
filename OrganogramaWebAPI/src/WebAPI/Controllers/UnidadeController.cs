@@ -1,8 +1,9 @@
-﻿ using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Infraestrutura.Comum;
+using Organograma.WebAPI.Base;
 using Organograma.WebAPI.Config;
 using System;
 using System.Collections.Generic;
@@ -11,31 +12,13 @@ using System.Net;
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/unidades")]
-    public class UnidadeController : Controller
+    public class UnidadeController : BaseController
     {
         IUnidadeWorkService service;
 
         public UnidadeController(IUnidadeWorkService service)
         {
             this.service = service;
-        }
-
-        // GET: api/unidades
-        [HttpGet]
-        public IActionResult Get()
-        {
-            try
-            {
-                return new ObjectResult(service.Listar());
-            }
-            catch (OrganogramaNaoEncontradoException e)
-            {
-                return NotFound(e.Message);
-            }
-            catch (Exception e)
-            {
-                return StatusCode((int) HttpStatusCode.InternalServerError, e.Message);
-            }
         }
 
         /// <summary>
@@ -97,8 +80,8 @@ namespace Organograma.WebAPI.Controllers
         }
 
         // POST api/unidades
-        [Authorize]
         [HttpPost]
+        [Authorize(Policy = "Unidade.Inserir")]
         public IActionResult Post([FromBody]UnidadeModeloPost unidade)
         {
             try
@@ -116,8 +99,8 @@ namespace Organograma.WebAPI.Controllers
         }
 
         // PATCH api/unidades/{id}
-        [Authorize]
         [HttpPatch("{id}")]
+        [Authorize(Policy = "Unidade.Alterar")]
         public IActionResult Patch(int id, [FromBody]UnidadeModeloPatch unidade)
         {
             try
@@ -142,8 +125,8 @@ namespace Organograma.WebAPI.Controllers
         }
 
         // DELETE api/unidades/{id}
-        [Authorize]
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Unidade.Excluir")]
         public IActionResult Delete(int id)
         {
             try
@@ -163,6 +146,7 @@ namespace Organograma.WebAPI.Controllers
         }
 
         [HttpPost("{id}/email")]
+        [Authorize(Policy = "Unidade.Alterar")]
         public IActionResult InserirEmail(int id, [FromBody]List<EmailModelo> emails)
         {
             try
@@ -180,7 +164,9 @@ namespace Organograma.WebAPI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
         [HttpDelete("{id}/email")]
+        [Authorize(Policy = "Unidade.Alterar")]
         public IActionResult DeleteEmail(int id, [FromBody]List<EmailModelo> emails)
         {
             try
