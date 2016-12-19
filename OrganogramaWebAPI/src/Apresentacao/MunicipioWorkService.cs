@@ -36,14 +36,14 @@ namespace Apresentacao
            
         }
 
-        public void Alterar(int id, MunicipioModeloPut municipio)
+        public void Alterar(string guid, MunicipioModeloPut municipio)
         {
-            municipioNegocio.Alterar(id, Mapper.Map<MunicipioModeloPut, MunicipioModeloNegocio>(municipio));
+            municipioNegocio.Alterar(guid, Mapper.Map<MunicipioModeloPut, MunicipioModeloNegocio>(municipio));
         }
 
-        public void Excluir (int id)
+        public void Excluir (string guid)
         {
-            municipioNegocio.Excluir(id);
+            municipioNegocio.Excluir(guid);
         }
 
     }

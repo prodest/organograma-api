@@ -9,15 +9,12 @@
 
     public class MunicipioModeloPut : MunicipioModeloPost
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
     }
     
     public class MunicipioModeloGet : MunicipioModeloPost
     {
         public string Guid { get; set; }
-        //public string InicioVigencia { get; set; }
-        //public string FimVigencia { get; set; }
-        //public string ObservacaoFimVigencia { get; set; }
     }
 
 

@@ -36,6 +36,9 @@ namespace Organograma.Negocio.Validacao
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(guid))
+                    throw new OrganogramaRequisicaoInvalidaException("Identificador inválido.");
+
                 Guid g = new Guid(guid);
 
                 if (g.Equals(Guid.Empty))
@@ -64,14 +67,18 @@ namespace Organograma.Negocio.Validacao
 
         internal void CodigoIbgeExistente (MunicipioModeloNegocio municipio)
         {
-            //O id do registro a ser alterado deve ser desconsiderado (na inserção, o id é 0).
-            //Em razão de erro de integridade do banco de dados (codigo IBGE deve ser único), o método ToList() está sendo utilizado no lugar de SingleOrDefault();
-            var resultado = repositorioMunicipios.Where(q => q.CodigoIbge == municipio.CodigoIbge).Where(q => q.Id != municipio.Id).ToList();
-                       
-            if (resultado.Count != 0)
+            var resultado = repositorioMunicipios.Where(m => m.CodigoIbge == municipio.CodigoIbge);
+
+            if (!string.IsNullOrWhiteSpace(municipio.Guid))
             {
-                throw new OrganogramaRequisicaoInvalidaException("Já existe um município cadastrado com código IBGE informado.");
+                Guid gMunicipio = new Guid(municipio.Guid);
+                resultado = resultado.Where(m => !m.IdentificadorExterno.Guid.Equals(gMunicipio));
             }
+
+            var mun = resultado.SingleOrDefault();
+
+            if (mun != null)
+                throw new OrganogramaRequisicaoInvalidaException("Já existe um município cadastrado com código IBGE informado.");
         }
 
         internal void MunicipioNaoExistente(Municipio municipioDominio)
@@ -101,11 +108,10 @@ namespace Organograma.Negocio.Validacao
             }
 
          }
-             
 
-        internal void IdAlteracaoValido(int id, MunicipioModeloNegocio municipioNegocio)
+        internal void GuidAlteracaoValido(string guid, MunicipioModeloNegocio municipioNegocio)
         {
-            if (id != municipioNegocio.Id)
+            if (!guid.Equals(municipioNegocio.Guid))
                 throw new Exception("Identificadores do municipio não podem ser diferentes.");
         }
 

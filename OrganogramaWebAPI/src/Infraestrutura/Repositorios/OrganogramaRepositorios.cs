@@ -19,6 +19,7 @@ namespace Organograma.Infraestrutura.Repositorios
             EmailsUnidades = UnitOfWork.MakeGenericRepository<EmailUnidade>();
             Enderecos = UnitOfWork.MakeGenericRepository<Endereco>();
             EsferasOrganizacoes = UnitOfWork.MakeGenericRepository<EsferaOrganizacao>();
+            IdentificadoresExternos = UnitOfWork.MakeGenericRepository<IdentificadorExterno>();
             Municipios = UnitOfWork.MakeGenericRepository<Municipio>();
             Organizacoes = UnitOfWork.MakeGenericRepository<Organizacao>();
             Poderes = UnitOfWork.MakeGenericRepository<Poder>();
@@ -41,6 +42,7 @@ namespace Organograma.Infraestrutura.Repositorios
         public IRepositorioGenerico<EmailUnidade> EmailsUnidades { get; private set; }
         public IRepositorioGenerico<Endereco> Enderecos { get; private set; }
         public IRepositorioGenerico<EsferaOrganizacao> EsferasOrganizacoes { get; private set; }
+        public IRepositorioGenerico<IdentificadorExterno> IdentificadoresExternos { get; private set; }
         public IRepositorioGenerico<Municipio> Municipios { get; private set; }
         public IRepositorioGenerico<Organizacao> Organizacoes { get; private set; }
         public IRepositorioGenerico<Poder> Poderes { get; private set; }

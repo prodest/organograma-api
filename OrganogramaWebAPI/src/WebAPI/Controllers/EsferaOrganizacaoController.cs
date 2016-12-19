@@ -116,8 +116,8 @@ namespace Organograma.WebAPI.Controllers
         /// <response code="400">Retorna a descrição da invalidação.</response>
         /// <response code="404">Esfera de organizações não encontrada.</response>
         /// <response code="500">Retorna a descrição do erro.</response>
-        [Authorize(Policy = "Esfera.Alterar")]
         [HttpPut("{id}")]
+        [Authorize(Policy = "Esfera.Alterar")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 404)]
@@ -152,8 +152,8 @@ namespace Organograma.WebAPI.Controllers
         /// <response code="200">Esfera de organizações excluída com sucesso.</response>
         /// <response code="404">Esfera de organizações não encontrada.</response>
         /// <response code="500">Retorna a descrição do erro.</response>
-        [Authorize(Policy = "Esfera.Excluir")]
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Esfera.Excluir")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]

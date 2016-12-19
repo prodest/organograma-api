@@ -15,6 +15,7 @@ namespace Organograma.Dominio.Base
         IRepositorioGenerico<EmailOrganizacao> EmailsOrganizacoes { get; }
         IRepositorioGenerico<EmailUnidade> EmailsUnidades { get; }
         IRepositorioGenerico<EsferaOrganizacao> EsferasOrganizacoes { get; }
+        IRepositorioGenerico<IdentificadorExterno> IdentificadoresExternos { get; }
         IRepositorioGenerico<Municipio> Municipios { get; }
         IRepositorioGenerico<Organizacao> Organizacoes { get; }
         IRepositorioGenerico<Poder> Poderes { get; }

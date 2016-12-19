@@ -15,16 +15,17 @@ namespace Organograma.Negocio
     {
         IUnitOfWork unitOfWork;
         IRepositorioGenerico<Municipio> repositorioMunicipios;
+        IRepositorioGenerico<IdentificadorExterno> repositorioIdentificadoresExternos;
         MunicipioValidacao validacao;
         
         public MunicipioNegocio (IOrganogramaRepositorios repositorios)
         {
             unitOfWork = repositorios.UnitOfWork;
             repositorioMunicipios = repositorios.Municipios;
+            repositorioIdentificadoresExternos = repositorios.IdentificadoresExternos;
             validacao = new MunicipioValidacao(repositorioMunicipios);
         }
 
-        
         public MunicipioModeloNegocio Pesquisar(string guid)
         {
             validacao.GuidValido(guid);
@@ -79,33 +80,45 @@ namespace Organograma.Negocio
             return Mapper.Map<Municipio, MunicipioModeloNegocio>(municipio);
         }
 
-        public void Alterar (int id, MunicipioModeloNegocio municipioNegocio)
+        public void Alterar (string guid, MunicipioModeloNegocio municipioNegocio)
         {
-            validacao.IdValido(municipioNegocio.Id);
-            validacao.IdAlteracaoValido(id, municipioNegocio);
+            validacao.GuidValido(municipioNegocio.Guid);
+            validacao.GuidAlteracaoValido(guid, municipioNegocio);
             validacao.PreenchimentoCompleto(municipioNegocio);
             validacao.NomeUfExistente(municipioNegocio);
             validacao.CodigoIbgeExistente(municipioNegocio);
             validacao.PreenchimentoCompleto(municipioNegocio);
 
-            Municipio municipioDominio = repositorioMunicipios.Where(q => q.Id == municipioNegocio.Id).Single();
+            Guid gMunicipio = new Guid(municipioNegocio.Guid);
+
+            Municipio municipioDominio = repositorioMunicipios.Where(q => q.IdentificadorExterno.Guid.Equals(gMunicipio))
+                                                              .Single();
 
             validacao.MunicipioNaoExistente(municipioDominio);
 
-            municipioNegocio.InicioVigencia = municipioDominio.InicioVigencia;            
+            municipioNegocio.Id = municipioDominio.Id;
+            municipioNegocio.InicioVigencia = municipioDominio.InicioVigencia;
             municipioDominio = Mapper.Map(municipioNegocio, municipioDominio);
+
+            //Não se deseja alterar nada do Identificador Externo
+            municipioDominio.IdentificadorExterno = null;
+
             unitOfWork.Save();
-
-
         }
 
-        public void Excluir (int id)
+        public void Excluir (string guid)
         {
-            validacao.IdValido(id);
+            validacao.GuidValido(guid);
 
-            Municipio municipio = repositorioMunicipios.Where(q => q.Id == id).SingleOrDefault();
+            Guid guidMunicipio = new Guid(guid);
+
+            Municipio municipio = repositorioMunicipios.Where(m => m.IdentificadorExterno.Guid.Equals(guidMunicipio))
+                                                       .Include(m => m.IdentificadorExterno)
+                                                       .SingleOrDefault();
+
             validacao.MunicipioNaoExistente(municipio);
 
+            repositorioIdentificadoresExternos.Remove(municipio.IdentificadorExterno);
             repositorioMunicipios.Remove(municipio);
 
             unitOfWork.Save();
@@ -123,7 +136,5 @@ namespace Organograma.Negocio
             return municipio;
 
         }
-               
-
     }
 }

@@ -6,13 +6,15 @@ using System;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Organograma.WebAPI.Base;
+using System.Collections.Generic;
+using Organograma.WebAPI.Config;
+using Microsoft.AspNetCore.Http;
 
 namespace Organograma.WebAPI.Controllers
 {
     [Route("api/municipios")]
     public class MunicipiosController : BaseController
     {
-
         private IMunicipioWorkService service;
 
         public MunicipiosController(IMunicipioWorkService service)
@@ -21,14 +23,14 @@ namespace Organograma.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Retorna os municípios todos os municípios, podendo ser filtrado por uma unidade da federação.
+        /// Retorna os municípios, podendo ser filtrado por uma unidade da federação.
         /// </summary>
         /// <param name="uf">Sigla da unidade da federação a qual se deseja obter seus municípios.</param>
         /// <returns>Municípios, caso tenha sido informada uma unidade da federação, somente seus municípios.</returns>
         /// <response code="200">Retorna os municípios, caso tenha sido informada uma unidade da federação, somente seus municípios.</response>
         /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(MunicipioModeloGet), 200)]
+        [ProducesResponseType(typeof(List<MunicipioModeloGet>), 200)]
         [ProducesResponseType(typeof(string), 500)]
         public IActionResult Listar([FromQuery] string uf)
         {
@@ -38,7 +40,7 @@ namespace Organograma.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message); ;
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
 
@@ -77,71 +79,107 @@ namespace Organograma.WebAPI.Controllers
 
         }
 
-        // POST api/municipios
+        /// <summary>
+        /// Insere um município.
+        /// </summary>
+        /// <param name="municipioPost">Município que será inserido.</param>
+        /// <returns>Município inserido.</returns>
+        /// <response code="201">Retorna o município inserido.</response>
+        /// <response code="400">Retorna a descrição da invalidação.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
         [HttpPost]
         [Authorize(Policy = "Municipio.Inserir")]
+        [ProducesResponseType(typeof(EsferaOrganizacaoModelo), 201)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult Post([FromBody]MunicipioModeloPost municipioPost)
         {
             try
             {
-               return new ObjectResult(service.Inserir(municipioPost));
+                MunicipioModeloGet municpio = service.Inserir(municipioPost);
+
+                HttpRequest request = HttpContext.Request;
+                return Created(request.Scheme + "://" + request.Host.Value + request.Path.Value + "/" + municpio.Guid, municpio);
             }
             catch(OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
             
         }
 
-        // PUT api/municipios/{id}
-        [HttpPut("{id}")]
+        /// <summary>
+        /// Altera um município.
+        /// </summary>
+        /// <param name="guid">Identificador do município que será alterado.</param>
+        /// <param name="municipio">Município que será alterado.</param>
+        /// <response code="200">Município alterado com sucesso.</response>
+        /// <response code="400">Retorna a descrição da invalidação.</response>
+        /// <response code="404">Município não encontrado.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpPut("{guid}")]
         [Authorize(Policy = "Municipio.Alterar")]
-        public IActionResult Alterar(int id, [FromBody]MunicipioModeloPut municipioPut)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Alterar(string guid, [FromBody]MunicipioModeloPut municipio)
         {
             try
             {
-                service.Alterar(id, municipioPut);
+                service.Alterar(guid, municipio);
                 return Ok();
             }
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             catch (OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
 
-        // DELETE api/municipios/{id}
-        [HttpDelete("{id}")]
+        /// <summary>
+        /// Exclui uma esfera de organizações.
+        /// </summary>
+        /// <param name="guid">Identificador da esfera de organizações que será excluída.</param>
+        /// <response code="400">Retorna a descrição da invalidação.</response>
+        /// <response code="200">Esfera de organizações excluída com sucesso.</response>
+        /// <response code="404">Esfera de organizações não encontrada.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpDelete("{guid}")]
         [Authorize(Policy = "Municipio.Excluir")]
-        public IActionResult Excluir(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Excluir(string guid)
         {
             try
             {
-                service.Excluir(id);
+                service.Excluir(guid);
                 return Ok();
-            }
-            catch (OrganogramaNaoEncontradoException e)
-            {
-                return NotFound(e.Message);
             }
             catch (OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
     }
