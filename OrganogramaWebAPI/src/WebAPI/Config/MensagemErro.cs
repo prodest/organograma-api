@@ -18,9 +18,6 @@ namespace Organograma.WebAPI.Config
         {
             StringBuilder retorno = new StringBuilder();
 
-            //if (mensagem != null)
-            //    retorno.AppendLine(mensagem);
-
             if (e != null)
             {
                 if (e.InnerException != null)
@@ -30,9 +27,9 @@ namespace Organograma.WebAPI.Config
                     retorno.AppendLine();
                 }
 
-                retorno.AppendLine("---Ínicio da Exceção---");
+                retorno.AppendLine("-------------------------------");
                 retorno.AppendLine(e.Message);
-                retorno.AppendLine("---Fim da Exceção---");
+                retorno.AppendLine("-------------------------------");
             }
 
             return retorno.ToString();
