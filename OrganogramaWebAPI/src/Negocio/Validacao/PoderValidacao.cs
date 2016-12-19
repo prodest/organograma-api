@@ -83,12 +83,6 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaNaoEncontradoException("Poder não encontrado.");
         }
 
-        internal void NaoEncontrado(List<Poder> poderes)
-        {
-            if (poderes == null || poderes.Count <= 0)
-                throw new OrganogramaNaoEncontradoException("Poderes não encontrados.");
-        }
-
         internal void IdPreenchido(PoderModeloNegocio poder)
         {
             if (poder != null)

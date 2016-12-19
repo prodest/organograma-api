@@ -24,9 +24,8 @@ namespace Organograma.Negocio
 
         public List<PoderModeloNegocio> Listar()
         {
-            List<Poder> poderes = repositorioPoderes.ToList();
-            validacao.NaoEncontrado(poderes);
-
+            List<Poder> poderes = repositorioPoderes.OrderBy(o => o.Descricao).ToList();
+            
             return Mapper.Map<List<Poder>, List<PoderModeloNegocio>>(poderes);
             
         }

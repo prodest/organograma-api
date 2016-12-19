@@ -79,7 +79,7 @@ namespace Organograma.Negocio
 
         public List<TipoOrganizacaoModeloNegocio> Listar()
         {
-            var tiposOrganizacoes = repositorioTiposOrganizacoes.ToList();
+            var tiposOrganizacoes = repositorioTiposOrganizacoes.OrderBy(to => to.Descricao).ToList();
 
             return Mapper.Map<List<TipoOrganizacao>, List<TipoOrganizacaoModeloNegocio>>(tiposOrganizacoes);
         }
