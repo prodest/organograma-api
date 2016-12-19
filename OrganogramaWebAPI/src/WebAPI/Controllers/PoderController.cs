@@ -8,6 +8,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Organograma.WebAPI.Base;
 using Organograma.WebAPI.Config;
+using Microsoft.AspNetCore.Http;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -87,7 +88,10 @@ namespace Organograma.WebAPI.Controllers
         {
             try
             {
-               return new ObjectResult(service.Inserir(poder));
+                PoderModeloGet poderModelo = service.Inserir(poder);
+
+                HttpRequest request = HttpContext.Request;
+                return Created(request.Scheme + "://" + request.Host.Value + request.Path.Value + "/" + poderModelo.Id, poderModelo);
             }
             catch(OrganogramaRequisicaoInvalidaException e)
             {
