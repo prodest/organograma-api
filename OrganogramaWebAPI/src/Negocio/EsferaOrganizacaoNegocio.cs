@@ -77,17 +77,15 @@ namespace Organograma.Negocio
 
         public List<EsferaOrganizacaoModeloNegocio> Listar()
         {
-            var esferasOrganizacoes = repositorioEsferasOrganizacoes.ToList();
-
-            validacao.NaoEncontrado(esferasOrganizacoes);
+            var esferasOrganizacoes = repositorioEsferasOrganizacoes.OrderBy(eo => eo.Descricao)
+                                                                    .ToList();
 
             return Mapper.Map<List<EsferaOrganizacao>, List<EsferaOrganizacaoModeloNegocio>>(esferasOrganizacoes);
         }
 
         public EsferaOrganizacaoModeloNegocio Pesquisar(int id)
         {
-            var esferaOrganizacao = repositorioEsferasOrganizacoes.OrderBy(eo => eo.Descricao)
-                                                                  .SingleOrDefault(eo => eo.Id == id);
+            var esferaOrganizacao = repositorioEsferasOrganizacoes.SingleOrDefault(eo => eo.Id == id);
 
             validacao.NaoEncontrado(esferaOrganizacao);
 
