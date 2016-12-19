@@ -78,8 +78,5 @@ namespace Organograma.Negocio
             return Mapper.Map(poder, poderNegocio);
 
         }
-
-       
-        
     }
 }
