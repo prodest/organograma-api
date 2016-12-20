@@ -25,8 +25,19 @@ namespace Organograma.WebAPI.Controllers
 
         #region GET
 
-        // GET: api/organizacoes
+        /// <summary>
+        /// Retorna a lista de organizações. Essa lista pode ser filtrada por esfera, poder, uf e/ou município
+        /// </summary>
+        /// <returns>Lista de organizações</returns>
+        /// <param name="esfera">Descrição da esfera</param>
+        /// <param name="poder">Descrição do poder</param>
+        /// <param name="uf">UF</param>
+        /// <param name="cod_ibge_municipio">Código IBGE do município</param>
+        /// <response code="200">Retorna a lista de organizações</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(List<OrganizacaoModeloGet>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult Listar([FromQuery] string esfera, [FromQuery] string poder, [FromQuery] string uf, [FromQuery] int cod_ibge_municipio)
         {
             try
@@ -36,12 +47,12 @@ namespace Organograma.WebAPI.Controllers
 
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, (MensagemErro.ObterMensagem(e)));
             }
         }
 
@@ -52,7 +63,7 @@ namespace Organograma.WebAPI.Controllers
         /// <returns>Infomações da organização informada.</returns>
         /// <response code="200">Retorna as informações da organização informada.</response>
         /// <response code="404">Organização não foi encontrada.</response>
-        /// <response code="500">Retorna a descrição do erro.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpGet("{guid}")]
         [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
         [ProducesResponseType(typeof(string), 400)]
@@ -67,16 +78,16 @@ namespace Organograma.WebAPI.Controllers
 
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             catch (OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
 
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
 
         }
@@ -88,7 +99,7 @@ namespace Organograma.WebAPI.Controllers
         /// <returns>Infomações da organização informada.</returns>
         /// <response code="200">Retorna as informações da organização informada.</response>
         /// <response code="404">Organização não foi encontrada.</response>
-        /// <response code="500">Retorna a descrição do erro.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpGet("sigla/{sigla}")]
         [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
         [ProducesResponseType(typeof(string), 404)]
@@ -102,12 +113,12 @@ namespace Organograma.WebAPI.Controllers
 
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
 
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
 
         }
@@ -119,7 +130,7 @@ namespace Organograma.WebAPI.Controllers
         /// <returns>Organização patriarca da organização informada.</returns>
         /// <response code="200">Retorna a organização patriarca da organização informada.</response>
         /// <response code="404">Organização não foi encontrada.</response>
-        /// <response code="500">Retorna a descrição do erro.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpGet("{guid}/patriarca")]
         [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
         [ProducesResponseType(typeof(string), 404)]
@@ -132,7 +143,7 @@ namespace Organograma.WebAPI.Controllers
             }
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
@@ -146,7 +157,7 @@ namespace Organograma.WebAPI.Controllers
         /// <param name="guid">Identificador da organização a qual se deseja obter a lista de organizações filhas e subfilhas.</param>
         /// <returns>Lista de organizações filhas e subfilhas da organização informada.</returns>
         /// <response code="200">Retorna a lista de organizações filhas e subfilhas da organização informada.</response>
-        /// <response code="500">Retorna a descrição do erro.</response>
+        /// <response code="500">Erro inesperado..</response>
         [HttpGet("{guid}/filhas")]
         [ProducesResponseType(typeof(List<OrganizacaoModeloGet>), 200)]
         [ProducesResponseType(typeof(string), 500)]
@@ -165,9 +176,17 @@ namespace Organograma.WebAPI.Controllers
         #endregion
 
         #region POST
-        // POST api/organizacoes
+        /// <summary>
+        /// Inserção de organizações.
+        /// </summary>
+        /// <param name="organizacaoPost">Informações da organização a ser inserida.</param>
+        /// <returns>Organização recém inserida.</returns>
+        /// <response code="201">Retorna a organização recém inserida.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpPost]
         [Authorize(Policy = "Organizacao.Inserir")]
+        [ProducesResponseType(typeof(OrganizacaoModeloGet), 201)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
         {
 
@@ -178,52 +197,36 @@ namespace Organograma.WebAPI.Controllers
 
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
 
             catch (OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
 
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
 
-        //Post api/organizacoes/{id}/site
-        [HttpPost("{idOrganizacao}/site")]
-        [Authorize(Policy = "Organizacao.Alterar")]
-        public IActionResult PostSite(int idOrganizacao, [FromBody]SiteModelo sitePost)
-        {
-
-            try
-            {
-                return new ObjectResult(service.InserirSite(idOrganizacao, sitePost));
-            }
-
-            catch (OrganogramaNaoEncontradoException e)
-            {
-                return NotFound(e.Message);
-            }
-
-            catch (OrganogramaRequisicaoInvalidaException e)
-            {
-                return BadRequest(e.Message);
-            }
-
-            catch (Exception e)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
         #endregion
 
         #region PATCH
-        // Patch api/organizacoes/{id}
+        /// <summary>
+        /// Alteração de organizações.
+        /// </summary>
+        /// <param name="id">Identificador da organização a ser alterada.</param>
+        /// <param name="organizacao">Informações que serão alteradas da organização.</param>
+        /// <response code="200">Organização alterada com sucesso.</response>
+        /// <response code="400">Informação inválida.</response>
+        /// <response code="404">Recurso não encontrado.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpPatch("{id}")]
         [Authorize(Policy = "Organizacao.Alterar")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult AlterarOrganizacao(int id, [FromBody]OrganizacaoModeloPatch organizacao)
         {
             try
@@ -234,26 +237,34 @@ namespace Organograma.WebAPI.Controllers
 
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
 
             catch (OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
 
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
 
         #endregion
 
         #region DELETE
-        // DELETE api/organizacoes/{id}
+        /// <summary>
+        /// Exclusão de organizações
+        /// </summary>
+        /// <param name="id">Identificador da organização a ser excluída.</param>
+        /// <returns></returns>
+        /// <response code=200>Organização excluída com sucesso.</response>
+        /// <response code=500>Erro inesperado</response>
         [HttpDelete("{id}")]
         [Authorize(Policy = "Organizacao.Excluir")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult Excluir(int id)
         {
             try
@@ -263,15 +274,11 @@ namespace Organograma.WebAPI.Controllers
             }
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
-            }
-            catch (OrganogramaRequisicaoInvalidaException e)
-            {
-                return BadRequest(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
         #endregion
