@@ -234,7 +234,7 @@ namespace Organograma.Negocio
             OrganizacaoModeloNegocio organizacaoNegocio = new OrganizacaoModeloNegocio();
 
             Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Sigla.Trim().ToUpper().Equals(sigla.Trim().ToUpper()))
-                                                             .Include(e => e.Endereco).ThenInclude(m => m.Municipio)
+                                                             .Include(e => e.Endereco).ThenInclude(m => m.Municipio).ThenInclude(m => m.IdentificadorExterno)
                                                              .Include(e => e.Esfera)
                                                              .Include(p => p.Poder)
                                                              .Include(c => c.ContatosOrganizacao).ThenInclude(co => co.Contato).ThenInclude(tc => tc.TipoContato)
@@ -286,6 +286,7 @@ namespace Organograma.Negocio
                                                              .Include(o => o.Esfera)
                                                              .Include(o => o.Poder)
                                                              .Include(o => o.IdentificadorExterno)
+                                                             .Include(o => o.Endereco).ThenInclude(e => e.Municipio).ThenInclude(m => m.IdentificadorExterno)
                                                              .SingleOrDefault();
 
             validacao.NaoEncontrado(organizacao);
