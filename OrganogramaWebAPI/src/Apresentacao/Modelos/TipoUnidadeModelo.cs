@@ -7,8 +7,6 @@ namespace Organograma.Apresentacao.Modelos
 {
     public class TipoUnidadeModelo : TipoUnidadeModeloPut
     {
-        public string InicioVigencia { get; set; }
-        public string FimVigencia { get; set; }
         public string ObservacaoFimVigencia { get; set; }
     }
 

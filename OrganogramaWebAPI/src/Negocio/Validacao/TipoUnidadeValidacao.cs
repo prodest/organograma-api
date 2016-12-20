@@ -76,5 +76,11 @@ namespace Organograma.Negocio.Validacao
             if (tUnidade == null)
                 throw new OrganogramaNaoEncontradoException("Tipo de unidade não encontrado.");
         }
+
+        internal void NaoEncontrado(TipoUnidade tipoUnidade)
+        {
+            if (tipoUnidade == null)
+                throw new OrganogramaNaoEncontradoException("Tipo de unidade não encontrado.");
+        }
     }
 }

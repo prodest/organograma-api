@@ -7,6 +7,10 @@ using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Organograma.WebAPI.Base;
+using System.Net;
+using Organograma.WebAPI.Config;
+using Organograma.Infraestrutura.Comum;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,42 +26,156 @@ namespace Organograma.WebAPI.Controllers
             this.service = service;
         }
 
-        // GET: api/tipos-unidade
+        /// <summary>
+        /// Retorna a lista de tipos de unidade.
+        /// </summary>
+        /// <returns>Lista de tipos de unidade.</returns>
+        /// <response code="200">Lista de tipos de unidade obtida com sucesso.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpGet]
-        public IEnumerable<TipoUnidadeModelo> Get()
+        [ProducesResponseType(typeof(List<TipoUnidadeModelo>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Get()
         {
-            return service.Listar();
+            try
+            {
+                return new ObjectResult(service.Listar());
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
-        // GET api/tipos-unidade/{id}
+        /// <summary>
+        /// Retorna o tipo de unidade conforme o identificador informado.
+        /// </summary>
+        /// <param name="id">Identificador do tipo de unidade.</param>
+        /// <returns>Tipo de unidade conforme o identificador informado.</returns>
+        /// <response code="200">Tipo de unidade obtida com sucesso.</response>
+        /// <response code="404">Tipo de unidade não encontrado.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpGet("{id}")]
-        public TipoUnidadeModelo Get(int id)
+        [ProducesResponseType(typeof(TipoUnidadeModelo), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Get(int id)
         {
-            return service.Pesquisar(id);
+            try
+            {
+                return new ObjectResult(service.Pesquisar(id));
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
-        // POST api/tipos-unidade
+        /// <summary>
+        /// Insere um tipo de unidade.
+        /// </summary>
+        /// <param name="tipoUnidade">Tipo de unidade que será inserido.</param>
+        /// <returns>Tipo de unidade inserido.</returns>
+        /// <response code="201">Tipo de unidade inserido com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpPost]
         [Authorize(Policy = "TipoUnidade.Inserir")]
-        public TipoUnidadeModelo Post([FromBody]TipoUnidadeModeloPost tipoUnidade)
+        [ProducesResponseType(typeof(TipoUnidadeModelo), 201)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Post([FromBody]TipoUnidadeModeloPost tipoUnidade)
         {
-            return service.Inserir(tipoUnidade);
+            try
+            {
+                TipoUnidadeModelo tipoUnidadeModelo = service.Inserir(tipoUnidade);
+
+                HttpRequest request = HttpContext.Request;
+                return Created(request.Scheme + "://" + request.Host.Value + request.Path.Value + "/" + tipoUnidadeModelo.Id, tipoUnidadeModelo);
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
-        // PUT api/tipos-unidade/{id}
+        /// <summary>
+        /// Altera um tipo de unidade.
+        /// </summary>
+        /// <param name="id">Identificador do tipo de unidade que será alterado.</param>
+        /// <param name="tipoUnidade">Tipo de unidade que será alterado.</param>
+        /// <response code="200">Tipo de unidade alterado com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="404">Tipo de unidade não encontrado.</response>
+        /// <response code="500">Erro não esperado.</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "TipoUnidade.Alterar")]
-        public void Put(int id, [FromBody]TipoUnidadeModeloPut tipoUnidade)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Put(int id, [FromBody]TipoUnidadeModeloPut tipoUnidade)
         {
-            service.Alterar(id, tipoUnidade);
+            try
+            {
+                service.Alterar(id, tipoUnidade);
+                return Ok();
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
-        // DELETE api/tipos-unidade/{id}
+        /// <summary>
+        /// Exclui um tipo de unidade.
+        /// </summary>
+        /// <param name="id">Identificador do tipo de unidade que será excluído.</param>
+        /// <response code="200">Tipo de unidade excluído com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="404">Tipo de unidade não encontrado.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpDelete("{id}")]
         [Authorize(Policy = "TipoUnidade.Excluir")]
-        public void Delete(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Delete(int id)
         {
-            service.Excluir(id);
+            try
+            {
+                service.Excluir(id);
+                return Ok();
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
     }
 }

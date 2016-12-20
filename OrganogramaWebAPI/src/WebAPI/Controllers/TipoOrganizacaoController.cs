@@ -73,7 +73,6 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-
         /// <summary>
         /// Insere um tipo de organização.
         /// </summary>

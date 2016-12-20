@@ -88,6 +88,8 @@ namespace Organograma.Negocio
         {
             var tipoUnidade = repositorioTiposUnidades.SingleOrDefault(td => td.Id == id);
 
+            validacao.NaoEncontrado(tipoUnidade);
+
             return Mapper.Map<TipoUnidade, TipoUnidadeModeloNegocio>(tipoUnidade); ;
         }
     }

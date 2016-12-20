@@ -137,9 +137,7 @@ namespace Organograma.Apresentacao.Config
                 #endregion
 
                 #region Mapeamento de Tipo de Unidade
-                cfg.CreateMap<TipoUnidadeModeloNegocio, TipoUnidadeModelo>()
-                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.ToString("dd/MM/yyyy")))
-                .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
+                cfg.CreateMap<TipoUnidadeModeloNegocio, TipoUnidadeModelo>();
 
                 cfg.CreateMap<TipoUnidadeModeloPut, TipoUnidadeModeloNegocio>().ReverseMap();
 
