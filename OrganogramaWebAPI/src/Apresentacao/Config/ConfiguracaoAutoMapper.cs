@@ -127,9 +127,7 @@ namespace Organograma.Apresentacao.Config
                 #endregion
 
                 #region Mapeamento de Tipo de Organização
-                cfg.CreateMap<TipoOrganizacaoModeloNegocio, TipoOrganizacaoModelo>()
-                .ForMember(dest => dest.InicioVigencia, opt => opt.MapFrom(src => src.InicioVigencia.ToString("dd/MM/yyyy")))
-                .ForMember(dest => dest.FimVigencia, opt => opt.MapFrom(src => src.FimVigencia.HasValue ? src.FimVigencia.Value.ToString("dd/MM/yyyy") : null));
+                cfg.CreateMap<TipoOrganizacaoModeloNegocio, TipoOrganizacaoModelo>();
 
                 cfg.CreateMap<TipoOrganizacaoModeloPut, TipoOrganizacaoModeloNegocio>();
 

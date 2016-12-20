@@ -7,6 +7,10 @@ using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Organograma.WebAPI.Base;
+using System.Net;
+using Organograma.WebAPI.Config;
+using Organograma.Infraestrutura.Comum;
+using Microsoft.AspNetCore.Http;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -20,42 +24,157 @@ namespace Organograma.WebAPI.Controllers
             this.service = service;
         }
 
-        // GET: api/tipos-organizacao
+        /// <summary>
+        /// Retorna a lista de tipos de organização.
+        /// </summary>
+        /// <returns>Lista de tipos de organização.</returns>
+        /// <response code="200">Retorna a lista de tipos de organização.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet]
-        public IEnumerable<TipoOrganizacaoModelo> Get()
+        [ProducesResponseType(typeof(List<TipoOrganizacaoModelo>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Get()
         {
-            return service.Listar();
+            try
+            {
+                return new ObjectResult(service.Listar());
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
-        // GET api/tipos-organizacao/{id}
+        /// <summary>
+        /// Retorna o tipo de organização conforme o identificador informado.
+        /// </summary>
+        /// <param name="id">Identificador do tipo de organização.</param>
+        /// <returns>Tipo de organização conforme o identificador informado.</returns>
+        /// <response code="200">Retorna o tipo de organização conforme o identificador informado.</response>
+        /// <response code="404">Tipo de organização não encontrado.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
         [HttpGet("{id}")]
-        public TipoOrganizacaoModelo Get(int id)
+        [ProducesResponseType(typeof(TipoOrganizacaoModelo), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Get(int id)
         {
-            return service.Pesquisar(id);
+            try
+            {
+                return new ObjectResult(service.Pesquisar(id));
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
-        // POST api/tipos-organizacao
+
+        /// <summary>
+        /// Insere um tipo de organização.
+        /// </summary>
+        /// <param name="tipoOrganizacao">Tipo de organização que será inserido.</param>
+        /// <returns>Tipo de organização inserido.</returns>
+        /// <response code="201">Tipo de organização inserido com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpPost]
         [Authorize(Policy = "TipoOrganizacao.Inserir")]
-        public TipoOrganizacaoModelo Post([FromBody]TipoOrganizacaoModeloPost tipoOrganizacao)
+        [ProducesResponseType(typeof(TipoOrganizacaoModelo), 201)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Post([FromBody]TipoOrganizacaoModeloPost tipoOrganizacao)
         {
-            return service.Inserir(tipoOrganizacao);
+            try
+            {
+                TipoOrganizacaoModelo tipoOrganizacaoModelo = service.Inserir(tipoOrganizacao);
+
+                HttpRequest request = HttpContext.Request;
+                return Created(request.Scheme + "://" + request.Host.Value + request.Path.Value + "/" + tipoOrganizacaoModelo.Id, tipoOrganizacaoModelo);
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
-        // PUT api/tipos-organizacao/{id}
+        /// <summary>
+        /// Altera um tipo de organização.
+        /// </summary>
+        /// <param name="id">Identificador do tipo de organização que será alterado.</param>
+        /// <param name="tipoOrganizacao">Tipo de organização que será alterado.</param>
+        /// <response code="200">Tipo de organização alterado com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="404">Tipo de organização não encontrado.</response>
+        /// <response code="500">Erro não esperado.</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "TipoOrganizacao.Alterar")]
-        public void Put(int id, [FromBody]TipoOrganizacaoModeloPut tipoOrganizacao)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Put(int id, [FromBody]TipoOrganizacaoModeloPut tipoOrganizacao)
         {
-            service.Alterar(id, tipoOrganizacao);
+            try
+            {
+                service.Alterar(id, tipoOrganizacao);
+                return Ok();
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
 
-        // DELETE api/tipos-organizacao/{id}
+        /// <summary>
+        /// Exclui um tipo de organização.
+        /// </summary>
+        /// <param name="id">Identificador do tipo de organização que será excluído.</param>
+        /// <response code="200">Tipo de organização excluído com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="404">Tipo de organização não encontrado.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpDelete("{id}")]
         [Authorize(Policy = "TipoOrganizacao.Excluir")]
-        public void Delete(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult Delete(int id)
         {
-            service.Excluir(id);
+            try
+            {
+                service.Excluir(id);
+                return Ok();
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
         }
     }
 }

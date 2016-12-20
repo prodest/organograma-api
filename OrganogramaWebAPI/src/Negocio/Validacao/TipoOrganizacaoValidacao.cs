@@ -47,7 +47,7 @@ namespace Organograma.Negocio.Validacao
             var tipoOrganizacao = repositorioTiposOrganizacoes.SingleOrDefault(td => td.Id == id);
 
             if (tipoOrganizacao == null)
-                throw new OrganogramaRequisicaoInvalidaException("Tipo de organização não encontrado.");
+                throw new OrganogramaNaoEncontradoException("Tipo de organização não encontrado.");
         }
 
         internal void DescricaoValida(string descricao)
@@ -83,6 +83,12 @@ namespace Organograma.Negocio.Validacao
                     throw new OrganogramaNaoEncontradoException("Tipo da organização não existe");
                 }
             }
+        }
+
+        internal void NaoEncontrado(TipoOrganizacao tipoOrganizacao)
+        {
+            if (tipoOrganizacao == null)
+                throw new OrganogramaNaoEncontradoException("Tipo de organização não encontrado.");
         }
     }
 }
