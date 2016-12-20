@@ -231,7 +231,10 @@ namespace Organograma.Negocio
 
         public List<UnidadeModeloNegocio> PesquisarPorOrganizacao(string guid)
         {
+            unidadeValidacao.GuidValido(guid);
+
             Guid g = new Guid(guid);
+
             var unidades = repositorioUnidades.Where(u => u.Organizacao.IdentificadorExterno.Guid.Equals(g))
                                              .Include(u => u.TipoUnidade)
                                              .Include(u => u.UnidadePai)
@@ -243,7 +246,9 @@ namespace Organograma.Negocio
                                              .OrderBy(u => u.Nome)
                                              .ToList();
 
-            return Mapper.Map<List<Unidade>, List<UnidadeModeloNegocio>>(unidades);
+            var un = Mapper.Map<List<Unidade>, List<UnidadeModeloNegocio>>(unidades);
+
+            return un;
 
         }
         private void ExcluirEndereco(Unidade unidade)

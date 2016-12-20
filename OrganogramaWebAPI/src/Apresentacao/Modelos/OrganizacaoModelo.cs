@@ -33,7 +33,7 @@ namespace Organograma.Apresentacao.Modelos
         public string RazaoSocial { get; set; }
         public string NomeFantasia { get; set; }
         public string Sigla { get; set; }
-        public List<ContatoModelo> Contatos { get; set; }
+        public List<ContatoModeloGet> Contatos { get; set; }
         public List<EmailModelo> Emails { get; set; }
         public EnderecoModeloGet Endereco { get; set; }
         public EsferaOrganizacaoModeloPost Esfera { get; set; }

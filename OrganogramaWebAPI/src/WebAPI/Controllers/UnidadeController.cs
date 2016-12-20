@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
@@ -22,6 +23,34 @@ namespace Organograma.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Retorna as unidades da organização informada.
+        /// </summary>
+        /// <param name="guid">Identificador da organização a qual se deseja obter suas unidades.</param>
+        /// <returns>Unidades da organização informada.</returns>
+        /// <response code="200">Lista de unidades obtida com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="500">Erro inesperado.</response>
+        [HttpGet("organizacao/{guid}")]
+        [ProducesResponseType(typeof(List<UnidadeModeloGet>), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult PesquisarPorOrganizacao(string guid)
+        {
+            try
+            {
+                return new ObjectResult(service.PesquisarPorOrganizacao(guid));
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
+        }
+
+        /// <summary>
         /// Retorna as informações da unidade informada.
         /// </summary>
         /// <param name="guid">Identificador da organização a qual se deseja obter suas informações.</param>
@@ -35,43 +64,19 @@ namespace Organograma.WebAPI.Controllers
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        [Authorize]
         public IActionResult Get(string guid)
         {
             try
             {
-                return new ObjectResult(service.Pesquisar(guid)); 
-            }
-            catch (OrganogramaNaoEncontradoException e)
-            {
-                return NotFound(e.Message);
+                return new ObjectResult(service.Pesquisar(guid));
             }
             catch (OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
-            catch (Exception e)
+            catch (OrganogramaNaoEncontradoException e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-            }   
-        }
-
-        /// <summary>
-        /// Retorna as unidades da organização informada.
-        /// </summary>
-        /// <param name="guid">Identificador da organização a qual se deseja obter suas unidades.</param>
-        /// <returns>Unidades da organização informada.</returns>
-        /// <response code="200">Retorna as unidades da organização informada.</response>
-        /// <response code="500">Retorna a descrição do erro.</response>
-        [HttpGet("organizacao/{guid}")]
-        [ProducesResponseType(typeof(List<UnidadeModeloGet>), 200)]
-        [ProducesResponseType(typeof(string), 500)]
-        [Authorize]
-        public IActionResult PesquisarPorOrganizacao(string guid)
-        {
-            try
-            {
-                return new ObjectResult(service.PesquisarPorOrganizacao(guid));
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
@@ -79,109 +84,106 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
-        // POST api/unidades
+        /// <summary>
+        /// Insere uma unidade.
+        /// </summary>
+        /// <param name="unidade">Unidade que será inserida.</param>
+        /// <returns>Unidade inserida.</returns>
+        /// <response code="201">Unidade inserida com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpPost]
         [Authorize(Policy = "Unidade.Inserir")]
+        [ProducesResponseType(typeof(UnidadeModeloRetornoPost), 201)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult Post([FromBody]UnidadeModeloPost unidade)
         {
             try
             {
-                return new ObjectResult(service.Inserir(unidade));
+                UnidadeModeloRetornoPost unidadeModelo = service.Inserir(unidade);
+
+                HttpRequest request = HttpContext.Request;
+                return Created(request.Scheme + "://" + request.Host.Value + request.Path.Value + "/" + unidadeModelo.Id, unidadeModelo);
             }
             catch (OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
 
-        // PATCH api/unidades/{id}
+        /// <summary>
+        /// Altera uma unidade.
+        /// </summary>
+        /// <param name="id">Identificador da unidade que será alterado.</param>
+        /// <param name="unidade">Unidade que será alterada.</param>
+        /// <response code="200">Unidade alterada com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="404">Unidade não encontrada.</response>
+        /// <response code="500">Erro não esperado.</response>
         [HttpPatch("{id}")]
         [Authorize(Policy = "Unidade.Alterar")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult Patch(int id, [FromBody]UnidadeModeloPatch unidade)
         {
             try
             {
                 service.Alterar(id, unidade);
-
                 return Ok();
             }
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             catch (OrganogramaRequisicaoInvalidaException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
-            
         }
 
-        // DELETE api/unidades/{id}
+        /// <summary>
+        /// Exclui uma unidade.
+        /// </summary>
+        /// <param name="id">Identificador da unidade que será excluída.</param>
+        /// <response code="200">Unidade excluída com sucesso.</response>
+        /// <response code="400">Falha na validação.</response>
+        /// <response code="404">Unidade não encontrada.</response>
+        /// <response code="500">Erro inesperado.</response>
         [HttpDelete("{id}")]
         [Authorize(Policy = "Unidade.Excluir")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult Delete(int id)
         {
             try
             {
                 service.Excluir(id);
-
                 return Ok();
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
             catch (OrganogramaNaoEncontradoException e)
             {
-                return NotFound(e.Message);
+                return NotFound(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [HttpPost("{id}/email")]
-        [Authorize(Policy = "Unidade.Alterar")]
-        public IActionResult InserirEmail(int id, [FromBody]List<EmailModelo> emails)
-        {
-            try
-            {
-                //service.ExcluirEmail(id, emails);
-
-                return Ok();
-            }
-            catch (OrganogramaNaoEncontradoException e)
-            {
-                return NotFound(e.Message);
-            }
-            catch (Exception e)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [HttpDelete("{id}/email")]
-        [Authorize(Policy = "Unidade.Alterar")]
-        public IActionResult DeleteEmail(int id, [FromBody]List<EmailModelo> emails)
-        {
-            try
-            {
-                service.ExcluirEmail(id, emails);
-
-                return Ok();
-            }
-            catch (OrganogramaNaoEncontradoException e)
-            {
-                return NotFound(e.Message);
-            }
-            catch (Exception e)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
     }
