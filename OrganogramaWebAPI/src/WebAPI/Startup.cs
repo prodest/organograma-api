@@ -39,6 +39,8 @@ namespace Organograma.WebAPI
             //Configurar o objeto AutenticacaoIdentityServer para ser usado na autenticação
             services.Configure<AutenticacaoIdentityServer>(Configuration.GetSection("AutenticacaoIdentityServer"));
 
+            services.AddMemoryCache();
+
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(opt =>
