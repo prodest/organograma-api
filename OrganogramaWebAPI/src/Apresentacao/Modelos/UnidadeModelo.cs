@@ -16,10 +16,10 @@ namespace Organograma.Apresentacao.Modelos
         public int IdTipoUnidade { get; set; }
         public int? IdUnidadePai { get; set; }
 
-        public virtual EnderecoModelo Endereco { get; set; }
-        public virtual List<ContatoModelo> Contatos { get; set; }
-        public virtual List<EmailModelo> Emails { get; set; }
-        public virtual List<SiteModelo> Sites { get; set; }
+        public EnderecoModelo Endereco { get; set; }
+        public List<ContatoModelo> Contatos { get; set; }
+        public List<EmailModelo> Emails { get; set; }
+        public List<SiteModelo> Sites { get; set; }
     }
 
     public class UnidadeModeloGet
@@ -34,7 +34,7 @@ namespace Organograma.Apresentacao.Modelos
         public OrganizacaoUnidadeModeloGet Organizacao { get; set; }
         public UnidadePaiModeloGet UnidadePai { get; set; }
         public EnderecoModeloGet Endereco { get; set; }
-        public List<ContatoModelo> Contatos { get; set; }
+        public List<ContatoModeloGet> Contatos { get; set; }
         public List<EmailModelo> Emails { get; set; }
         public List<SiteModelo> Sites { get; set; }
     }
@@ -53,11 +53,6 @@ namespace Organograma.Apresentacao.Modelos
         public string Sigla { get; set; }
         public int? IdTipoUnidade { get; set; }
         public int? IdUnidadePai { get; set; }
-
-        //public virtual EnderecoModeloPut Endereco { get; set; }
-        //public virtual List<ContatoModeloPut> Contatos { get; set; }
-        //public virtual List<EmailModeloPut> Emails { get; set; }
-        //public virtual List<SiteModeloPut> Sites { get; set; }
     }
 
 }

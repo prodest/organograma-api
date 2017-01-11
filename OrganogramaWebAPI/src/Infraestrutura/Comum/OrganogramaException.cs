@@ -9,21 +9,21 @@ namespace Organograma.Infraestrutura.Comum
     {
         public OrganogramaException(string mensagem) : base(mensagem) { }
 
-        public OrganogramaException(string mensagem, Exception ex) : base(mensagem, ex) { }
+        public OrganogramaException(string mensagem, Exception innerException) : base(mensagem, innerException) { }
     }
 
     public class OrganogramaNaoEncontradoException : OrganogramaException
     {
         public OrganogramaNaoEncontradoException(string mensagem) : base(mensagem) { }
 
-        public OrganogramaNaoEncontradoException(string mensagem, Exception ex) : base(mensagem, ex) { }
+        public OrganogramaNaoEncontradoException(string mensagem, Exception innerException) : base(mensagem, innerException) { }
     }
 
     public class OrganogramaRequisicaoInvalidaException : OrganogramaException
     {
         public OrganogramaRequisicaoInvalidaException(string mensagem) : base(mensagem) { }
 
-        public OrganogramaRequisicaoInvalidaException(string mensagem, Exception ex) : base(mensagem, ex) { }
+        public OrganogramaRequisicaoInvalidaException(string mensagem, Exception innerException) : base(mensagem, innerException) { }
     }
 
 
