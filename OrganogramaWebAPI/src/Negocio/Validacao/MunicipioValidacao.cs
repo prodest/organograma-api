@@ -50,12 +50,12 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
-        internal void IdPreenchido(MunicipioModeloNegocio municipio)
+        internal void GuidPreenchido(MunicipioModeloNegocio municipio)
         {
             NaoNulo(municipio);
 
-            if (municipio.Id == default(int))
-                throw new OrganogramaRequisicaoInvalidaException("O id do munícipio deve ser preenchido.");
+            if (string.IsNullOrWhiteSpace(municipio.Guid))
+                throw new OrganogramaRequisicaoInvalidaException("O identificador do munícipio deve ser preenchido.");
         }
 
         internal void MunicipioValido (MunicipioModeloNegocio municipio)
@@ -123,7 +123,9 @@ namespace Organograma.Negocio.Validacao
 
         internal void Existe(MunicipioModeloNegocio municipio)
         {
-            var mun = repositorioMunicipios.Where(m => m.Id == municipio.Id)
+            Guid guid = new Guid(municipio.Guid);
+
+            var mun = repositorioMunicipios.Where(m => m.IdentificadorExterno.Guid.Equals(guid))
                                            .SingleOrDefault();
 
             if(mun == null)

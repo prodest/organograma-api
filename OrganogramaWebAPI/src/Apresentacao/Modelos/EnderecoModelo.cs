@@ -12,7 +12,7 @@ namespace Organograma.Apresentacao.Modelos
         public string Complemento { get; set; }
         public string Bairro { get; set; }
         public string Cep { get; set; }
-        public int IdMunicipio { get; set; }
+        public string GuidMunicipio { get; set; }
     }
 
     public class EnderecoModeloGet

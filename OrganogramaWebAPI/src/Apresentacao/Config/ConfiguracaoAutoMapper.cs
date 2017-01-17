@@ -37,16 +37,16 @@ namespace Organograma.Apresentacao.Config
 
                 #region Mapeamento de Endereço
                 cfg.CreateMap<EnderecoModeloNegocio, EnderecoModelo>()
-                   .ForMember(dest => dest.IdMunicipio, opt => opt.MapFrom(s => s.Municipio.Id));
+                   .ForMember(dest => dest.GuidMunicipio, opt => opt.MapFrom(s => s.Municipio.Guid));
 
                 cfg.CreateMap<EnderecoModeloNegocio, EnderecoModeloGet>()
                 .ForMember(dest => dest.Municipio, opt => opt.MapFrom(src => src.Municipio));
 
                 cfg.CreateMap<EnderecoModelo, EnderecoModeloNegocio>()
-                   .ForMember(dest => dest.Municipio, opt => opt.MapFrom(s => s.IdMunicipio != default(int) ? new MunicipioModeloNegocio() { Id = s.IdMunicipio } : null));
+                   .ForMember(dest => dest.Municipio, opt => opt.MapFrom(s => !string.IsNullOrWhiteSpace(s.GuidMunicipio) ? new MunicipioModeloNegocio() { Guid = s.GuidMunicipio } : null));
 
                 cfg.CreateMap<EnderecoModeloPut, EnderecoModeloNegocio>()
-                   .ForMember(dest => dest.Municipio, opt => opt.MapFrom(s => s.IdMunicipio != default(int) ? new MunicipioModeloNegocio() { Id = s.IdMunicipio } : null));
+                   .ForMember(dest => dest.Municipio, opt => opt.MapFrom(s => !string.IsNullOrWhiteSpace(s.GuidMunicipio) ? new MunicipioModeloNegocio() { Guid = s.GuidMunicipio } : null));
                 #endregion
 
                 #region Mapeamento de Esfera de Organização
@@ -76,13 +76,13 @@ namespace Organograma.Apresentacao.Config
                  .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModelo>, List<ContatoModeloNegocio>>(s.Contatos)))
                  .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => Mapper.Map<PoderModeloNegocio>(new PoderModeloGet { Id = s.IdPoder })))
                  .ForMember(dest => dest.Esfera, opt => opt.MapFrom(s => Mapper.Map<EsferaOrganizacaoModeloNegocio>(new EsferaOrganizacaoModelo { Id = s.IdEsfera })))
-                 .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.IdOrganizacaoPai != default(int) ? new OrganizacaoModeloNegocio() { Id = s.IdOrganizacaoPai } : null))
+                 .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => !string.IsNullOrEmpty(s.GuidOrganizacaoPai) ? new OrganizacaoModeloNegocio() { Guid = s.GuidOrganizacaoPai } : null))
                  .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => Mapper.Map<TipoOrganizacaoModeloNegocio>(new TipoOrganizacaoModelo { Id = s.IdTipoOrganizacao })));
 
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoModeloPut>()
                  .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
                  .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder.Id))
-                 .ForMember(dest => dest.IdOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? s.OrganizacaoPai.Id : 0))
+                 .ForMember(dest => dest.GuidOrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai != null ? s.OrganizacaoPai.Guid : null))
                  .ForMember(dest => dest.IdTipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao.Id))
                  .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
                  .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => Mapper.Map<EnderecoModeloNegocio, EnderecoModelo>(s.Endereco)))

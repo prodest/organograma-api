@@ -21,6 +21,7 @@ namespace Organograma.Negocio
         IRepositorioGenerico<Email> repositorioEmails;
         IRepositorioGenerico<EmailOrganizacao> repositorioEmailsOrganizacoes;
         IRepositorioGenerico<Endereco> repositorioEnderecos;
+        IRepositorioGenerico<Municipio> repositorioMunicipios;
         IRepositorioGenerico<Site> repositorioSites;
         IRepositorioGenerico<SiteOrganizacao> repositorioSitesOrganizacoes;
 
@@ -43,6 +44,7 @@ namespace Organograma.Negocio
             repositorioEmails = repositorios.Emails;
             repositorioEmailsOrganizacoes = repositorios.EmailsOrganizacoes;
             repositorioEnderecos = repositorios.Enderecos;
+            repositorioMunicipios = repositorios.Municipios;
             repositorioSites = repositorios.Sites;
             repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
 
@@ -317,8 +319,11 @@ namespace Organograma.Negocio
         private Organizacao PreparaInsercao(OrganizacaoModeloNegocio organizacaoNegocio)
         {
             organizacaoNegocio.Guid = Guid.NewGuid().ToString("D");
+            organizacaoNegocio.OrganizacaoPai.Id = BuscarIdOrganizacaoPai(organizacaoNegocio.OrganizacaoPai.Guid);
+            organizacaoNegocio.Endereco.Municipio.Id = BuscarIdMunicipio(organizacaoNegocio.Endereco.Municipio.Guid);
 
             Organizacao organizacao = new Organizacao();
+
             organizacao = Mapper.Map<OrganizacaoModeloNegocio, Organizacao>(organizacaoNegocio);
 
             return organizacao;
@@ -334,6 +339,12 @@ namespace Organograma.Negocio
             }
         }
 
+        private int BuscarIdOrganizacaoPai(string guidOrganizacaoPai)
+        {
+            Guid guid = new Guid(guidOrganizacaoPai);
+            return repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(guid)).Single().Id;
+        }
+
         private void ExcluiContatos(Organizacao organizacao)
         {
             if (organizacao.ContatosOrganizacao != null)
@@ -345,6 +356,12 @@ namespace Organograma.Negocio
                 }
 
             }
+        }
+
+        private int BuscarIdMunicipio(string guidMunicipio)
+        {
+            Guid guid = new Guid(guidMunicipio);
+            return repositorioMunicipios.Where(o => o.IdentificadorExterno.Guid.Equals(guid)).Single().Id;
         }
 
         private void ExcluiEndereco(Organizacao organizacao)

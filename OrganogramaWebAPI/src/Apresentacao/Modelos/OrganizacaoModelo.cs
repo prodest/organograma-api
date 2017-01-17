@@ -13,7 +13,7 @@ namespace Organograma.Apresentacao.Modelos
         public int IdEsfera { get; set; }
         public int IdPoder { get; set; }
         public int IdTipoOrganizacao { get; set; }
-        public int IdOrganizacaoPai { get; set; }
+        public string GuidOrganizacaoPai { get; set; }
         public EnderecoModelo Endereco { get; set; }
         public List<ContatoModelo> Contatos { get; set; }
         public List<EmailModelo> Emails { get; set; }

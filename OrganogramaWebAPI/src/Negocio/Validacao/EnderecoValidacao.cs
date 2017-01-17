@@ -33,7 +33,7 @@ namespace Organograma.Negocio.Validacao
                 BairroPreenchido(endereco.Bairro);
                 CepPreenchido(endereco.Cep);
 
-                municipioValidacao.IdPreenchido(endereco.Municipio);
+                municipioValidacao.GuidPreenchido(endereco.Municipio);
                 
             }
         }
@@ -63,7 +63,7 @@ namespace Organograma.Negocio.Validacao
         {
             if (endereco != null)
             {
-                municipioValidacao.IdValido(endereco.Municipio);
+                municipioValidacao.GuidValido(endereco.Municipio.Guid);
                 municipioValidacao.Existe(endereco.Municipio);
             }
         }
