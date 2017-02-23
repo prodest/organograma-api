@@ -15,7 +15,7 @@ namespace Organograma.Apresentacao.Base
 
         void Alterar(int id, UnidadeModeloPatch unidade);
 
-        void Excluir(int id);
+        void Excluir(string guid);
 
         void ExcluirEmail(int id, List<EmailModelo> emails);
     }

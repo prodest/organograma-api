@@ -21,6 +21,7 @@ namespace Organograma.Negocio
         private IRepositorioGenerico<ContatoUnidade> repositorioContatosUnidades;
         private IRepositorioGenerico<Email> repositorioEmails;
         private IRepositorioGenerico<EmailUnidade> repositorioEmailsUnidades;
+        private IRepositorioGenerico<IdentificadorExterno> repositorioIdentificadoresExternos;
         private IRepositorioGenerico<Municipio> repositorioMunicipios;
         private IRepositorioGenerico<Organizacao> repositorioOrganizcoes;
         private IRepositorioGenerico<Site> repositorioSites;
@@ -43,6 +44,7 @@ namespace Organograma.Negocio
             repositorioContatosUnidades = repositorios.ContatosUnidades;
             repositorioEmails = repositorios.Emails;
             repositorioEmailsUnidades = repositorios.EmailsUnidades;
+            repositorioIdentificadoresExternos = repositorios.IdentificadoresExternos;
             repositorioMunicipios = repositorios.Municipios;
             repositorioOrganizcoes = repositorios.Organizacoes;
             repositorioSites = repositorios.Sites;
@@ -106,13 +108,13 @@ namespace Organograma.Negocio
             unitOfWork.Save();
         }
 
-        public void Excluir(int id)
+        public void Excluir(string guid)
         {
-            unidadeValidacao.IdPreenchido(id);
+            unidadeValidacao.GuidValido(guid);
 
-            unidadeValidacao.IdValido(id);
-
-            var unidade = repositorioUnidades.Where(un => un.Id == id)
+            Guid g = new Guid(guid);
+            var unidade = repositorioUnidades.Where(un => un.IdentificadorExterno.Guid.Equals(g))
+                                             .Include(u => u.IdentificadorExterno)
                                              .Include(u => u.Endereco)
                                              .Include(u => u.ContatosUnidade).ThenInclude(cu => cu.Contato)
                                              .Include(u => u.EmailsUnidade).ThenInclude(eu => eu.Email)
@@ -121,7 +123,9 @@ namespace Organograma.Negocio
 
             unidadeValidacao.NaoEncontrado(unidade);
 
-            unidadeValidacao.PossuiFilho(id);
+            unidadeValidacao.PossuiFilho(unidade.Id);
+
+            ExcluirIdentificadorExterno(unidade);
 
             if (unidade.Endereco != null)
                 ExcluirEndereco(unidade);
@@ -276,6 +280,12 @@ namespace Organograma.Negocio
             return un;
 
         }
+
+        private void ExcluirIdentificadorExterno(Unidade unidade)
+        {
+            repositorioIdentificadoresExternos.Remove(unidade.IdentificadorExterno);
+        }
+
         private void ExcluirEndereco(Unidade unidade)
         {
             repositorioEnderecos.Remove(unidade.Endereco);

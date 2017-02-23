@@ -24,9 +24,9 @@ namespace Organograma.Apresentacao
             unidadeNegocio.Alterar(id, umn);
         }
 
-        public void Excluir(int id)
+        public void Excluir(string guid)
         {
-            unidadeNegocio.Excluir(id);
+            unidadeNegocio.Excluir(guid);
         }
 
         public UnidadeModeloRetornoPost Inserir(UnidadeModeloPost unidade)

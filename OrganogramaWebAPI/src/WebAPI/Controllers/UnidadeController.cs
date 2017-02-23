@@ -155,22 +155,22 @@ namespace Organograma.WebAPI.Controllers
         /// <summary>
         /// Exclui uma unidade.
         /// </summary>
-        /// <param name="id">Identificador da unidade que será excluída.</param>
+        /// <param name="guid">Identificador da unidade que será excluída.</param>
         /// <response code="200">Unidade excluída com sucesso.</response>
         /// <response code="400">Falha na validação.</response>
         /// <response code="404">Unidade não encontrada.</response>
         /// <response code="500">Erro inesperado.</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("{guid}")]
         [Authorize(Policy = "Unidade.Excluir")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string guid)
         {
             try
             {
-                service.Excluir(id);
+                service.Excluir(guid);
                 return Ok();
             }
             catch (OrganogramaRequisicaoInvalidaException e)
