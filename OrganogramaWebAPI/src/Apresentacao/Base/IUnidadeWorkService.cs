@@ -13,7 +13,7 @@ namespace Organograma.Apresentacao.Base
 
         UnidadeModeloRetornoPost Inserir(UnidadeModeloPost unidade);
 
-        void Alterar(int id, UnidadeModeloPatch unidade);
+        void Alterar(string guid, UnidadeModeloPatch unidade);
 
         void Excluir(string guid);
 

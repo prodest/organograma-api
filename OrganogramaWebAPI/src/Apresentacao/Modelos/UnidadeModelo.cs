@@ -46,7 +46,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class UnidadeModeloPatch
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
         public string Nome { get; set; }
         public string Sigla { get; set; }
         public int? IdTipoUnidade { get; set; }

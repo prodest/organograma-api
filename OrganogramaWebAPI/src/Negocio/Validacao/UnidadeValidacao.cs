@@ -179,10 +179,16 @@ namespace Organograma.Negocio.Validacao
 
         #endregion
 
+        internal void GuidAlteracaoValido(string guid, UnidadeModeloNegocio unidade)
+        {
+            if (!guid.Equals(unidade.Guid))
+                throw new OrganogramaRequisicaoInvalidaException("Identificadores da unidade não podem ser diferentes.");
+        }
+
         internal void IdAlteracaoValido(int id, UnidadeModeloNegocio unidade)
         {
             if (id != unidade.Id)
-                throw new Exception("Identificadores da unidade não podem ser diferentes.");
+                throw new OrganogramaRequisicaoInvalidaException("Identificadores da unidade não podem ser diferentes.");
         }
 
         internal void NaoEncontrado(Unidade unidade)

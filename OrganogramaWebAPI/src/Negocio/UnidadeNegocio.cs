@@ -60,21 +60,21 @@ namespace Organograma.Negocio
             siteValidacao = new SiteValidacao();
         }
 
-        public void Alterar(int id, UnidadeModeloNegocio unidade)
+        public void Alterar(string guid, UnidadeModeloNegocio unidade)
         {
             #region Verificação básica de Id
             unidadeValidacao.NaoNula(unidade);
 
-            unidadeValidacao.IdPreenchido(unidade.Id);
-            unidadeValidacao.IdValido(unidade.Id);
-            unidadeValidacao.IdAlteracaoValido(id, unidade);
+            unidadeValidacao.GuidValido(guid);
+            unidadeValidacao.GuidAlteracaoValido(guid, unidade);
             #endregion
 
-            var unidadeDominio = repositorioUnidades.Where(un => un.Id == id)
-                                        .Include(un => un.Organizacao)
-                                        .Include(un => un.TipoUnidade)
-                                        .Include(un => un.UnidadePai)
-                                        .SingleOrDefault();
+            Guid g = new Guid(unidade.Guid);
+            var unidadeDominio = repositorioUnidades.Where(u => u.IdentificadorExterno.Guid.Equals(g))
+                                                    .Include(un => un.Organizacao)
+                                                    .Include(un => un.TipoUnidade)
+                                                    .Include(un => un.UnidadePai).ThenInclude(up => up.IdentificadorExterno)
+                                                    .SingleOrDefault();
 
             //Verificação da unidade na base de dados
             unidadeValidacao.NaoEncontrado(unidadeDominio);
@@ -101,6 +101,10 @@ namespace Organograma.Negocio
             organizacaoValidacao.Existe(unidade.Organizacao);
 
             unidadeValidacao.UnidadePaiValida(unidade.UnidadePai);
+            if (unidade.UnidadePai != null)
+                unidade.UnidadePai.Guid = null;
+
+            unidade.Guid = null;
             #endregion
 
             Mapper.Map(unidade, unidadeDominio);

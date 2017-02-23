@@ -17,11 +17,11 @@ namespace Organograma.Apresentacao
             this.unidadeNegocio = unidadeNegocio;
         }
 
-        public void Alterar(int id, UnidadeModeloPatch unidade)
+        public void Alterar(string guid, UnidadeModeloPatch unidade)
         {
             UnidadeModeloNegocio umn = Mapper.Map<UnidadeModeloPatch, UnidadeModeloNegocio>(unidade);
 
-            unidadeNegocio.Alterar(id, umn);
+            unidadeNegocio.Alterar(guid, umn);
         }
 
         public void Excluir(string guid)

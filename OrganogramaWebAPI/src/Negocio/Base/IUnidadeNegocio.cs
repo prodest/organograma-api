@@ -14,7 +14,7 @@ namespace Organograma.Negocio.Base
 
         UnidadeModeloNegocio Inserir(UnidadeModeloNegocio esferaOrganizacao);
 
-        void Alterar(int id, UnidadeModeloNegocio esferaOrganizacao);
+        void Alterar(string guid, UnidadeModeloNegocio esferaOrganizacao);
 
         void Excluir(string guid);
         List<UnidadeModeloNegocio> PesquisarPorOrganizacao(string guidOrganizacao);

@@ -119,23 +119,23 @@ namespace Organograma.WebAPI.Controllers
         /// <summary>
         /// Altera uma unidade.
         /// </summary>
-        /// <param name="id">Identificador da unidade que será alterado.</param>
+        /// <param name="guid">Identificador da unidade que será alterado.</param>
         /// <param name="unidade">Unidade que será alterada.</param>
         /// <response code="200">Unidade alterada com sucesso.</response>
         /// <response code="400">Falha na validação.</response>
         /// <response code="404">Unidade não encontrada.</response>
         /// <response code="500">Erro não esperado.</response>
-        [HttpPatch("{id}")]
+        [HttpPatch("{guid}")]
         [Authorize(Policy = "Unidade.Alterar")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult Patch(int id, [FromBody]UnidadeModeloPatch unidade)
+        public IActionResult Patch(string guid, [FromBody]UnidadeModeloPatch unidade)
         {
             try
             {
-                service.Alterar(id, unidade);
+                service.Alterar(guid, unidade);
                 return Ok();
             }
             catch (OrganogramaNaoEncontradoException e)
