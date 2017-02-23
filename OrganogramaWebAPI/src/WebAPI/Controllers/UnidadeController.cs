@@ -104,7 +104,7 @@ namespace Organograma.WebAPI.Controllers
                 UnidadeModeloRetornoPost unidadeModelo = service.Inserir(unidade);
 
                 HttpRequest request = HttpContext.Request;
-                return Created(request.Scheme + "://" + request.Host.Value + request.Path.Value + "/" + unidadeModelo.Id, unidadeModelo);
+                return Created(request.Scheme + "://" + request.Host.Value + request.Path.Value + "/" + unidadeModelo.Guid, unidadeModelo);
             }
             catch (OrganogramaRequisicaoInvalidaException e)
             {

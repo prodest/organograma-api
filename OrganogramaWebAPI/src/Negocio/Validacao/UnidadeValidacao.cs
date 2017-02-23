@@ -80,7 +80,7 @@ namespace Organograma.Negocio.Validacao
         internal void UnidadePaiPreenchida(UnidadeModeloNegocio unidadePai)
         {
             if (unidadePai != null)
-                IdUnidadePaiPreenchido(unidadePai);
+                GuidValido(unidadePai.Guid, true);
         }
 
         #endregion
@@ -146,8 +146,22 @@ namespace Organograma.Negocio.Validacao
         {
             if (unidadePai != null)
             {
-                IdUnidadePaiValido(unidadePai);
-                UnidadePaiExiste(unidadePai);
+                GuidValido(unidadePai.Guid, true);
+                Existe(unidadePai);
+            }
+        }
+
+        private void Existe(UnidadeModeloNegocio unidade, bool unidadePai = false)
+        {
+            if (unidade != null)
+            {
+                Guid guid = new Guid(unidade.Guid);
+
+                var uni = repositorioUnidades.Where(u => u.IdentificadorExterno.Guid.Equals(guid))
+                                             .SingleOrDefault();
+
+                if (uni == null)
+                    throw new OrganogramaNaoEncontradoException("Unidade " + (unidadePai ? "pai " : "") + "não encontrada.");
             }
         }
 
@@ -183,18 +197,18 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaNaoEncontradoException("Unidade não encontrada.");
         }
 
-        internal void GuidValido(string guid)
+        internal void GuidValido(string guid, bool unidadePai = false)
         {
             try
             {
                 Guid g = new Guid(guid);
 
                 if (g.Equals(Guid.Empty))
-                    throw new OrganogramaRequisicaoInvalidaException("Identificador inválido.");
+                    throw new OrganogramaRequisicaoInvalidaException("Identificador " + (unidadePai ? "da unidade pai " : "") + "inválido.");
             }
             catch (FormatException)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Formato do identificador inválido.");
+                throw new OrganogramaRequisicaoInvalidaException("Formato do identificador " + (unidadePai ? "da unidade pai " : "") + "inválido.");
             }
         }
     }

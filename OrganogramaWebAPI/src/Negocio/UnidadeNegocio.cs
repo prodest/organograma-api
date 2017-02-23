@@ -21,6 +21,8 @@ namespace Organograma.Negocio
         private IRepositorioGenerico<ContatoUnidade> repositorioContatosUnidades;
         private IRepositorioGenerico<Email> repositorioEmails;
         private IRepositorioGenerico<EmailUnidade> repositorioEmailsUnidades;
+        private IRepositorioGenerico<Municipio> repositorioMunicipios;
+        private IRepositorioGenerico<Organizacao> repositorioOrganizcoes;
         private IRepositorioGenerico<Site> repositorioSites;
         private IRepositorioGenerico<SiteUnidade> repositorioSitesUnidades;
         private UnidadeValidacao unidadeValidacao;
@@ -41,6 +43,8 @@ namespace Organograma.Negocio
             repositorioContatosUnidades = repositorios.ContatosUnidades;
             repositorioEmails = repositorios.Emails;
             repositorioEmailsUnidades = repositorios.EmailsUnidades;
+            repositorioMunicipios = repositorios.Municipios;
+            repositorioOrganizcoes = repositorios.Organizacoes;
             repositorioSites = repositorios.Sites;
             repositorioSitesUnidades = repositorios.SitesUnidades;
 
@@ -153,7 +157,7 @@ namespace Organograma.Negocio
             tipoUnidadeValidacao.IdPreenchido(unidade.TipoUnidade);
 
             organizacaoValidacao.NaoNulo(unidade.Organizacao);
-            organizacaoValidacao.IdPreenchido(unidade.Organizacao);
+            organizacaoValidacao.GuidPreenchido(unidade.Organizacao);
 
             unidadeValidacao.UnidadePaiPreenchida(unidade.UnidadePai);
 
@@ -173,7 +177,8 @@ namespace Organograma.Negocio
 
             tipoUnidadeValidacao.Existe(unidade.TipoUnidade);
 
-            organizacaoValidacao.Existe(unidade.Organizacao);
+            organizacaoValidacao.GuidValido(unidade.Organizacao.Guid);
+            organizacaoValidacao.ExistePorGuid(unidade.Organizacao);
 
             unidadeValidacao.UnidadePaiValida(unidade.UnidadePai);
 
@@ -186,6 +191,26 @@ namespace Organograma.Negocio
             siteValidacao.Valido(unidade.Sites);
 
             #endregion
+            Guid guidOrganziacao = new Guid(unidade.Organizacao.Guid);
+            unidade.Organizacao.Id = repositorioOrganizcoes.Where(o => o.IdentificadorExterno.Guid.Equals(guidOrganziacao))
+                                                           .Select(o => o.Id)
+                                                           .Single();
+
+            if (unidade.UnidadePai != null)
+            {
+                Guid guidUnidadePai = new Guid(unidade.UnidadePai.Guid);
+                unidade.UnidadePai.Id = repositorioUnidades.Where(u => u.IdentificadorExterno.Guid.Equals(guidUnidadePai))
+                                                           .Select(u => u.Id)
+                                                           .Single();
+            }
+
+            if (unidade.Endereco != null)
+            {
+                Guid guidMunicipio = new Guid(unidade.Endereco.Municipio.Guid);
+                unidade.Endereco.Municipio.Id = repositorioMunicipios.Where(m => m.IdentificadorExterno.Guid.Equals(guidMunicipio))
+                                                                  .Select(m => m.Id)
+                                                                  .Single();
+            }
 
             unidade.Guid = Guid.NewGuid().ToString("D");
 

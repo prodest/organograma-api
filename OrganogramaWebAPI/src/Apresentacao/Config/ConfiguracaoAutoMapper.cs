@@ -152,9 +152,9 @@ namespace Organograma.Apresentacao.Config
 
                 #region Mapeamento de Unidade
                 cfg.CreateMap<UnidadeModeloNegocio, UnidadeModeloRetornoPost>()
-                   .ForMember(dest => dest.IdOrganizacao, opt => opt.MapFrom(s => s.Organizacao.Id))
+                   .ForMember(dest => dest.GuidOrganizacao, opt => opt.MapFrom(s => s.Organizacao.Id))
                    .ForMember(dest => dest.IdTipoUnidade, opt => opt.MapFrom(s => s.TipoUnidade.Id))
-                   .ForMember(dest => dest.IdUnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? s.UnidadePai.Id : (int?)null))
+                   .ForMember(dest => dest.GuidUnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? s.UnidadePai.Id : (int?)null))
                    .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<EnderecoModeloNegocio, EnderecoModelo>(s.Endereco) : null))
                 ;
 
@@ -166,9 +166,9 @@ namespace Organograma.Apresentacao.Config
                 ;
 
                 cfg.CreateMap<UnidadeModeloPost, UnidadeModeloNegocio>()
-                   .ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => s.IdOrganizacao != default(int) ? new OrganizacaoModeloNegocio() { Id = s.IdOrganizacao } : null))
+                   .ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => !string.IsNullOrWhiteSpace(s.GuidOrganizacao) ? new OrganizacaoModeloNegocio() { Guid = s.GuidOrganizacao } : null))
                    .ForMember(dest => dest.TipoUnidade, opt => opt.MapFrom(s => s.IdTipoUnidade != default(int) ? new TipoUnidadeModeloNegocio() { Id = s.IdTipoUnidade } : null))
-                   .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.IdUnidadePai.HasValue && s.IdUnidadePai.Value != default(int) ? new UnidadeModeloNegocio() { Id = s.IdUnidadePai.Value } : null))
+                   .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => !string.IsNullOrWhiteSpace(s.GuidUnidadePai) ? new UnidadeModeloNegocio() { Guid = s.GuidUnidadePai } : null))
                    .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<EnderecoModelo, EnderecoModeloNegocio>(s.Endereco) : null))
                    .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.Contatos != null ? Mapper.Map<List<ContatoModelo>, List<ContatoModeloNegocio>>(s.Contatos) : null))
                    .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.Emails != null ? Mapper.Map<List<EmailModelo>, List<EmailModeloNegocio>>(s.Emails) : null))

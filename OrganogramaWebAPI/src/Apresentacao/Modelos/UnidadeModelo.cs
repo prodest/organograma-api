@@ -5,16 +5,16 @@ namespace Organograma.Apresentacao.Modelos
 {
     public partial class UnidadeModeloRetornoPost : UnidadeModeloPost
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
     }
 
     public partial class UnidadeModeloPost
     {
         public string Nome { get; set; }
         public string Sigla { get; set; }
-        public int IdOrganizacao { get; set; }
+        public string GuidOrganizacao { get; set; }
         public int IdTipoUnidade { get; set; }
-        public int? IdUnidadePai { get; set; }
+        public string GuidUnidadePai { get; set; }
 
         public EnderecoModelo Endereco { get; set; }
         public List<ContatoModelo> Contatos { get; set; }
@@ -24,8 +24,6 @@ namespace Organograma.Apresentacao.Modelos
 
     public class UnidadeModeloGet
     {
-
-        public int Id { get; set; }
         public string Guid { get; set; }
         public string Nome { get; set; }
         public string Sigla { get; set; }

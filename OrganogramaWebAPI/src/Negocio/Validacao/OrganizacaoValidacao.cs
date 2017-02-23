@@ -20,6 +20,19 @@ namespace Organograma.Negocio.Validacao
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
         }
 
+        internal void GuidPreenchido(string guid)
+        {
+            if (string.IsNullOrWhiteSpace(guid))
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Guid da organização não preenchido.");
+            }
+        }
+
+        internal void GuidPreenchido(OrganizacaoModeloNegocio organizacao)
+        {
+            GuidPreenchido(organizacao.Guid);
+        }
+
         internal void IdPreenchido(int id)
         {
             if (id == default(int))
@@ -100,6 +113,21 @@ namespace Organograma.Negocio.Validacao
         internal void Existe(OrganizacaoModeloNegocio organizacao)
         {
             Existe(organizacao.Id);
+        }
+
+        internal void Existe(string guid)
+        {
+            Guid g = new Guid(guid);
+
+            if (repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g)).SingleOrDefault() == null)
+            {
+                throw new OrganogramaNaoEncontradoException("Organização não existe.");
+            }
+        }
+
+        internal void ExistePorGuid(OrganizacaoModeloNegocio organizacao)
+        {
+            Existe(organizacao.Guid);
         }
 
         internal void PaiExiste(OrganizacaoModeloNegocio organizacaoPai)
