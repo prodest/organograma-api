@@ -24,6 +24,7 @@ namespace Organograma.Negocio
         IRepositorioGenerico<Municipio> repositorioMunicipios;
         IRepositorioGenerico<Site> repositorioSites;
         IRepositorioGenerico<SiteOrganizacao> repositorioSitesOrganizacoes;
+        IRepositorioGenerico<Unidade> repositorioUnidades;
 
         OrganizacaoValidacao validacao;
         CnpjValidacao cnpjValidacao;
@@ -47,6 +48,7 @@ namespace Organograma.Negocio
             repositorioMunicipios = repositorios.Municipios;
             repositorioSites = repositorios.Sites;
             repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
+            repositorioUnidades = repositorios.Unidades;
 
             validacao = new OrganizacaoValidacao(repositorioOrganizacoes);
             cnpjValidacao = new CnpjValidacao(repositorioOrganizacoes);
@@ -298,6 +300,49 @@ namespace Organograma.Negocio
             return Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoesFilhas);
         }
 
+        public OrganizacaoModeloNegocio PesquisarOrganograma(string guid, bool filhas)
+        {
+            Guid g = new Guid(guid);
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
+                                                             .Include(o => o.Esfera)
+                                                             .Include(o => o.Poder)
+                                                             .Include(o => o.IdentificadorExterno)
+                                                             .SingleOrDefault();
+
+            validacao.NaoEncontrado(organizacao);
+
+            OrganizacaoModeloNegocio omn = Mapper.Map<Organizacao, OrganizacaoModeloNegocio>(organizacao);
+
+            if (filhas)
+            {
+                var organizacoes = repositorioOrganizacoes.Where(o => o.Id != organizacao.Id)
+                                                 .Include(o => o.Esfera)
+                                                 .Include(o => o.Poder)
+                                                 .Include(o => o.IdentificadorExterno)
+                                                 .OrderBy(o => o.RazaoSocial)
+                                                 .ToList();
+
+                List<OrganizacaoModeloNegocio> omns = Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoes);
+
+                MontarOrganograma(omn, omns);
+            }
+
+            List<int> idsOrganizacoes = IdsOrganizacoesOrganograma(omn);
+
+            var unidades = repositorioUnidades.Where(u => idsOrganizacoes.Contains(u.IdOrganizacao))
+                                              .Include(o => o.Organizacao)
+                                              .Include(o => o.UnidadePai)
+                                              .Include(o => o.IdentificadorExterno)
+                                              .OrderBy(u=> u.Nome)
+                                              .ToList();
+
+            List<UnidadeModeloNegocio> umns = Mapper.Map<List<Unidade>, List<UnidadeModeloNegocio>>(unidades);
+
+            MontarOrganograma(omn, umns);
+
+            return omn;
+        }
+
         #endregion
 
         #region Funções Auxiliares
@@ -440,6 +485,109 @@ namespace Organograma.Negocio
             return organizacoesFilhas.OrderBy(o => o.RazaoSocial).ToList();
         }
 
+        private void MontarOrganograma(OrganizacaoModeloNegocio organizacao, List<OrganizacaoModeloNegocio> organizacoes)
+        {
+            int quantidadeOrganizacoes = organizacoes.Count;
+
+            organizacao.OrganizacoesFilhas = organizacoes.Where(o => o.OrganizacaoPai != null
+                                                                  && o.OrganizacaoPai.Id == organizacao.Id)
+                                                         .ToList();
+
+            if (organizacao.OrganizacoesFilhas.Count > 0)
+                organizacoes.RemoveAll(o => o.OrganizacaoPai != null && o.OrganizacaoPai.Id == organizacao.Id);
+            else
+                organizacao.OrganizacoesFilhas = null;
+
+            if (organizacoes.Count < quantidadeOrganizacoes)
+            {
+                foreach (var org in organizacao.OrganizacoesFilhas)
+                {
+                    MontarOrganograma(org, organizacoes);
+                }
+            }
+        }
+
+        private void MontarOrganograma(OrganizacaoModeloNegocio organizacao, List<UnidadeModeloNegocio> unidades)
+        {
+            var unidadesOrganizacao = unidades.Where(u => u.Organizacao != null
+                                                       && u.Organizacao.Id == organizacao.Id)
+                                              .ToList();
+
+            if (unidadesOrganizacao != null && unidadesOrganizacao.Count > 0)
+            {
+                unidades.RemoveAll(u => u.Organizacao != null && u.Organizacao.Id == organizacao.Id);
+
+                var unidadesSemPai = unidadesOrganizacao.Where(u => u.UnidadePai == null)
+                                                        .ToList();
+
+                if (unidadesSemPai != null && unidadesSemPai.Count > 0)
+                {
+                    unidadesOrganizacao.RemoveAll(u => u.UnidadePai == null);
+
+                    organizacao.Unidades = unidadesSemPai;
+
+                    foreach (var u in organizacao.Unidades)
+                    {
+                        MontarOrganograma(u, unidadesOrganizacao);
+                    }
+                }
+            }
+
+            if (organizacao.OrganizacoesFilhas != null && organizacao.OrganizacoesFilhas.Count > 0)
+            {
+                foreach (var org in organizacao.OrganizacoesFilhas)
+                {
+                    MontarOrganograma(org, unidades);
+                }
+            }
+        }
+
+        private void MontarOrganograma(UnidadeModeloNegocio unidade, List<UnidadeModeloNegocio> unidades)
+        {
+            int quantidadeUnidades = unidades.Count;
+
+            unidade.UnidadesFilhas = unidades.Where(u => u.UnidadePai != null
+                                                      && u.UnidadePai.Id == unidade.Id)
+                                             .ToList();
+
+            if (unidade.UnidadesFilhas.Count > 0)
+                unidades.RemoveAll(u => u.UnidadePai != null && u.UnidadePai.Id == unidade.Id);
+            else
+                unidade.UnidadesFilhas = null;
+
+            if (unidades.Count < quantidadeUnidades)
+            {
+                foreach (var uni in unidade.UnidadesFilhas)
+                {
+                    MontarOrganograma(uni, unidades);
+                }
+            }
+        }
+
+        private List<int> IdsOrganizacoesOrganograma(OrganizacaoModeloNegocio organizacao)
+        {
+            List<int> idsOrganizacoes = null;
+
+            if (organizacao != null)
+            {
+                idsOrganizacoes = new List<int>();
+
+                idsOrganizacoes.Add(organizacao.Id);
+
+                //var idsOrganizacoesFilhas = organizacao.OrganizacoesFilhas.Select(of => of.Id)
+                //                                                          .ToList();
+
+                if (organizacao.OrganizacoesFilhas != null && organizacao.OrganizacoesFilhas.Count > 0)
+                {
+                    foreach (var org in organizacao.OrganizacoesFilhas)
+                    {
+                        idsOrganizacoes.AddRange(IdsOrganizacoesOrganograma(org));
+                    }
+                }
+            }
+
+            return idsOrganizacoes;
+        }
 
         #endregion
     }

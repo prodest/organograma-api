@@ -17,6 +17,8 @@ namespace Organograma.Negocio.Modelos
         public TipoOrganizacaoModeloNegocio TipoOrganizacao { get; set; }
         public OrganizacaoModeloNegocio OrganizacaoPai { get; set; }
         public EnderecoModeloNegocio Endereco { get; set; }
+        public List<OrganizacaoModeloNegocio> OrganizacoesFilhas { get; set; }
+        public List<UnidadeModeloNegocio> Unidades { get; set; }
         public List<ContatoModeloNegocio> Contatos { get; set; }
         public List<EmailModeloNegocio> Emails { get; set; }
         public List<SiteModeloNegocio> Sites { get; set; }

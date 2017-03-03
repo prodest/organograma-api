@@ -53,4 +53,12 @@ namespace Organograma.Apresentacao.Modelos
         public int? IdUnidadePai { get; set; }
     }
 
+    public class UnidadeOrganograma
+    {
+        public string Guid { get; set; }
+        public string Nome { get; set; }
+        public string Sigla { get; set; }
+        public List<UnidadeOrganograma> UnidadesFilhas { get; set; }
+    }
+
 }

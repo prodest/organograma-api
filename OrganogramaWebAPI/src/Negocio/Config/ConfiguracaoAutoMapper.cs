@@ -95,6 +95,8 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.SitesOrganizacao != null ? Mapper.Map<List<SiteOrganizacao>, List<SiteModeloNegocio>>(s.SitesOrganizacao.ToList()) : null))
                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao))
                 .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno != null ? s.IdentificadorExterno.Guid.ToString("D") : null))
+                .ForMember(dest => dest.OrganizacoesFilhas, opt => opt.Ignore())
+                .ForMember(dest => dest.Unidades, opt => opt.Ignore())
                 .MaxDepth(1)
                 .ForAllMembers(opt =>
                 {

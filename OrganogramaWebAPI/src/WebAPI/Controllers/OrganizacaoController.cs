@@ -173,6 +173,40 @@ namespace Organograma.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Retorna o organograma a partir da organização informada.
+        /// </summary>
+        /// <param name="guid">Identificador da organização a partir da qual se deseja obter seu organograma.</param>
+        /// <param name="filhas">Indica se o organograma irá retornar as organizações filhas e não somente as unidades, o padrão é retornar as organizações filhas.</param>
+        /// <returns>Organograma a partir da organização informada.</returns>
+        /// <response code="200">Retorna o organograma a partir da organização informada.</response>
+        /// <response code="404">Organização não foi encontrada.</response>
+        /// <response code="500">Erro inesperado.</response>
+        [HttpGet("organograma/{guid}")]
+        [ProducesResponseType(typeof(OrganizacaoOrganograma), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult PesquisarOrganograma(string guid, bool filhas = true)
+        {
+            try
+            {
+                return new ObjectResult(service.PesquisarOrganograma(guid, filhas));
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
+
+        }
         #endregion
 
         #region POST

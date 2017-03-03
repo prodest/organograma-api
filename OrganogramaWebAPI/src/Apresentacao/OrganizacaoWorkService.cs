@@ -85,5 +85,11 @@ namespace Organograma.Apresentacao
 
             #endregion
         }
+
+        public OrganizacaoOrganograma PesquisarOrganograma(string guid, bool filhas)
+        {
+            var org = organizacaoNegocio.PesquisarOrganograma(guid, filhas);
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoOrganograma>(org);
+        }
     }
 }

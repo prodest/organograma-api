@@ -111,7 +111,9 @@ namespace Organograma.Apresentacao.Config
                 .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.IdOrganizacaoPai.HasValue ? new OrganizacaoModeloNegocio() { Id = s.IdOrganizacaoPai.Value } : null))
                 .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.IdPoder.HasValue ? new PoderModeloNegocio() { Id = s.IdPoder.Value } : null))
                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.IdTipoOrganizacao.HasValue ? new TipoOrganizacaoModeloNegocio() { Id = s.IdTipoOrganizacao.Value } : null));
-                
+
+                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoOrganograma>();
+
                 #endregion
 
                 #region Mapeamento de Poder
@@ -179,6 +181,8 @@ namespace Organograma.Apresentacao.Config
                    .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.IdUnidadePai.HasValue && s.IdUnidadePai.Value != default(int) ? new UnidadeModeloNegocio() { Id = s.IdUnidadePai.Value } : null));
 
                 cfg.CreateMap<UnidadeModeloNegocio, UnidadePaiModeloGet>();
+
+                cfg.CreateMap<UnidadeModeloNegocio, UnidadeOrganograma>();
                 #endregion
 
                 #region Importação do mapeamento do Negócio   

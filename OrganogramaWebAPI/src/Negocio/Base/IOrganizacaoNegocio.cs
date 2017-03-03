@@ -16,5 +16,6 @@ namespace Organograma.Negocio.Base
         OrganizacaoModeloNegocio PesquisarPatriarca(string guid);
         List<OrganizacaoModeloNegocio> PesquisarFilhas(string guid);
         OrganizacaoModeloNegocio PesquisarPorSigla(string sigla);
+        OrganizacaoModeloNegocio PesquisarOrganograma(string guid, bool filhas);
     }
 }
