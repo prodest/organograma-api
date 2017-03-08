@@ -393,8 +393,12 @@ namespace Organograma.Negocio
         private Organizacao PreparaInsercao(OrganizacaoModeloNegocio organizacaoNegocio)
         {
             organizacaoNegocio.Guid = Guid.NewGuid().ToString("D");
-            organizacaoNegocio.OrganizacaoPai.Id = BuscarIdOrganizacaoPai(organizacaoNegocio.OrganizacaoPai.Guid);
-            organizacaoNegocio.Endereco.Municipio.Id = BuscarIdMunicipio(organizacaoNegocio.Endereco.Municipio.Guid);
+
+            if (organizacaoNegocio.OrganizacaoPai != null)
+                organizacaoNegocio.OrganizacaoPai.Id = BuscarIdOrganizacaoPai(organizacaoNegocio.OrganizacaoPai.Guid);
+
+            if (organizacaoNegocio.Endereco != null)
+                organizacaoNegocio.Endereco.Municipio.Id = BuscarIdMunicipio(organizacaoNegocio.Endereco.Municipio.Guid);
 
             Organizacao organizacao = new Organizacao();
 

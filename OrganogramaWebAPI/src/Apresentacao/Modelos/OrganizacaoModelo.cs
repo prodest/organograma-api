@@ -23,7 +23,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class OrganizacaoModeloPut : OrganizacaoModeloPost
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
     }
 
     public class OrganizacaoModeloGet

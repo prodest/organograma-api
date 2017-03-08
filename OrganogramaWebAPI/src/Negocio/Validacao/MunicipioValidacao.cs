@@ -37,16 +37,16 @@ namespace Organograma.Negocio.Validacao
             try
             {
                 if (string.IsNullOrWhiteSpace(guid))
-                    throw new OrganogramaRequisicaoInvalidaException("Identificador inválido.");
+                    throw new OrganogramaRequisicaoInvalidaException("Identificador do município inválido.");
 
                 Guid g = new Guid(guid);
 
                 if (g.Equals(Guid.Empty))
-                    throw new OrganogramaRequisicaoInvalidaException("Identificador inválido.");
+                    throw new OrganogramaRequisicaoInvalidaException("Identificador do município inválido.");
             }
             catch (FormatException)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Formato do identificador inválido.");
+                throw new OrganogramaRequisicaoInvalidaException("Formato do identificador do município inválido.");
             }
         }
 
