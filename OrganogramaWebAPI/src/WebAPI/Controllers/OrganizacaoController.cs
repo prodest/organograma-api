@@ -313,19 +313,19 @@ namespace Organograma.WebAPI.Controllers
         /// <summary>
         /// Exclusão de organizações
         /// </summary>
-        /// <param name="id">Identificador da organização a ser excluída.</param>
+        /// <param name="guid">Identificador da organização a ser excluída.</param>
         /// <returns></returns>
         /// <response code=200>Organização excluída com sucesso.</response>
         /// <response code=500>Erro inesperado</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("{guid}")]
         [Authorize(Policy = "Organizacao.Excluir")]
         [ProducesResponseType(typeof(void), 200)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult Excluir(int id)
+        public IActionResult Excluir(string guid)
         {
             try
             {
-                service.Excluir(id);
+                service.Excluir(guid);
                 return Ok();
             }
             catch (OrganogramaNaoEncontradoException e)

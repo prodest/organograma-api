@@ -11,7 +11,7 @@ namespace Organograma.Negocio.Base
 
         void Alterar(int id, OrganizacaoModeloNegocio poderNegocio);
 
-        void Excluir (int id);
+        void Excluir (string guid);
         SiteModeloNegocio InserirSite(SiteModeloNegocio siteModeloNegocio);
         OrganizacaoModeloNegocio PesquisarPatriarca(string guid);
         List<OrganizacaoModeloNegocio> PesquisarFilhas(string guid);

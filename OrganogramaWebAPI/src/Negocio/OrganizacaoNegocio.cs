@@ -13,28 +13,27 @@ namespace Organograma.Negocio
 {
     public class OrganizacaoNegocio : BaseNegocio, IOrganizacaoNegocio
     {
-
-        IUnitOfWork unitOfWork;
-        IRepositorioGenerico<Organizacao> repositorioOrganizacoes;
-        IRepositorioGenerico<Contato> repositorioContatos;
-        IRepositorioGenerico<ContatoOrganizacao> repositorioContatosOrganizacoes;
-        IRepositorioGenerico<Email> repositorioEmails;
-        IRepositorioGenerico<EmailOrganizacao> repositorioEmailsOrganizacoes;
-        IRepositorioGenerico<Endereco> repositorioEnderecos;
-        IRepositorioGenerico<Municipio> repositorioMunicipios;
-        IRepositorioGenerico<Site> repositorioSites;
-        IRepositorioGenerico<SiteOrganizacao> repositorioSitesOrganizacoes;
-        IRepositorioGenerico<Unidade> repositorioUnidades;
-
-        OrganizacaoValidacao validacao;
-        CnpjValidacao cnpjValidacao;
-        ContatoValidacao contatoValidacao;
-        EmailValidacao emailValidacao;
-        EnderecoValidacao enderecoValidacao;
-        EsferaOrganizacaoValidacao esferaValidacao;
-        PoderValidacao poderValidacao;
-        SiteValidacao siteValidacao;
-        TipoOrganizacaoValidacao tipoOrganizacaoValidacao;
+        private IUnitOfWork unitOfWork;
+        private IRepositorioGenerico<Organizacao> repositorioOrganizacoes;
+        private IRepositorioGenerico<Contato> repositorioContatos;
+        private IRepositorioGenerico<ContatoOrganizacao> repositorioContatosOrganizacoes;
+        private IRepositorioGenerico<Email> repositorioEmails;
+        private IRepositorioGenerico<EmailOrganizacao> repositorioEmailsOrganizacoes;
+        private IRepositorioGenerico<Endereco> repositorioEnderecos;
+        private IRepositorioGenerico<IdentificadorExterno> repositorioIdentificadoresExternos;
+        private IRepositorioGenerico<Municipio> repositorioMunicipios;
+        private IRepositorioGenerico<Site> repositorioSites;
+        private IRepositorioGenerico<SiteOrganizacao> repositorioSitesOrganizacoes;
+        private IRepositorioGenerico<Unidade> repositorioUnidades;
+        private OrganizacaoValidacao validacao;
+        private CnpjValidacao cnpjValidacao;
+        private ContatoValidacao contatoValidacao;
+        private EmailValidacao emailValidacao;
+        private EnderecoValidacao enderecoValidacao;
+        private EsferaOrganizacaoValidacao esferaValidacao;
+        private PoderValidacao poderValidacao;
+        private SiteValidacao siteValidacao;
+        private TipoOrganizacaoValidacao tipoOrganizacaoValidacao;
 
         public OrganizacaoNegocio(IOrganogramaRepositorios repositorios)
         {
@@ -45,6 +44,7 @@ namespace Organograma.Negocio
             repositorioEmails = repositorios.Emails;
             repositorioEmailsOrganizacoes = repositorios.EmailsOrganizacoes;
             repositorioEnderecos = repositorios.Enderecos;
+            repositorioIdentificadoresExternos = repositorios.IdentificadoresExternos;
             repositorioMunicipios = repositorios.Municipios;
             repositorioSites = repositorios.Sites;
             repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
@@ -97,19 +97,23 @@ namespace Organograma.Negocio
         #endregion
 
         #region Excluir
-        public void Excluir(int id)
+        public void Excluir(string guid)
         {
-            validacao.IdPreenchido(id);
-            validacao.Existe(id);
-            validacao.PossuiFilho(id);
-            validacao.PossuiUnidade(id);
+            validacao.GuidValido(guid);
+            validacao.Existe(guid);
+            Guid g = new Guid(guid);
 
-            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == id)
-                .Include(i => i.Endereco)
-                .Include(i => i.ContatosOrganizacao).ThenInclude(c => c.Contato)
-                .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
-                .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email).Single();
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
+                                                             .Include(o => o.IdentificadorExterno)
+                                                             .Include(i => i.Endereco)
+                                                             .Include(i => i.ContatosOrganizacao).ThenInclude(c => c.Contato)
+                                                             .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
+                                                             .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email).Single();
 
+            validacao.PossuiFilho(organizacao.Id);
+            validacao.PossuiUnidade(organizacao.Id);
+
+            ExcluirIdentificadorExterno(organizacao);
             ExcluiContatos(organizacao);
             ExcluiEndereco(organizacao);
             ExcluiEmails(organizacao);
@@ -475,6 +479,11 @@ namespace Organograma.Negocio
                 }
 
             }
+        }
+
+        private void ExcluirIdentificadorExterno(Organizacao organizacao)
+        {
+            repositorioIdentificadoresExternos.Remove(organizacao.IdentificadorExterno);
         }
 
         private int ObterOrganizacaoPatriarca(Organizacao organizacao)
