@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.Negocio
 {
-    public class OrganizacaoNegocio : IOrganizacaoNegocio
+    public class OrganizacaoNegocio : BaseNegocio, IOrganizacaoNegocio
     {
 
         IUnitOfWork unitOfWork;
@@ -205,7 +205,6 @@ namespace Organograma.Negocio
         #endregion
 
         #region Pesquisar
-
         public OrganizacaoModeloNegocio Pesquisar(string guid)
         {
             validacao.GuidValido(guid);
@@ -343,6 +342,36 @@ namespace Organograma.Negocio
             return omn;
         }
 
+        public List<OrganizacaoModeloNegocio> PesquisarPorUsuario(bool filhas)
+        {
+            List<Organizacao> organizacoes = repositorioOrganizacoes.Where(o => UsuarioGuidOrganizacoes.Contains(o.IdentificadorExterno.Guid))
+                                                             .Include(o => o.OrganizacoesFilhas)
+                                                             .Include(o => o.Esfera)
+                                                             .Include(o => o.Poder)
+                                                             .Include(o => o.IdentificadorExterno)
+                                                             .ToList();
+
+            List<Organizacao> organizacoesFilhas = null;
+            if (filhas && organizacoes != null && organizacoes.Count > 0)
+            {
+                organizacoesFilhas = new List<Organizacao>();
+                foreach (var organizacao in organizacoes)
+                {
+                    organizacoesFilhas.AddRange(ObterOrganizacoesFilhas(organizacao));
+                }
+            }
+
+            if (organizacoesFilhas != null)
+                organizacoes = organizacoesFilhas.Distinct()
+                                                 .OrderBy(o => o.RazaoSocial)
+                                                 .ToList();
+            else
+                organizacoes = organizacoes.Distinct()
+                                           .OrderBy(o => o.RazaoSocial)
+                                           .ToList();
+
+            return Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoes);
+        }
         #endregion
 
         #region Funções Auxiliares
@@ -588,7 +617,6 @@ namespace Organograma.Negocio
 
             return idsOrganizacoes;
         }
-
         #endregion
     }
 }

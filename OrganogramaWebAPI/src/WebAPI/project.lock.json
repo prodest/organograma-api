@@ -4214,7 +4214,8 @@
           "Dominio": "1.0.0",
           "Infraestrutura": "1.0.0",
           "Microsoft.EntityFrameworkCore": "1.1.0",
-          "NETStandard.Library": "1.6.1"
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
           "netstandard1.6/Negocio.dll": {}
@@ -8583,7 +8584,8 @@
           "Dominio": "1.0.0",
           "Infraestrutura": "1.0.0",
           "Microsoft.EntityFrameworkCore": "1.1.0",
-          "NETStandard.Library": "1.6.1"
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
           "netstandard1.6/Negocio.dll": {}
@@ -12916,7 +12918,8 @@
           "Dominio": "1.0.0",
           "Infraestrutura": "1.0.0",
           "Microsoft.EntityFrameworkCore": "1.1.0",
-          "NETStandard.Library": "1.6.1"
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
           "netstandard1.6/Negocio.dll": {}

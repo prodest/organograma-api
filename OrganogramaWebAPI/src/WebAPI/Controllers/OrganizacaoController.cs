@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Organograma.Infraestrutura.Comum;
-using System;
-using System.Net;
-using Apresentacao.Base;
-using Organograma.Apresentacao.Modelos;
-using Microsoft.EntityFrameworkCore;
+﻿using Apresentacao.Base;
 using Microsoft.AspNetCore.Authorization;
-using Organograma.WebAPI.Config;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Organograma.Apresentacao.Modelos;
+using Organograma.Infraestrutura.Comum;
 using Organograma.WebAPI.Base;
+using Organograma.WebAPI.Config;
+using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -18,9 +18,10 @@ namespace Organograma.WebAPI.Controllers
 
         private IOrganizacaoWorkService service;
 
-        public OrganizacaoController(IOrganizacaoWorkService service)
+        public OrganizacaoController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             this.service = service;
+            this.service.Usuario = UsuarioAutenticado;
         }
 
         #region GET
@@ -206,6 +207,28 @@ namespace Organograma.WebAPI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
 
+        }
+
+        /// <summary>
+        /// Retorna a lista de organizações que o usuário tem permissão.
+        /// </summary>
+        /// <param name="filhas">Indica se irá retornar as organizações filhas.</param>
+        /// <returns>Lista de organizações que o usuário tem permissão e suas sucessoras.</returns>
+        /// <response code="200">Retorna a lista de organizações que o usuário tem permissão.</response>
+        /// <response code="500">Erro inesperado.</response>
+        [HttpGet("escopo")]
+        [ProducesResponseType(typeof(List<OrganizacaoModeloGet>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult PesquisarPorUsuario(bool filhas = true)
+        {
+            try
+            {
+                return new ObjectResult(service.PesquisarPorUsuario(filhas));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, (MensagemErro.ObterMensagem(e)));
+            }
         }
         #endregion
 

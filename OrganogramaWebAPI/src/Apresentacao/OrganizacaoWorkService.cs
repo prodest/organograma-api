@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using Apresentacao.Base;
+﻿using Apresentacao.Base;
+using AutoMapper;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Base;
-using AutoMapper;
 using Organograma.Negocio.Modelos;
+using System.Collections.Generic;
 
 namespace Organograma.Apresentacao
 {
-    public class OrganizacaoWorkService : IOrganizacaoWorkService
+    public class OrganizacaoWorkService : BaseWorkService, IOrganizacaoWorkService
     {
         private IOrganizacaoNegocio organizacaoNegocio;
 
         public OrganizacaoWorkService(IOrganizacaoNegocio organizacaoNegocio)
         {
             this.organizacaoNegocio = organizacaoNegocio;
+        }
+
+        public override void RaiseUsuarioAlterado()
+        {
+            organizacaoNegocio.Usuario = Usuario;
         }
 
         #region Alterar
@@ -82,8 +86,6 @@ namespace Organograma.Apresentacao
         public List<OrganizacaoModeloGet> PesquisarFilhas(string guid)
         {
             return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacaoNegocio.PesquisarFilhas(guid));
-
-            #endregion
         }
 
         public OrganizacaoOrganograma PesquisarOrganograma(string guid, bool filhas)
@@ -91,5 +93,13 @@ namespace Organograma.Apresentacao
             var org = organizacaoNegocio.PesquisarOrganograma(guid, filhas);
             return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoOrganograma>(org);
         }
+
+        public List<OrganizacaoModeloGet> PesquisarPorUsuario(bool filhas)
+        {
+            List<OrganizacaoModeloNegocio> organizacoes = organizacaoNegocio.PesquisarPorUsuario(filhas);
+
+            return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacoes);
+        }
+        #endregion
     }
 }

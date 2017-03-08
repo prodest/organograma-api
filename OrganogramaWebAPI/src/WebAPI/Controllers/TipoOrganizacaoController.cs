@@ -19,7 +19,7 @@ namespace Organograma.WebAPI.Controllers
     {
         ITipoOrganizacaoWorkService service;
 
-        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service)
+        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             this.service = service;
         }

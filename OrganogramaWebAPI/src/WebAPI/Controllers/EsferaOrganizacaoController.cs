@@ -21,7 +21,7 @@ namespace Organograma.WebAPI.Controllers
     {
         IEsferaOrganizacaoWorkService service;
 
-        public EsferaOrganizacaoController(IEsferaOrganizacaoWorkService service)
+        public EsferaOrganizacaoController(IEsferaOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             this.service = service;
         }

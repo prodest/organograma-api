@@ -17,7 +17,7 @@ namespace Organograma.WebAPI.Controllers
     {
         IUnidadeWorkService service;
 
-        public UnidadeController(IUnidadeWorkService service)
+        public UnidadeController(IUnidadeWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             this.service = service;
         }

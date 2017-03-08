@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using Organograma.Infraestrutura.Mapeamento;
 using Organograma.WebAPI.Middleware;
+using Microsoft.AspNetCore.Http;
 
 namespace Organograma.WebAPI
 {
@@ -47,6 +48,8 @@ namespace Organograma.WebAPI
                 {
                     opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             ConfiguracaoDependencias.InjetarDependencias(services);
             ConfiguracaoAutoMapper.CriarMapeamento();

@@ -21,7 +21,7 @@ namespace Organograma.WebAPI.Controllers
     {
         ITipoUnidadeWorkService service;
 
-        public TipoUnidadeController(ITipoUnidadeWorkService service)
+        public TipoUnidadeController(ITipoUnidadeWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             this.service = service;
         }
