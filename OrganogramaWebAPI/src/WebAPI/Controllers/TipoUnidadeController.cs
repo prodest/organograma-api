@@ -11,6 +11,7 @@ using System.Net;
 using Organograma.WebAPI.Config;
 using Organograma.Infraestrutura.Comum;
 using Microsoft.AspNetCore.Http;
+using Apresentacao.Base;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,7 +22,7 @@ namespace Organograma.WebAPI.Controllers
     {
         ITipoUnidadeWorkService service;
 
-        public TipoUnidadeController(ITipoUnidadeWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public TipoUnidadeController(ITipoUnidadeWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
         {
             this.service = service;
         }

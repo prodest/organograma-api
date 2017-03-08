@@ -17,7 +17,7 @@ namespace Organograma.WebAPI.Controllers
     {
         private IMunicipioWorkService service;
 
-        public MunicipiosController(IMunicipioWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public MunicipiosController(IMunicipioWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
         {
             this.service = service;
         }

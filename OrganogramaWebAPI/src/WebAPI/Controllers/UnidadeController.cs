@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Apresentacao.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
@@ -17,7 +18,7 @@ namespace Organograma.WebAPI.Controllers
     {
         IUnidadeWorkService service;
 
-        public UnidadeController(IUnidadeWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public UnidadeController(IUnidadeWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
         {
             this.service = service;
         }

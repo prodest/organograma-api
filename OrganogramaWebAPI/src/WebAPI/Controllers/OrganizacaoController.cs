@@ -18,7 +18,7 @@ namespace Organograma.WebAPI.Controllers
 
         private IOrganizacaoWorkService service;
 
-        public OrganizacaoController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public OrganizacaoController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor) : base(service, httpContextAccessor)
         {
             this.service = service;
             this.service.Usuario = UsuarioAutenticado;
@@ -246,7 +246,6 @@ namespace Organograma.WebAPI.Controllers
         [ProducesResponseType(typeof(string), 500)]
         public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
         {
-
             try
             {
                 return new ObjectResult(service.Inserir(organizacaoPost));

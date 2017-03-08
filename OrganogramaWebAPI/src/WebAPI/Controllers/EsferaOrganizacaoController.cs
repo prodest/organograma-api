@@ -11,6 +11,7 @@ using System.Net;
 using Organograma.WebAPI.Base;
 using Organograma.WebAPI.Config;
 using Microsoft.AspNetCore.Http;
+using Apresentacao.Base;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,7 +22,7 @@ namespace Organograma.WebAPI.Controllers
     {
         IEsferaOrganizacaoWorkService service;
 
-        public EsferaOrganizacaoController(IEsferaOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public EsferaOrganizacaoController(IEsferaOrganizacaoWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
         {
             this.service = service;
         }

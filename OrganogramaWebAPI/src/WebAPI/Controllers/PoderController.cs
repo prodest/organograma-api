@@ -17,7 +17,7 @@ namespace Organograma.WebAPI.Controllers
     {
         private IPoderWorkService service;
 
-        public PoderController(IPoderWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public PoderController(IPoderWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
         {
             this.service = service;
         }

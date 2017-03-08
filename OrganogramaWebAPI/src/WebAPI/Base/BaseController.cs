@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Apresentacao.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Organograma.Apresentacao.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,8 @@ namespace Organograma.WebAPI.Base
     [Authorize]
     public class BaseController : Controller
     {
+        private IOrganizacaoWorkService service;
+
         private List<KeyValuePair<string, string>> usuarioAutenticado;
         public List<KeyValuePair<string, string>> UsuarioAutenticado
         {
@@ -23,8 +27,9 @@ namespace Organograma.WebAPI.Base
             }
         }
 
-        public BaseController(IHttpContextAccessor httpContextAccessor)
+        public BaseController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor)
         {
+            this.service = service;
             PreencherUsuario(httpContextAccessor.HttpContext.User);
         }
 
@@ -88,26 +93,30 @@ namespace Organograma.WebAPI.Base
 
             var url = urlApiOrganograma + "organizacoes/sigla/" + organizacaoSigla;
 
-            Organizacao organizacaoUsuario = DownloadJsonData<Organizacao>(urlApiOrganograma + "organizacoes/sigla/" + organizacaoSigla, accessToken);
+            //Organizacao organizacaoUsuario = DownloadJsonData<Organizacao>(urlApiOrganograma + "organizacoes/sigla/" + organizacaoSigla, accessToken);
 
-            usuarioAutenticado.Add(new KeyValuePair<string, string>("guidOrganizacao", organizacaoUsuario.guid));
+            OrganizacaoModeloGet organizacaoUsuario = service.PesquisarPorSigla(organizacaoSigla);
+
+            usuarioAutenticado.Add(new KeyValuePair<string, string>("guidOrganizacao", organizacaoUsuario.Guid));
 
             var organizacoesPatriarcas = usuarioAutenticado.Where(x => x.Key.Equals("guidOrganizacaoPatriarca"))
-                                                           .Select(x => new Organizacao { guid = x.Value })
+                                                           .Select(x => new OrganizacaoModeloGet { Guid = x.Value })
                                                            .ToList();
 
-            Organizacao organizacaoPatriarca = null;
+            //Organizacao organizacaoPatriarca = null;
+            OrganizacaoModeloGet organizacaoPatriarca = null;
 
             if (organizacoesPatriarcas != null && organizacoesPatriarcas.Count > 0)
-                organizacaoPatriarca = organizacoesPatriarcas.Where(op => op.guid.Equals(organizacaoUsuario.organizacaoPai.guid)).SingleOrDefault();
+                organizacaoPatriarca = organizacoesPatriarcas.Where(op => op.Guid.Equals(organizacaoUsuario.OrganizacaoPai.Guid)).SingleOrDefault();
 
             if (organizacaoPatriarca == null)
             {
-                url = urlApiOrganograma + "organizacoes/" + organizacaoUsuario.guid + "/patriarca";
+                url = urlApiOrganograma + "organizacoes/" + organizacaoUsuario.Guid + "/patriarca";
 
-                organizacaoPatriarca = DownloadJsonData<Organizacao>(url, accessToken);
+                //organizacaoPatriarca = DownloadJsonData<Organizacao>(url, accessToken);
+                organizacaoPatriarca = service.PesquisarPatriarca(organizacaoUsuario.Guid);
 
-                usuarioAutenticado.Add(new KeyValuePair<string, string>("guidOrganizacaoPatriarca", organizacaoPatriarca.guid));
+                usuarioAutenticado.Add(new KeyValuePair<string, string>("guidOrganizacaoPatriarca", organizacaoPatriarca.Guid));
             }
         }
 

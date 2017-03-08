@@ -11,6 +11,7 @@ using System.Net;
 using Organograma.WebAPI.Config;
 using Organograma.Infraestrutura.Comum;
 using Microsoft.AspNetCore.Http;
+using Apresentacao.Base;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -19,7 +20,7 @@ namespace Organograma.WebAPI.Controllers
     {
         ITipoOrganizacaoWorkService service;
 
-        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
         {
             this.service = service;
         }
