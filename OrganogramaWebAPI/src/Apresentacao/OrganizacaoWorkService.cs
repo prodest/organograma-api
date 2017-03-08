@@ -30,9 +30,9 @@ namespace Organograma.Apresentacao
         #endregion
 
         #region Excluir
-        public void Excluir(int id)
+        public void Excluir(string guid)
         {
-            organizacaoNegocio.Excluir(id);
+            organizacaoNegocio.Excluir(guid);
         }
         #endregion
 

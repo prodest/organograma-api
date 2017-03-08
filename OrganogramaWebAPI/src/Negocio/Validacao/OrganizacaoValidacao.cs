@@ -204,11 +204,11 @@ namespace Organograma.Negocio.Validacao
                 Guid g = new Guid(guid);
 
                 if (g.Equals(Guid.Empty))
-                    throw new OrganogramaRequisicaoInvalidaException("Identificador inválido.");
+                    throw new OrganogramaRequisicaoInvalidaException("Identificador da organização inválido.");
             }
             catch (FormatException)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Formato do identificador inválido.");
+                throw new OrganogramaRequisicaoInvalidaException("Formato do identificador da organizaçao inválido.");
             }
         }
     }
