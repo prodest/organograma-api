@@ -7,9 +7,10 @@ namespace Organograma.Negocio.Base
     {
         List<OrganizacaoModeloNegocio> Listar(string esfera, string poder, string uf, int codIbgeMunicipio);
         OrganizacaoModeloNegocio Pesquisar(string guid);
-        OrganizacaoModeloNegocio Inserir(OrganizacaoModeloNegocio OrganizacaoNegocio);
+        OrganizacaoModeloNegocio InserirFilha(OrganizacaoModeloNegocio OrganizacaoNegocio);
+        OrganizacaoModeloNegocio InserirPatriarca(OrganizacaoModeloNegocio OrganizacaoNegocio);
 
-        void Alterar(int id, OrganizacaoModeloNegocio poderNegocio);
+        void Alterar(string guid, OrganizacaoModeloNegocio poderNegocio);
 
         void Excluir (string guid);
         SiteModeloNegocio InserirSite(SiteModeloNegocio siteModeloNegocio);

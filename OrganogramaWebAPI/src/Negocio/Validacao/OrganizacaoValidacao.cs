@@ -33,6 +33,14 @@ namespace Organograma.Negocio.Validacao
             GuidPreenchido(organizacao.Guid);
         }
 
+        private void GuidPaiPreenchido(string guid)
+        {
+            if (string.IsNullOrWhiteSpace(guid))
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Guid da organização pai não preenchido.");
+            }
+        }
+
         internal void IdPreenchido(int id)
         {
             if (id == default(int))
@@ -94,9 +102,9 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
-        internal void IdAlteracaoValido(int id, OrganizacaoModeloNegocio organizacaoNegocio)
+        internal void GuidAlteracaoValido(string guid, OrganizacaoModeloNegocio organizacaoNegocio)
         {
-            if (id != organizacaoNegocio.Id)
+            if (!guid.Equals(organizacaoNegocio.Guid))
             {
                 throw new OrganogramaRequisicaoInvalidaException("Identificadores de Organização diferentes.");
             }
@@ -132,7 +140,6 @@ namespace Organograma.Negocio.Validacao
 
         internal void PaiExiste(OrganizacaoModeloNegocio organizacaoPai)
         {
-
             if (organizacaoPai != null)
             {
                 Guid guid = new Guid(organizacaoPai.Guid);
@@ -155,12 +162,20 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
+        internal void UsuarioTemPermissao(List<Guid> usuarioGuidOrganizacoes, string guidOrganizacao)
+        {
+            Guid g = new Guid(guidOrganizacao);
+            var guid = usuarioGuidOrganizacoes.Where(go => go.Equals(g)).SingleOrDefault();
+
+            if (guid == null)
+                throw new OrganogramaRequisicaoInvalidaException("Usuario não possui permissão para esta organização.");
+        }
 
         internal void PaiValido(OrganizacaoModeloNegocio organizacaoPai)
         {
-
             if (organizacaoPai != null)
             {
+                GuidPaiPreenchido(organizacaoPai.Guid);
                 GuidValido(organizacaoPai.Guid);
                 PaiExiste(organizacaoPai);
                 PaiDiferente(organizacaoPai);
@@ -189,12 +204,23 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaRequisicaoInvalidaException("Organização não pode ser nulo.");
         }
 
+        internal void PaiPreenchido(OrganizacaoModeloNegocio organizacaoPai)
+        {
+            if (organizacaoPai == null)
+                throw new OrganogramaRequisicaoInvalidaException("Organização pai não pode ser nula.");
+        }
+
         internal void NaoEncontrado(Organizacao organizacao)
         {
             if (organizacao == null)
             {
                 throw new OrganogramaNaoEncontradoException("Organização não encontrada.");
             }
+        }
+
+        internal void GuidValido(OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            GuidValido(organizacaoNegocio.Guid);
         }
 
         internal void GuidValido(string guid)

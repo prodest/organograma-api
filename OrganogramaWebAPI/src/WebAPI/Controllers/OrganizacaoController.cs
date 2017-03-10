@@ -234,22 +234,57 @@ namespace Organograma.WebAPI.Controllers
 
         #region POST
         /// <summary>
+        /// Inserção de organizações filhas.
+        /// </summary>
+        /// <param name="organizacao">Informações da organização a ser inserida.</param>
+        /// <returns>Organização inserida.</returns>
+        /// <response code="201">Retorna a organização inserida.</response>
+        /// <response code="500">Erro inesperado.</response>
+        [HttpPost]
+        [Authorize(Policy = "Organizacao.Inserir")]
+        [ProducesResponseType(typeof(OrganizacaoModeloPut), 201)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult PostFilha([FromBody]OrganizacaoFilhaModeloPost organizacao)
+        {
+            try
+            {
+                OrganizacaoModeloPut organizacaoModelo = service.InserirFilha(organizacao);
+
+                HttpRequest request = HttpContext.Request;
+                return Created(request.Scheme + "://" + request.Host.Value + request.Path.Value + "/" + organizacaoModelo.Guid, organizacaoModelo);
+            }
+
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
+        }
+
+        /// <summary>
         /// Inserção de organizações.
         /// </summary>
         /// <param name="organizacaoPost">Informações da organização a ser inserida.</param>
         /// <returns>Organização recém inserida.</returns>
         /// <response code="201">Retorna a organização recém inserida.</response>
         /// <response code="500">Erro inesperado.</response>
-        [HttpPost]
-        [Authorize(Policy = "Organizacao.Inserir")]
+        [HttpPost("patriarca")]
+        [Authorize(Policy = "Organizacao.InserirPatriarca")]
         [ProducesResponseType(typeof(OrganizacaoModeloGet), 201)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult Post([FromBody]OrganizacaoModeloPost organizacaoPost)
+        public IActionResult PostPatriarca([FromBody]OrganizacaoModeloPost organizacaoPost)
         {
 
             try
             {
-                return new ObjectResult(service.Inserir(organizacaoPost));
+                return new ObjectResult(service.InserirPatriarca(organizacaoPost));
             }
 
             catch (OrganogramaNaoEncontradoException e)
@@ -267,28 +302,27 @@ namespace Organograma.WebAPI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
             }
         }
-
         #endregion
 
         #region PATCH
         /// <summary>
         /// Alteração de organizações.
         /// </summary>
-        /// <param name="id">Identificador da organização a ser alterada.</param>
+        /// <param name="guid">Identificador da organização a ser alterada.</param>
         /// <param name="organizacao">Informações que serão alteradas da organização.</param>
         /// <response code="200">Organização alterada com sucesso.</response>
         /// <response code="400">Informação inválida.</response>
         /// <response code="404">Recurso não encontrado.</response>
         /// <response code="500">Erro inesperado.</response>
-        [HttpPatch("{id}")]
+        [HttpPatch("{guid}")]
         [Authorize(Policy = "Organizacao.Alterar")]
         [ProducesResponseType(typeof(void), 200)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult AlterarOrganizacao(int id, [FromBody]OrganizacaoModeloPatch organizacao)
+        public IActionResult AlterarOrganizacao(string guid, [FromBody]OrganizacaoModeloPatch organizacao)
         {
             try
             {
-                service.Alterar(id, organizacao);
+                service.Alterar(guid, organizacao);
                 return Ok();
             }
 

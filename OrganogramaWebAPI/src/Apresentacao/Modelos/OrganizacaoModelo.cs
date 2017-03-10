@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 
 namespace Organograma.Apresentacao.Modelos
-{
-    
+{    
     public class OrganizacaoModeloPost
     {
         public string Cnpj { get; set; }
@@ -21,6 +20,20 @@ namespace Organograma.Apresentacao.Modelos
 
     }
 
+    public class OrganizacaoFilhaModeloPost
+    {
+        public string Cnpj { get; set; }
+        public string RazaoSocial { get; set; }
+        public string NomeFantasia { get; set; }
+        public string Sigla { get; set; }
+        public int IdTipoOrganizacao { get; set; }
+        public string GuidOrganizacaoPai { get; set; }
+        public EnderecoModelo Endereco { get; set; }
+        public List<ContatoModelo> Contatos { get; set; }
+        public List<EmailModelo> Emails { get; set; }
+        public List<SiteModelo> Sites { get; set; }
+    }
+
     public class OrganizacaoModeloPut : OrganizacaoModeloPost
     {
         public string Guid { get; set; }
@@ -28,7 +41,6 @@ namespace Organograma.Apresentacao.Modelos
 
     public class OrganizacaoModeloGet
     {
-        public int Id { get; set; }
         public string Guid { get; set; }
         public string Cnpj { get; set; }
         public string RazaoSocial { get; set; }
@@ -46,7 +58,7 @@ namespace Organograma.Apresentacao.Modelos
 
     public class OrganizacaoModeloPatch
     {
-        public int Id { get; set; }
+        public string Guid { get; set; }
         public string Cnpj { get; set; }
         public string RazaoSocial { get; set; }
         public string NomeFantasia { get; set; }

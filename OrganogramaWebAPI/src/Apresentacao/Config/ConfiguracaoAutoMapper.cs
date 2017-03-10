@@ -79,6 +79,15 @@ namespace Organograma.Apresentacao.Config
                  .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => !string.IsNullOrEmpty(s.GuidOrganizacaoPai) ? new OrganizacaoModeloNegocio() { Guid = s.GuidOrganizacaoPai } : null))
                  .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => Mapper.Map<TipoOrganizacaoModeloNegocio>(new TipoOrganizacaoModelo { Id = s.IdTipoOrganizacao })));
 
+                cfg.CreateMap<OrganizacaoFilhaModeloPost, OrganizacaoModeloNegocio>()
+                                 .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<EnderecoModelo, EnderecoModeloNegocio>(s.Endereco) : null))
+                                 .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => Mapper.Map<List<EmailModelo>, List<EmailModeloNegocio>>(s.Emails)))
+                                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => Mapper.Map<List<SiteModelo>, List<SiteModeloNegocio>>(s.Sites)))
+                                 .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModelo>, List<ContatoModeloNegocio>>(s.Contatos)))
+                                 .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => !string.IsNullOrEmpty(s.GuidOrganizacaoPai) ? new OrganizacaoModeloNegocio() { Guid = s.GuidOrganizacaoPai } : null))
+                                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => Mapper.Map<TipoOrganizacaoModeloNegocio>(new TipoOrganizacaoModelo { Id = s.IdTipoOrganizacao })))
+                                 ;
+
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoModeloPut>()
                  .ForMember(dest => dest.IdEsfera, opt => opt.MapFrom(s => s.Esfera.Id))
                  .ForMember(dest => dest.IdPoder, opt => opt.MapFrom(s => s.Poder.Id))
@@ -106,7 +115,7 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoPaiModeloGet>();
 
                 cfg.CreateMap<OrganizacaoModeloPatch, OrganizacaoModeloNegocio>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(s => s.Id))
+                //.ForMember(dest => dest.Id, opt => opt.MapFrom(s => s.Guid))
                 .ForMember(dest => dest.Esfera, opt => opt.MapFrom(s => s.IdEsfera.HasValue ? new EsferaOrganizacaoModeloNegocio() { Id = s.IdEsfera.Value } : null))
                 .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.IdOrganizacaoPai.HasValue ? new OrganizacaoModeloNegocio() { Id = s.IdOrganizacaoPai.Value } : null))
                 .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.IdPoder.HasValue ? new PoderModeloNegocio() { Id = s.IdPoder.Value } : null))
