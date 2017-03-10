@@ -17,6 +17,7 @@ namespace Apresentacao.Base
         List<OrganizacaoModeloGet> PesquisarFilhas(string guid);
         OrganizacaoModeloGet PesquisarPorSigla(string sigla);
         OrganizacaoOrganograma PesquisarOrganograma(string guid, bool filhas);
+        List<OrganizacaoOrganograma> PesquisarOrganograma();
         List<OrganizacaoModeloGet> PesquisarPorUsuario(bool filhas);
     }
 

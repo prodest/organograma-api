@@ -103,6 +103,12 @@ namespace Organograma.Apresentacao
             return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoOrganograma>(org);
         }
 
+        public List<OrganizacaoOrganograma> PesquisarOrganograma()
+        {
+            var org = organizacaoNegocio.PesquisarOrganograma();
+            return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoOrganograma>>(org);
+        }
+
         public List<OrganizacaoModeloGet> PesquisarPorUsuario(bool filhas)
         {
             List<OrganizacaoModeloNegocio> organizacoes = organizacaoNegocio.PesquisarPorUsuario(filhas);

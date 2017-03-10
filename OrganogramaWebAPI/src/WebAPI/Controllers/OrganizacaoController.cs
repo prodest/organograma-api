@@ -210,6 +210,28 @@ namespace Organograma.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Retorna os organogramas.
+        /// </summary>
+        /// <returns>Organogramas.</returns>
+        /// <response code="200">Retorna os organogramas.</response>
+        /// <response code="500">Erro inesperado.</response>
+        [HttpGet("organograma")]
+        [ProducesResponseType(typeof(OrganizacaoOrganograma), 200)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult PesquisarOrganograma()
+        {
+            try
+            {
+                return new ObjectResult(service.PesquisarOrganograma());
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
+
+        }
+
+        /// <summary>
         /// Retorna a lista de organizações que o usuário tem permissão.
         /// </summary>
         /// <param name="filhas">Indica se irá retornar as organizações filhas.</param>

@@ -385,7 +385,7 @@ namespace Organograma.Negocio
                                               .Include(o => o.Organizacao)
                                               .Include(o => o.UnidadePai)
                                               .Include(o => o.IdentificadorExterno)
-                                              .OrderBy(u=> u.Nome)
+                                              .OrderBy(u => u.Nome)
                                               .ToList();
 
             List<UnidadeModeloNegocio> umns = Mapper.Map<List<Unidade>, List<UnidadeModeloNegocio>>(unidades);
@@ -393,6 +393,51 @@ namespace Organograma.Negocio
             MontarOrganograma(omn, umns);
 
             return omn;
+        }
+
+        public List<OrganizacaoModeloNegocio> PesquisarOrganograma()
+        {
+            List<Organizacao> organizacoesPatriarcas = repositorioOrganizacoes.Where(o => !o.IdOrganizacaoPai.HasValue)
+                                                                              .Include(o => o.Esfera)
+                                                                              .Include(o => o.Poder)
+                                                                              .Include(o => o.IdentificadorExterno)
+                                                                              .OrderBy(o => o.RazaoSocial)
+                                                                              .ToList();
+
+            List<OrganizacaoModeloNegocio> organizacoesPatriarcasNegocio = null;
+            if (organizacoesPatriarcas != null)
+            {
+                organizacoesPatriarcasNegocio = Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoesPatriarcas);
+
+                var idsOrganizacoesPatriarcas = organizacoesPatriarcasNegocio.Select(op => op.Id)
+                                                                             .ToList();
+
+                var organizacoesFilhas = repositorioOrganizacoes.Where(o => !idsOrganizacoesPatriarcas.Contains(o.Id))
+                                                                .Include(o => o.Esfera)
+                                                                .Include(o => o.Poder)
+                                                                .Include(o => o.IdentificadorExterno)
+                                                                .OrderBy(o => o.RazaoSocial)
+                                                                .ToList();
+
+                List<OrganizacaoModeloNegocio> organizacoesFilhasNegocio = Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoesFilhas);
+
+                MontarOrganograma(organizacoesPatriarcasNegocio, organizacoesFilhasNegocio);
+
+                List<int> idsOrganizacoes = IdsOrganizacoesOrganograma(organizacoesPatriarcasNegocio);
+
+                var unidades = repositorioUnidades.Where(u => idsOrganizacoes.Contains(u.IdOrganizacao))
+                                                  .Include(o => o.Organizacao)
+                                                  .Include(o => o.UnidadePai)
+                                                  .Include(o => o.IdentificadorExterno)
+                                                  .OrderBy(u => u.Nome)
+                                                  .ToList();
+
+                List<UnidadeModeloNegocio> umns = Mapper.Map<List<Unidade>, List<UnidadeModeloNegocio>>(unidades);
+
+                MontarOrganograma(organizacoesPatriarcasNegocio, umns);
+            }
+
+            return organizacoesPatriarcasNegocio;
         }
 
         public List<OrganizacaoModeloNegocio> PesquisarPorUsuario(bool filhas)
@@ -455,7 +500,7 @@ namespace Organograma.Negocio
                 var organizacaoPai = Pesquisar(organizacaoNegocio.OrganizacaoPai.Guid);
                 organizacaoNegocio.OrganizacaoPai.Id = organizacaoPai.Id;
                 organizacaoNegocio.Esfera = new EsferaOrganizacaoModeloNegocio { Id = organizacaoPai.Esfera.Id };
-                organizacaoNegocio.Poder = new PoderModeloNegocio {Id = organizacaoPai.Poder.Id };
+                organizacaoNegocio.Poder = new PoderModeloNegocio { Id = organizacaoPai.Poder.Id };
             }
 
             if (organizacaoNegocio.Endereco != null)
@@ -606,6 +651,17 @@ namespace Organograma.Negocio
             }
         }
 
+        private void MontarOrganograma(List<OrganizacaoModeloNegocio> organizacoesPatriarcas, List<OrganizacaoModeloNegocio> organizacoesFilhas)
+        {
+            if (organizacoesPatriarcas != null && organizacoesPatriarcas.Count > 0)
+            {
+                foreach (var organizacaoPatriarca in organizacoesPatriarcas)
+                {
+                    MontarOrganograma(organizacaoPatriarca, organizacoesFilhas);
+                }
+            }
+        }
+
         private void MontarOrganograma(OrganizacaoModeloNegocio organizacao, List<UnidadeModeloNegocio> unidades)
         {
             var unidadesOrganizacao = unidades.Where(u => u.Organizacao != null
@@ -635,6 +691,17 @@ namespace Organograma.Negocio
             if (organizacao.OrganizacoesFilhas != null && organizacao.OrganizacoesFilhas.Count > 0)
             {
                 foreach (var org in organizacao.OrganizacoesFilhas)
+                {
+                    MontarOrganograma(org, unidades);
+                }
+            }
+        }
+
+        private void MontarOrganograma(List<OrganizacaoModeloNegocio> organizacoes, List<UnidadeModeloNegocio> unidades)
+        {
+            if (organizacoes != null && organizacoes.Count > 0)
+            {
+                foreach (var org in organizacoes)
                 {
                     MontarOrganograma(org, unidades);
                 }
@@ -682,6 +749,23 @@ namespace Organograma.Negocio
                     {
                         idsOrganizacoes.AddRange(IdsOrganizacoesOrganograma(org));
                     }
+                }
+            }
+
+            return idsOrganizacoes;
+        }
+
+        private List<int> IdsOrganizacoesOrganograma(List<OrganizacaoModeloNegocio> organizacoes)
+        {
+            List<int> idsOrganizacoes = null;
+
+            if (organizacoes != null && organizacoes.Count > 0)
+            {
+                idsOrganizacoes = new List<int>();
+
+                foreach (var org in organizacoes)
+                {
+                    idsOrganizacoes.AddRange(IdsOrganizacoesOrganograma(org));
                 }
             }
 
