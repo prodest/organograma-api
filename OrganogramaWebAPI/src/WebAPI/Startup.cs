@@ -64,6 +64,7 @@ namespace Organograma.WebAPI
                 options.AddPolicy("Municipio.Alterar", policy => policy.RequireClaim("Acao$Municipio", "Alterar"));
                 options.AddPolicy("Municipio.Excluir", policy => policy.RequireClaim("Acao$Municipio", "Excluir"));
                 options.AddPolicy("Organizacao.Inserir", policy => policy.RequireClaim("Acao$Organizacao", "Inserir"));
+                options.AddPolicy("Organizacao.InserirPatriarca", policy => policy.RequireClaim("Acao$Organizacao", "InserirPatriarca"));
                 options.AddPolicy("Organizacao.Alterar", policy => policy.RequireClaim("Acao$Organizacao", "Alterar"));
                 options.AddPolicy("Organizacao.Excluir", policy => policy.RequireClaim("Acao$Organizacao", "Excluir"));
                 options.AddPolicy("Poder.Inserir", policy => policy.RequireClaim("Acao$Poder", "Inserir"));

@@ -63,11 +63,14 @@ namespace Organograma.Negocio
         }
 
         #region Alterar
-        public void Alterar(int id, OrganizacaoModeloNegocio organizacaoNegocio)
+        public void Alterar(string guid, OrganizacaoModeloNegocio organizacaoNegocio)
         {
-            validacao.IdPreenchido(id);
-            validacao.IdPreenchido(organizacaoNegocio);
-            validacao.IdAlteracaoValido(id, organizacaoNegocio);
+            validacao.GuidPreenchido(guid);
+            validacao.GuidValido(guid);
+            validacao.NaoNulo(organizacaoNegocio);
+            validacao.GuidPreenchido(organizacaoNegocio.Guid);
+            validacao.GuidValido(organizacaoNegocio);
+            validacao.GuidAlteracaoValido(guid, organizacaoNegocio);
 
             Organizacao organizacao = BuscaObjetoDominio(organizacaoNegocio);
 
@@ -103,6 +106,8 @@ namespace Organograma.Negocio
             validacao.Existe(guid);
             Guid g = new Guid(guid);
 
+            validacao.UsuarioTemPermissao(UsuarioGuidOrganizacoes, guid);
+
             Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
                                                              .Include(o => o.IdentificadorExterno)
                                                              .Include(i => i.Endereco)
@@ -124,7 +129,47 @@ namespace Organograma.Negocio
         #endregion
 
         #region Inserir
-        public OrganizacaoModeloNegocio Inserir(OrganizacaoModeloNegocio organizacaoNegocio)
+        public OrganizacaoModeloNegocio InserirFilha(OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            //Preenchimentos primeiro (pois não interagem com banco de dados nem fazem validações complexas)
+            validacao.Preenchido(organizacaoNegocio);
+            validacao.PaiPreenchido(organizacaoNegocio.OrganizacaoPai);
+            contatoValidacao.Preenchido(organizacaoNegocio.Contatos);
+            emailValidacao.Preenchido(organizacaoNegocio.Emails);
+            enderecoValidacao.NaoNulo(organizacaoNegocio.Endereco);
+            enderecoValidacao.Preenchido(organizacaoNegocio.Endereco);
+            //esferaValidacao.IdPreenchido(organizacaoNegocio.Esfera);
+            //poderValidacao.IdPreenchido(organizacaoNegocio.Poder);
+            siteValidacao.Preenchido(organizacaoNegocio.Sites);
+            tipoOrganizacaoValidacao.IdPreenchido(organizacaoNegocio.TipoOrganizacao);
+
+            //Validações utilizam cálculos e/ou interagem com o banco de dados
+            validacao.Valido(organizacaoNegocio);
+            validacao.PaiValido(organizacaoNegocio.OrganizacaoPai);
+
+            if (organizacaoNegocio.OrganizacaoPai != null)
+                validacao.UsuarioTemPermissao(UsuarioGuidOrganizacoes, organizacaoNegocio.OrganizacaoPai.Guid);
+
+            contatoValidacao.Valido(organizacaoNegocio.Contatos);
+            emailValidacao.Valido(organizacaoNegocio.Emails);
+            enderecoValidacao.Valido(organizacaoNegocio.Endereco);
+            //esferaValidacao.Existe(organizacaoNegocio.Esfera);
+            //poderValidacao.Existe(organizacaoNegocio.Poder);
+            siteValidacao.Valido(organizacaoNegocio.Sites);
+            tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
+
+
+            Organizacao organizacao = PreparaInsercao(organizacaoNegocio);
+            repositorioOrganizacoes.Add(organizacao);
+            unitOfWork.Attach(organizacao.TipoOrganizacao);
+            unitOfWork.Attach(organizacao.Esfera);
+            unitOfWork.Attach(organizacao.Poder);
+            unitOfWork.Save();
+
+            return Mapper.Map<Organizacao, OrganizacaoModeloNegocio>(organizacao);
+        }
+
+        public OrganizacaoModeloNegocio InserirPatriarca(OrganizacaoModeloNegocio organizacaoNegocio)
         {
             //Preenchimentos primeiro (pois não interagem com banco de dados nem fazem validações complexas)
             validacao.Preenchido(organizacaoNegocio);
@@ -147,6 +192,9 @@ namespace Organograma.Negocio
             poderValidacao.Existe(organizacaoNegocio.Poder);
             siteValidacao.Valido(organizacaoNegocio.Sites);
             tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
+
+            if (organizacaoNegocio.OrganizacaoPai != null)
+                validacao.UsuarioTemPermissao(UsuarioGuidOrganizacoes, organizacaoNegocio.OrganizacaoPai.Guid);
 
             Organizacao organizacao = PreparaInsercao(organizacaoNegocio);
             repositorioOrganizacoes.Add(organizacao);
@@ -382,11 +430,14 @@ namespace Organograma.Negocio
 
         private Organizacao BuscaObjetoDominio(OrganizacaoModeloNegocio organizacaoNegocio)
         {
-            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.Id == organizacaoNegocio.Id)
-                .Include(e => e.Esfera)
-                .Include(p => p.Poder)
-                .Include(to => to.TipoOrganizacao)
-                .Single();
+            Guid g = new Guid(organizacaoNegocio.Guid);
+
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
+                                                             .Include(o => o.IdentificadorExterno)
+                                                             .Include(e => e.Esfera)
+                                                             .Include(p => p.Poder)
+                                                             .Include(to => to.TipoOrganizacao)
+                                                             .Single();
 
             PreencheOrganizacaoPai(organizacao);
 
@@ -399,7 +450,12 @@ namespace Organograma.Negocio
             organizacaoNegocio.Guid = Guid.NewGuid().ToString("D");
 
             if (organizacaoNegocio.OrganizacaoPai != null)
-                organizacaoNegocio.OrganizacaoPai.Id = BuscarIdOrganizacaoPai(organizacaoNegocio.OrganizacaoPai.Guid);
+            {
+                var organizacaoPai = Pesquisar(organizacaoNegocio.OrganizacaoPai.Guid);
+                organizacaoNegocio.OrganizacaoPai.Id = organizacaoPai.Id;
+                organizacaoNegocio.Esfera = new EsferaOrganizacaoModeloNegocio { Id = organizacaoPai.Esfera.Id };
+                organizacaoNegocio.Poder = new PoderModeloNegocio {Id = organizacaoPai.Poder.Id };
+            }
 
             if (organizacaoNegocio.Endereco != null)
                 organizacaoNegocio.Endereco.Municipio.Id = BuscarIdMunicipio(organizacaoNegocio.Endereco.Municipio.Guid);

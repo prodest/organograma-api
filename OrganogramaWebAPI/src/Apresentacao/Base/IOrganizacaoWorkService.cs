@@ -8,8 +8,9 @@ namespace Apresentacao.Base
     {
         List<OrganizacaoModeloGet> Listar(string esfera, string poder, string uf, int codIbgeMunicipio);
         OrganizacaoModeloGet Pesquisar(string id);
-        OrganizacaoModeloPut Inserir(OrganizacaoModeloPost organizacaoPost);
-        void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch);
+        OrganizacaoModeloPut InserirFilha(OrganizacaoFilhaModeloPost organizacaoPost);
+        OrganizacaoModeloPut InserirPatriarca(OrganizacaoModeloPost organizacaoPost);
+        void Alterar(string guid, OrganizacaoModeloPatch organizacaoPatch);
         void Excluir(string guid);
         SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost);
         OrganizacaoModeloGet PesquisarPatriarca(string guid);

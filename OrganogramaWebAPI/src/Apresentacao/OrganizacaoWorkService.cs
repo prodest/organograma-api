@@ -22,9 +22,9 @@ namespace Organograma.Apresentacao
         }
 
         #region Alterar
-        public void Alterar(int id, OrganizacaoModeloPatch organizacaoPatch)
+        public void Alterar(string guid, OrganizacaoModeloPatch organizacaoPatch)
         {
-            organizacaoNegocio.Alterar(id, Mapper.Map<OrganizacaoModeloPatch, OrganizacaoModeloNegocio>(organizacaoPatch));
+            organizacaoNegocio.Alterar(guid, Mapper.Map<OrganizacaoModeloPatch, OrganizacaoModeloNegocio>(organizacaoPatch));
         }
 
         #endregion
@@ -37,12 +37,21 @@ namespace Organograma.Apresentacao
         #endregion
 
         #region Inserir
-        public OrganizacaoModeloPut Inserir(OrganizacaoModeloPost organizacaoPost)
+        public OrganizacaoModeloPut InserirFilha(OrganizacaoFilhaModeloPost organizacaoPost)
         {
             OrganizacaoModeloNegocio organizacaoModeloNegocio = new OrganizacaoModeloNegocio();
             Mapper.Map(organizacaoPost, organizacaoModeloNegocio);
 
-            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloPut>(organizacaoNegocio.Inserir(organizacaoModeloNegocio));
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloPut>(organizacaoNegocio.InserirFilha(organizacaoModeloNegocio));
+
+        }
+
+        public OrganizacaoModeloPut InserirPatriarca(OrganizacaoModeloPost organizacaoPost)
+        {
+            OrganizacaoModeloNegocio organizacaoModeloNegocio = new OrganizacaoModeloNegocio();
+            Mapper.Map(organizacaoPost, organizacaoModeloNegocio);
+
+            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloPut>(organizacaoNegocio.InserirPatriarca(organizacaoModeloNegocio));
 
         }
 
