@@ -92,6 +92,7 @@ namespace Organograma.Negocio
             poderValidacao.Existe(organizacaoNegocio.Poder);
             tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
 
+            organizacaoNegocio.Guid = null;
             Mapper.Map(organizacaoNegocio, organizacao);
             unitOfWork.Save();
 
@@ -433,7 +434,7 @@ namespace Organograma.Negocio
             Guid g = new Guid(organizacaoNegocio.Guid);
 
             Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
-                                                             .Include(o => o.IdentificadorExterno)
+                                                             //.Include(o => o.IdentificadorExterno)
                                                              .Include(e => e.Esfera)
                                                              .Include(p => p.Poder)
                                                              .Include(to => to.TipoOrganizacao)

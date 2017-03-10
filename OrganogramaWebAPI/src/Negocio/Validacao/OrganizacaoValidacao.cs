@@ -187,7 +187,18 @@ namespace Organograma.Negocio.Validacao
         {
             cnpjValidacao.CnpjExiste(organizacao);
             cnpjValidacao.CnpjValido(organizacao.Cnpj);
+            RazaoSocialExiste(organizacao);
             SiglaValida(organizacao);
+        }
+
+        private void RazaoSocialExiste(OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            Organizacao organizacao = repositorioOrganizacoes.Where(o => o.RazaoSocial.Equals(organizacaoNegocio.RazaoSocial) && o.Id != organizacaoNegocio.Id).SingleOrDefault();
+
+            if (organizacao != null)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("A Razão Social informada já pertence a uma organização.");
+            }
         }
 
         private void SiglaValida(OrganizacaoModeloNegocio organizacao)
