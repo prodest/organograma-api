@@ -2,9 +2,7 @@
 using Organograma.Dominio.Modelos;
 using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Modelos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Organograma.Negocio.Validacao
 {
@@ -63,8 +61,21 @@ namespace Organograma.Negocio.Validacao
         {
             if (endereco != null)
             {
+                if (!string.IsNullOrWhiteSpace(endereco.Cep))
+                    CepValido(endereco.Cep);
+
                 municipioValidacao.GuidValido(endereco.Municipio.Guid);
                 municipioValidacao.Existe(endereco.Municipio);
+            }
+        }
+
+        private void CepValido(string cep)
+        {
+            if (!string.IsNullOrWhiteSpace(cep))
+            {
+                Regex regex = new Regex(@"^\d{8}$");
+                if (!regex.IsMatch(cep))
+                    throw new OrganogramaRequisicaoInvalidaException("O CEP deve conter 8 dígitos.");
             }
         }
 
