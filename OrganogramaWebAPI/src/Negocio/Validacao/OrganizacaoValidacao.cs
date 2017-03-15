@@ -74,6 +74,11 @@ namespace Organograma.Negocio.Validacao
                 throw new OrganogramaRequisicaoInvalidaException("Razão Social não preenchida.");
             }
 
+            if (string.IsNullOrEmpty(organizacao.NomeFantasia))
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Nome fantasia não preenchido.");
+            }
+
             if (string.IsNullOrEmpty(organizacao.Sigla))
             {
                 throw new OrganogramaRequisicaoInvalidaException("Sigla não preenchida.");
@@ -189,6 +194,57 @@ namespace Organograma.Negocio.Validacao
             cnpjValidacao.CnpjValido(organizacao.Cnpj);
             RazaoSocialExiste(organizacao);
             SiglaValida(organizacao);
+            SiglaExiste(organizacao);
+            NomeFantasiaValido(organizacao);
+            NomeFantasiaExiste(organizacao);
+        }
+
+        private void NomeFantasiaExiste(OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            var query = repositorioOrganizacoes.Where(o => o.NomeFantasia.ToUpper().Equals(organizacaoNegocio.NomeFantasia.ToUpper())
+                                                        && o.Id != organizacaoNegocio.Id);
+
+            if (organizacaoNegocio.OrganizacaoPai == null)
+                query = query.Where(o => o.OrganizacaoPai == null);
+            else
+            {
+                Guid g = new Guid(organizacaoNegocio.OrganizacaoPai.Guid);
+
+                query = query.Where(o => o.OrganizacaoPai.IdentificadorExterno.Guid.Equals(g));
+            }
+
+            Organizacao organizacao = query.SingleOrDefault();
+
+            if (organizacao != null)
+                throw new OrganogramaRequisicaoInvalidaException("O nome fantasia informado já pertence a uma organização.");
+        }
+
+        private void NomeFantasiaValido(OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            if (organizacaoNegocio.NomeFantasia.Length > 100)
+            {
+                throw new OrganogramaRequisicaoInvalidaException("Sigla deve possuir no máximo 100 caracteres.");
+            }
+        }
+
+        private void SiglaExiste(OrganizacaoModeloNegocio organizacaoNegocio)
+        {
+            var query = repositorioOrganizacoes.Where(o => o.Sigla.ToUpper().Equals(organizacaoNegocio.Sigla.ToUpper())
+                                                        && o.Id != organizacaoNegocio.Id);
+
+            if (organizacaoNegocio.OrganizacaoPai == null)
+                query = query.Where(o => o.OrganizacaoPai == null);
+            else
+            {
+                Guid g = new Guid(organizacaoNegocio.OrganizacaoPai.Guid);
+
+                query = query.Where(o => o.OrganizacaoPai.IdentificadorExterno.Guid.Equals(g));
+            }
+
+            Organizacao organizacao = query.SingleOrDefault();
+
+            if (organizacao != null)
+                throw new OrganogramaRequisicaoInvalidaException("A Sigla informada já pertence a uma organização.");
         }
 
         private void RazaoSocialExiste(OrganizacaoModeloNegocio organizacaoNegocio)
@@ -205,7 +261,7 @@ namespace Organograma.Negocio.Validacao
         {
             if (organizacao.Sigla.Length > 10)
             {
-                throw new OrganogramaRequisicaoInvalidaException("Sigla deve possuir no máximo 10 caracteres");
+                throw new OrganogramaRequisicaoInvalidaException("Sigla deve possuir no máximo 10 caracteres.");
             }
         }
 

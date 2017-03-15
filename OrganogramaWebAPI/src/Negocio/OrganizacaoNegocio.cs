@@ -145,8 +145,8 @@ namespace Organograma.Negocio
             tipoOrganizacaoValidacao.IdPreenchido(organizacaoNegocio.TipoOrganizacao);
 
             //Validações utilizam cálculos e/ou interagem com o banco de dados
-            validacao.Valido(organizacaoNegocio);
             validacao.PaiValido(organizacaoNegocio.OrganizacaoPai);
+            validacao.Valido(organizacaoNegocio);
 
             if (organizacaoNegocio.OrganizacaoPai != null)
                 validacao.UsuarioTemPermissao(UsuarioGuidOrganizacoes, organizacaoNegocio.OrganizacaoPai.Guid);
