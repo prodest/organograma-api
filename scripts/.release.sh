@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker build -t $DOCKER_IMAGE-hmg -f ./Dockerfile .
+docker tag $DOCKER_IMAGE $DOCKER_IMAGE-hmg
 
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 docker push $DOCKER_IMAGE-hmg

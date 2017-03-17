@@ -1,7 +1,5 @@
 #!/bin/bash
 
-docker build -t $DOCKER_IMAGE -f ./Dockerfile .
-
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 docker push $DOCKER_IMAGE
 
