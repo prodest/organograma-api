@@ -89,12 +89,6 @@ namespace Organograma.WebAPI.Base
 
         private void FillOrgaoEPatriarca(string organizacaoSigla, string accessToken)
         {
-            string urlApiOrganograma = Environment.GetEnvironmentVariable("UrlApiOrganograma");
-
-            var url = urlApiOrganograma + "organizacoes/sigla/" + organizacaoSigla;
-
-            //Organizacao organizacaoUsuario = DownloadJsonData<Organizacao>(urlApiOrganograma + "organizacoes/sigla/" + organizacaoSigla, accessToken);
-
             OrganizacaoModeloGet organizacaoUsuario = service.PesquisarPorSigla(organizacaoSigla);
 
             usuarioAutenticado.Add(new KeyValuePair<string, string>("guidOrganizacao", organizacaoUsuario.Guid));
@@ -103,7 +97,6 @@ namespace Organograma.WebAPI.Base
                                                            .Select(x => new OrganizacaoModeloGet { Guid = x.Value })
                                                            .ToList();
 
-            //Organizacao organizacaoPatriarca = null;
             OrganizacaoModeloGet organizacaoPatriarca = null;
 
             if (organizacoesPatriarcas != null && organizacoesPatriarcas.Count > 0)
@@ -111,9 +104,6 @@ namespace Organograma.WebAPI.Base
 
             if (organizacaoPatriarca == null)
             {
-                url = urlApiOrganograma + "organizacoes/" + organizacaoUsuario.Guid + "/patriarca";
-
-                //organizacaoPatriarca = DownloadJsonData<Organizacao>(url, accessToken);
                 organizacaoPatriarca = service.PesquisarPatriarca(organizacaoUsuario.Guid);
 
                 usuarioAutenticado.Add(new KeyValuePair<string, string>("guidOrganizacaoPatriarca", organizacaoPatriarca.Guid));
