@@ -10,7 +10,6 @@ namespace Organograma.Negocio
 {
     public class BaseNegocio : IBaseNegocio
     {
-        private readonly string UrlApiOrganograma = Environment.GetEnvironmentVariable("UrlApiOrganograma");
         private List<KeyValuePair<string, string>> usuario;
         private string usuarioCpf;
         private string usuarioNome;
@@ -124,30 +123,6 @@ namespace Organograma.Negocio
                 }
             }
 
-        }
-
-        public OrganizacaoOrganogramaModelo PesquisarOrganizacaoPatriarca(Guid guidOrganizacao)
-        {
-            OrganizacaoOrganogramaModelo organizacao = DownloadJsonData<OrganizacaoOrganogramaModelo>(UrlApiOrganograma + "organizacoes/" + guidOrganizacao.ToString("D") + "/patriarca");
-            return organizacao;
-        }
-
-        public OrganizacaoOrganogramaModelo PesquisarOrganizacao(Guid guidOrganizacao)
-        {
-            OrganizacaoOrganogramaModelo organizacao = DownloadJsonData<OrganizacaoOrganogramaModelo>(UrlApiOrganograma + "organizacoes/" + guidOrganizacao.ToString("D"));
-            return organizacao;
-        }
-
-        public UnidadeOrganogramaModelo PesquisarUnidade(Guid guidUnidade)
-        {
-            UnidadeOrganogramaModelo unidade = DownloadJsonData<UnidadeOrganogramaModelo>(UrlApiOrganograma + "unidades/" + guidUnidade.ToString("D"));
-            return unidade;
-        }
-
-        public MunicipioOrganogramaModelo PesquisarMunicipio(Guid guidMunicipio)
-        {
-            MunicipioOrganogramaModelo municipio = DownloadJsonData<MunicipioOrganogramaModelo>(UrlApiOrganograma + "municipios/" + guidMunicipio.ToString("D"));
-            return municipio;
         }
 
         public class OrganizacaoOrganogramaModelo
