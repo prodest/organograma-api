@@ -301,18 +301,6 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasName("UK_OrganizacaoCnpj")
                     .IsUnique();
 
-                entity.HasIndex(e => e.RazaoSocial)
-                    .HasName("UK_OrganizacaoRazaoSocial")
-                    .IsUnique();
-
-                entity.HasIndex(e => new { e.NomeFantasia, e.IdOrganizacaoPai })
-                    .HasName("UK_OrganizacaoNomeFantasia")
-                    .IsUnique();
-
-                entity.HasIndex(e => new { e.Sigla, e.IdOrganizacaoPai })
-                    .HasName("UK_OrganizacaoSigla")
-                    .IsUnique();
-
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Cnpj)
@@ -322,15 +310,17 @@ namespace Organograma.Infraestrutura.Mapeamento
 
                 entity.Property(e => e.IdAntigo).HasColumnName("idAntigo");
 
+                entity.Property(e => e.IdEmpresaSiarhes).HasColumnName("idEmpresaSiarhes");
+
                 entity.Property(e => e.IdEndereco).HasColumnName("idEndereco");
 
                 entity.Property(e => e.IdEsfera).HasColumnName("idEsfera");
 
-                entity.Property(e => e.IdOrganizacaoPai)
-                    .IsRequired()
-                    .HasColumnName("idOrganizacaoPai");
+                entity.Property(e => e.IdOrganizacaoPai).HasColumnName("idOrganizacaoPai");
 
                 entity.Property(e => e.IdPoder).HasColumnName("idPoder");
+
+                entity.Property(e => e.IdSubEmpresaSiarhes).HasColumnName("idSubEmpresaSiarhes");
 
                 entity.Property(e => e.IdTipoOrganizacao).HasColumnName("idTipoOrganizacao");
 
@@ -473,7 +463,7 @@ namespace Organograma.Infraestrutura.Mapeamento
             modelBuilder.Entity<TipoOrganizacao>(entity =>
             {
                 entity.HasIndex(e => e.Descricao)
-                    .HasName("UK_TipoUnidadeDescricao")
+                    .HasName("UK_TipoOrganizacaoDescricao")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -577,7 +567,5 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasConstraintName("FK_Unidade_UnidadePai");
             });
         }
-
-
     }
 }

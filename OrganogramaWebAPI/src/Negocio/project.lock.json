@@ -931,7 +931,7 @@
           "System.Runtime.InteropServices": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Globalization.Extensions.dll": {}
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard1.3/System.Globalization.Extensions.dll": {
@@ -2056,7 +2056,8 @@
           "AutoMapper": "5.2.0",
           "Dominio": "1.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
-          "NETStandard.Library": "1.6.1"
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
           "netstandard1.6/Infraestrutura.dll": {}
@@ -6507,7 +6508,8 @@
       "Infraestrutura >= 1.0.0-*",
       "Microsoft.EntityFrameworkCore >= 1.1.0",
       "NETStandard.Library >= 1.6.1",
-      "Newtonsoft.Json >= 9.0.1"
+      "Newtonsoft.Json >= 9.0.1",
+      "System.Globalization.Extensions >= 4.3.0"
     ],
     ".NETStandard,Version=v1.6": []
   },

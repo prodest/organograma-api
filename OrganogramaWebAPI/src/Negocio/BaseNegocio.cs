@@ -14,7 +14,7 @@ namespace Organograma.Negocio
         private List<KeyValuePair<string, string>> usuario;
         private string usuarioCpf;
         private string usuarioNome;
-        private string usuarioAccessToken;
+        private string clientAccessToken;
         private List<Guid> usuarioGuidOrganizacoes;
         private List<Guid> usuarioGuidOrganizacoesPatriarca;
 
@@ -36,7 +36,7 @@ namespace Organograma.Negocio
             get
             {
                 if (usuarioCpf == null)
-                    usuarioCpf = Usuario.Where(u => u.Key.Equals("cpf")).SingleOrDefault().ToString();
+                    usuarioCpf = Usuario.Where(u => u.Key.Equals("cpf")).SingleOrDefault().Value;
 
                 return usuarioCpf;
             }
@@ -46,19 +46,19 @@ namespace Organograma.Negocio
             get
             {
                 if (usuarioNome == null)
-                    usuarioNome = Usuario.Where(u => u.Key.Equals("nome")).SingleOrDefault().ToString();
+                    usuarioNome = Usuario.Where(u => u.Key.Equals("nome")).SingleOrDefault().Value;
 
                 return usuarioNome;
             }
         }
-        public string UsuarioAccessToken
+        public string ClientAccessToken
         {
             get
             {
-                if (usuarioAccessToken == null)
-                    usuarioAccessToken = Usuario.Where(u => u.Key.Equals("accessToken")).SingleOrDefault().ToString();
+                if (clientAccessToken == null)
+                    clientAccessToken = Usuario.Where(u => u.Key.Equals("clientAccessToken")).SingleOrDefault().Value;
 
-                return usuarioAccessToken;
+                return clientAccessToken;
             }
         }
 
@@ -106,9 +106,9 @@ namespace Organograma.Negocio
             {
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                if (!string.IsNullOrWhiteSpace(UsuarioAccessToken))
+                if (!string.IsNullOrWhiteSpace(ClientAccessToken))
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UsuarioAccessToken);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ClientAccessToken);
                 }
                 var result = client.GetAsync(url).Result;
 

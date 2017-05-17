@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Organograma.WebAPI.Base
 {
@@ -27,13 +28,13 @@ namespace Organograma.WebAPI.Base
             }
         }
 
-        public BaseController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor)
+        public BaseController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor, IClientAccessToken clientAccessToken)
         {
             this.service = service;
-            PreencherUsuario(httpContextAccessor.HttpContext.User);
+            PreencherUsuario(httpContextAccessor.HttpContext.User, clientAccessToken);
         }
 
-        private T DownloadJsonData<T>(string url, string acessToken) where T : new()
+        protected async Task<T> DownloadJsonData<T>(string url, string acessToken) where T : new()
         {
             var handler = new HttpClientHandler();
             handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
@@ -52,26 +53,26 @@ namespace Organograma.WebAPI.Base
                 }
                 else
                 {
-                    return new T();
+                    throw new Exception(result.StatusCode + ": " + await result.Content.ReadAsStringAsync());
                 }
             }
         }
 
-        private void PreencherUsuario(ClaimsPrincipal user)
+        private void PreencherUsuario(ClaimsPrincipal user, IClientAccessToken clientAccessToken)
         {
+            usuarioAutenticado = new List<KeyValuePair<string, string>>();
+
+            string accessToken = clientAccessToken.AccessToken;
+            usuarioAutenticado.Add(new KeyValuePair<string, string>("clientAccessToken", accessToken));
+
             if (user != null)
             {
                 Claim claimCpf = user.FindFirst("cpf");
                 Claim claimNome = user.FindFirst("nome");
                 if (claimCpf != null && claimNome != null)
                 {
-                    usuarioAutenticado = new List<KeyValuePair<string, string>>();
-
                     usuarioAutenticado.Add(new KeyValuePair<string, string>("cpf", claimCpf.Value));
                     usuarioAutenticado.Add(new KeyValuePair<string, string>("nome", claimNome.Value));
-
-                    string accessToken = user.FindFirst("accessToken").Value;
-                    usuarioAutenticado.Add(new KeyValuePair<string, string>("accessToken", accessToken));
 
                     List<Claim> claimsOrganizacao = user.FindAll("orgao").ToList();
 
@@ -85,7 +86,6 @@ namespace Organograma.WebAPI.Base
                 }
             }
         }
-
 
         private void FillOrgaoEPatriarca(string organizacaoSigla, string accessToken)
         {

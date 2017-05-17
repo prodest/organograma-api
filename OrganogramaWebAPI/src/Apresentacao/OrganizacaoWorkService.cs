@@ -116,5 +116,12 @@ namespace Organograma.Apresentacao
             return Mapper.Map<List<OrganizacaoModeloNegocio>, List<OrganizacaoModeloGet>>(organizacoes);
         }
         #endregion
+
+        #region Integração com o SIARHES
+        public void IntegarSiarhes()
+        {
+            organizacaoNegocio.IntegrarSiarhes();
+        }
+        #endregion
     }
 }

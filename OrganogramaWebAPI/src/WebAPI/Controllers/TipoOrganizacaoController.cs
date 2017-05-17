@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Apresentacao.Base;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
-using Microsoft.AspNetCore.Authorization;
-using Organograma.WebAPI.Base;
-using System.Net;
-using Organograma.WebAPI.Config;
 using Organograma.Infraestrutura.Comum;
-using Microsoft.AspNetCore.Http;
-using Apresentacao.Base;
+using Organograma.WebAPI.Base;
+using Organograma.WebAPI.Config;
+using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -20,7 +18,7 @@ namespace Organograma.WebAPI.Controllers
     {
         ITipoOrganizacaoWorkService service;
 
-        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
+        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor, IClientAccessToken clientAccessToken) : base(organizacaoService, httpContextAccessor, clientAccessToken)
         {
             this.service = service;
         }

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Apresentacao.Base;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
-using Microsoft.AspNetCore.Authorization;
-using Organograma.WebAPI.Base;
-using System.Net;
-using Organograma.WebAPI.Config;
 using Organograma.Infraestrutura.Comum;
-using Microsoft.AspNetCore.Http;
-using Apresentacao.Base;
+using Organograma.WebAPI.Base;
+using Organograma.WebAPI.Config;
+using System;
+using System.Collections.Generic;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +20,7 @@ namespace Organograma.WebAPI.Controllers
     {
         ITipoUnidadeWorkService service;
 
-        public TipoUnidadeController(ITipoUnidadeWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
+        public TipoUnidadeController(ITipoUnidadeWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor, IClientAccessToken clientAccessToken) : base(organizacaoService, httpContextAccessor, clientAccessToken)
         {
             this.service = service;
         }

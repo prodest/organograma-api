@@ -192,11 +192,11 @@ namespace Organograma.Negocio.Validacao
         {
             cnpjValidacao.CnpjExiste(organizacao);
             cnpjValidacao.CnpjValido(organizacao.Cnpj);
-            RazaoSocialExiste(organizacao);
+            //RazaoSocialExiste(organizacao);
             SiglaValida(organizacao);
-            SiglaExiste(organizacao);
+            //SiglaExiste(organizacao);
             NomeFantasiaValido(organizacao);
-            NomeFantasiaExiste(organizacao);
+            //NomeFantasiaExiste(organizacao);
         }
 
         private void NomeFantasiaExiste(OrganizacaoModeloNegocio organizacaoNegocio)

@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Apresentacao.Base;
+﻿using Apresentacao.Base;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Modelos;
 using Organograma.Infraestrutura.Comum;
-using System;
-using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Organograma.WebAPI.Base;
-using System.Collections.Generic;
 using Organograma.WebAPI.Config;
-using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -17,7 +17,7 @@ namespace Organograma.WebAPI.Controllers
     {
         private IMunicipioWorkService service;
 
-        public MunicipiosController(IMunicipioWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor) : base(organizacaoService, httpContextAccessor)
+        public MunicipiosController(IMunicipioWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor, IClientAccessToken clientAccessToken) : base(organizacaoService, httpContextAccessor, clientAccessToken)
         {
             this.service = service;
         }

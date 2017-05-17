@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
-using Newtonsoft.Json;
+using Organograma.Infraestrutura.Mapeamento;
+using Organograma.WebAPI.Base;
 using Organograma.WebAPI.Config;
+using Organograma.WebAPI.Middleware;
 using Swashbuckle.Swagger.Model;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using Organograma.Infraestrutura.Mapeamento;
-using Organograma.WebAPI.Middleware;
-using Microsoft.AspNetCore.Http;
 
 namespace Organograma.WebAPI
 {
@@ -50,6 +50,7 @@ namespace Organograma.WebAPI
                 });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IClientAccessToken, AcessoCidadaoClientAccessToken>();
 
             ConfiguracaoDependencias.InjetarDependencias(services);
             ConfiguracaoAutoMapper.CriarMapeamento();
@@ -79,6 +80,7 @@ namespace Organograma.WebAPI
                 options.AddPolicy("Unidade.Inserir", policy => policy.RequireClaim("Acao$Unidade", "Inserir"));
                 options.AddPolicy("Unidade.Alterar", policy => policy.RequireClaim("Acao$Unidade", "Alterar"));
                 options.AddPolicy("Unidade.Excluir", policy => policy.RequireClaim("Acao$Unidade", "Excluir"));
+                options.AddPolicy("IntegracaoSiarhes.Integrar", policy => policy.RequireClaim("Acao$IntegracaoSiarhes", "Integrar"));
             }
             );
             #endregion

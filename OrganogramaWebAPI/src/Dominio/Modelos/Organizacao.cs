@@ -24,6 +24,8 @@ namespace Organograma.Dominio.Modelos
         public int? IdOrganizacaoPai { get; set; }
         public int IdEndereco { get; set; }
         public int? IdAntigo { get; set; }
+        public int? IdEmpresaSiarhes { get; set; }
+        public int? IdSubEmpresaSiarhes { get; set; }
 
         public virtual ICollection<ContatoOrganizacao> ContatosOrganizacao { get; set; }
         public virtual ICollection<EmailOrganizacao> EmailsOrganizacao { get; set; }

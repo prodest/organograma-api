@@ -18,7 +18,7 @@ namespace Organograma.WebAPI.Controllers
 
         private IOrganizacaoWorkService service;
 
-        public OrganizacaoController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor) : base(service, httpContextAccessor)
+        public OrganizacaoController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor, IClientAccessToken clientAccessToken) : base(service, httpContextAccessor, clientAccessToken)
         {
             this.service = service;
             this.service.Usuario = UsuarioAutenticado;
@@ -387,6 +387,35 @@ namespace Organograma.WebAPI.Controllers
             catch (OrganogramaNaoEncontradoException e)
             {
                 return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
+        }
+        #endregion
+
+        #region PUT 
+        /// <summary>
+        /// Realiza a integração com o SIARHES.
+        /// </summary>
+        /// <response code="200">Integração realizada com sucesso.</response>
+        /// <response code="400">Informação inválida.</response>
+        /// <response code="500">Erro inesperado.</response>
+        [HttpPut("integrarSiarhes")]
+        [Authorize(Policy = "IntegracaoSiarhes.Integrar")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 500)]
+        public IActionResult IntegrarSiarhes()
+        {
+            try
+            {
+                service.IntegarSiarhes();
+                return Ok();
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
             }
             catch (Exception e)
             {

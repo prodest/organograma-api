@@ -20,5 +20,6 @@ namespace Organograma.Negocio.Base
         OrganizacaoModeloNegocio PesquisarOrganograma(string guid, bool filhas);
         List<OrganizacaoModeloNegocio> PesquisarOrganograma();
         List<OrganizacaoModeloNegocio> PesquisarPorUsuario(bool filhas);
+        void IntegrarSiarhes();
     }
 }

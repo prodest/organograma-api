@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Organograma.Dominio.Base;
+using Organograma.Dominio.Modelos;
 using Organograma.Negocio.Base;
+using Organograma.Negocio.Modelos;
+using Organograma.Negocio.Validacao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Organograma.Negocio.Modelos;
-using Organograma.Dominio.Base;
-using Organograma.Dominio.Modelos;
-using Organograma.Negocio.Validacao;
-using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.Negocio
 {
     public class OrganizacaoNegocio : BaseNegocio, IOrganizacaoNegocio
     {
+        private IOrganogramaRepositorios repositorios;
         private IUnitOfWork unitOfWork;
         private IRepositorioGenerico<Organizacao> repositorioOrganizacoes;
         private IRepositorioGenerico<Contato> repositorioContatos;
@@ -37,6 +38,7 @@ namespace Organograma.Negocio
 
         public OrganizacaoNegocio(IOrganogramaRepositorios repositorios)
         {
+            this.repositorios = repositorios;
             unitOfWork = repositorios.UnitOfWork;
             repositorioOrganizacoes = repositorios.Organizacoes;
             repositorioContatos = repositorios.Contatos;
@@ -469,6 +471,15 @@ namespace Organograma.Negocio
                                            .ToList();
 
             return Mapper.Map<List<Organizacao>, List<OrganizacaoModeloNegocio>>(organizacoes);
+        }
+        #endregion
+
+        #region Integração com o SIARHES
+        public void IntegrarSiarhes()
+        {
+            IntegracaoSiarhesNegocio isn = new IntegracaoSiarhesNegocio();
+
+            isn.Integrar(repositorios, ClientAccessToken);
         }
         #endregion
 
