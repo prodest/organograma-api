@@ -1,9 +1,9 @@
 #!/bin/bash
 
-docker tag $DOCKER_IMAGE $DOCKER_IMAGE-hmg
+docker tag $DOCKER_IMAGE $DOCKER_IMAGE-hmg:$TRAVIS_COMMIT
 
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-docker push $DOCKER_IMAGE-hmg
+docker push $DOCKER_IMAGE-hmg:$TRAVIS_COMMIT
 
 export RANCHER_ENV_ID=1a10541 #env SEP/organograma (1a10541)
 export RANCHER_STACK_ID=1e102 #stack hmg (1e102)
