@@ -24,6 +24,7 @@ namespace Organograma.Negocio
         private IRepositorioGenerico<SiteOrganizacao> _repositorioSitesOrganizacoes;
         private IRepositorioGenerico<SiteUnidade> _repositorioSitesUnidades;
         private IRepositorioGenerico<Site> _repositorioSites;
+        private IRepositorioGenerico<TipoOrganizacao> _repositorioTiposOrganizacao;
         private IRepositorioGenerico<TipoUnidade> _repositorioTiposUnidades;
         private List<TipoOrganizacao> TiposOrganizacao;
         private List<TipoUnidade> TiposUnidades;
@@ -47,8 +48,9 @@ namespace Organograma.Negocio
             _repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
             _repositorioSitesUnidades = repositorios.SitesUnidades;
             _repositorioSites = repositorios.Sites;
+            _repositorioTiposOrganizacao = repositorios.TiposOrganizacoes;
             _repositorioTiposUnidades = repositorios.TiposUnidades;
-            TiposOrganizacao = repositorios.TiposOrganizacoes.ToList();
+            TiposOrganizacao = _repositorioTiposOrganizacao.ToList();
             TiposUnidades = _repositorioTiposUnidades.ToList();
             Municipios = repositorios.Municipios.ToList();
 
@@ -56,6 +58,12 @@ namespace Organograma.Negocio
 
             if (organizacoesSiarhes != null && organizacoesSiarhes.Count > 0)
             {
+                AtualizarTiposOrganizacao();
+
+                _unitOfWork.Save();
+
+                TiposOrganizacao = _repositorioTiposOrganizacao.ToList();
+
                 ConverterDados(organizacoesSiarhes);
 
                 _unitOfWork.Save();
@@ -808,6 +816,44 @@ namespace Organograma.Negocio
             }
         }
 
+        private void AtualizarTiposOrganizacao()
+        {
+            #region Autarquia
+            TipoOrganizacao tipoOrganizacao = _repositorioTiposOrganizacao.Where(to => to.Descricao.ToUpper().Equals("AUTARQUIA"))
+                                                                          .SingleOrDefault(); //autarquia
+
+            if (tipoOrganizacao == null)
+            {
+                tipoOrganizacao = new TipoOrganizacao { Descricao = "Autarquia", InicioVigencia = DateTime.Now };
+
+                _repositorioTiposOrganizacao.Add(tipoOrganizacao);
+            }
+            #endregion
+
+            #region Secretaria
+            tipoOrganizacao = _repositorioTiposOrganizacao.Where(to => to.Descricao.ToUpper().Equals("SECRETARIA"))
+                                                          .SingleOrDefault(); //secretaria
+
+            if (tipoOrganizacao == null)
+            {
+                tipoOrganizacao = new TipoOrganizacao { Descricao = "Secretaria", InicioVigencia = DateTime.Now };
+
+                _repositorioTiposOrganizacao.Add(tipoOrganizacao);
+            }
+            #endregion
+
+            #region Fundação
+            tipoOrganizacao = _repositorioTiposOrganizacao.Where(to => RemoveDiacritics(to.Descricao.ToUpper()).Equals("FUNDACAO"))
+                                                          .SingleOrDefault(); //fundação
+
+            if (tipoOrganizacao == null)
+            {
+                tipoOrganizacao = new TipoOrganizacao { Descricao = "Fundação", InicioVigencia = DateTime.Now };
+
+                _repositorioTiposOrganizacao.Add(tipoOrganizacao);
+            }
+            #endregion
+        }
         private void AtualizarTiposUnidade(List<UnidadeSiarhes> unidadesSiarhes)
         {
             if (unidadesSiarhes == null) throw new ArgumentNullException("A lista de unidades não pode ser nula.");
