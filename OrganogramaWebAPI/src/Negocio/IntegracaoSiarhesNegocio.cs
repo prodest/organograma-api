@@ -56,6 +56,10 @@ namespace Organograma.Negocio
 
             List<OrganizacaoSiarhes> organizacoesSiarhes = JsonData.DownloadAsync<List<OrganizacaoSiarhes>>("https://api.es.gov.br/siarhes/v1/subempresas", clientAccessToken).Result;
 
+            //TODO: Foram retiradas as unidades de algumas organizações, pois existem dados duplicados de nome da unidade
+            organizacoesSiarhes = organizacoesSiarhes.Where(us => !(us.Empresa == 9 && us.Codigo == 1)) //DETRAN
+                                                     .ToList();
+
             if (organizacoesSiarhes != null && organizacoesSiarhes.Count > 0)
             {
                 AtualizarTiposOrganizacao();
@@ -70,6 +74,13 @@ namespace Organograma.Negocio
             }
 
             List<UnidadeSiarhes> unidadesSiarhes = JsonData.DownloadAsync<List<UnidadeSiarhes>>("https://api.es.gov.br/siarhes/v1/organograma", clientAccessToken).Result;
+
+            var idsOrganizacoes = organizacoesSiarhes.Select(os => new { Empresa = os.Empresa, Subempresa = os.Codigo })
+                                                     .ToList();
+            
+            //Pegando somente as unidades cujas organizações foram inseridas
+            unidadesSiarhes = unidadesSiarhes.Where(us => idsOrganizacoes.Contains(new { Empresa = us.Empresa, Subempresa = us.Subempresa}))
+                                             .ToList();
 
             //TODO: Foram retiradas as unidades de algumas organizações, pois existem dados duplicados de nome da unidade
             unidadesSiarhes = unidadesSiarhes.Where(us => !(us.Empresa == 1 && us.Subempresa == 51) //SEDU
@@ -139,7 +150,6 @@ namespace Organograma.Negocio
                     if (org == null)
                     {
                         org = new Organizacao();
-                        _repositorioOrganizacoes.Add(org);
                         organizacoes.Add(org);
 
                         org.IdentificadorExterno = ObterIdentificadoresExternos();
@@ -185,7 +195,6 @@ namespace Organograma.Negocio
                             organizacaoPai.IdentificadorExterno = ObterIdentificadoresExternos();
 
                             organizacoes.Add(organizacaoPai);
-                            _repositorioOrganizacoes.Add(organizacaoPai);
 
                             organizacaoPai.OrganizacoesFilhas = new List<Organizacao>();
                             organizacaoPai.OrganizacoesFilhas.Add(org);
@@ -195,6 +204,9 @@ namespace Organograma.Negocio
                     {
                         org.IdOrganizacaoPai = _governoEstado.Id;
                     }
+
+                    if (org.Id == 0)
+                        _repositorioOrganizacoes.Add(org);
                 }
             }
         }
@@ -563,6 +575,8 @@ namespace Organograma.Negocio
                 organizacao.Endereco.Logradouro = organizacaoSiarhes.Logradouro;
                 organizacao.Endereco.Numero = !string.IsNullOrWhiteSpace(organizacaoSiarhes.NumEnder) ? organizacaoSiarhes.NumEnder : null;
             }
+            else
+                throw new OrganogramaException($"A organização {organizacaoSiarhes.Empresa} - {organizacaoSiarhes.Codigo} - {organizacaoSiarhes.Razao} - {organizacaoSiarhes.Fantasia} não possui endereço.");
         }
 
         private void PreencherEndereco(Unidade unidade, UnidadeSiarhes unidadeSiarhes)
@@ -854,6 +868,7 @@ namespace Organograma.Negocio
             }
             #endregion
         }
+
         private void AtualizarTiposUnidade(List<UnidadeSiarhes> unidadesSiarhes)
         {
             if (unidadesSiarhes == null) throw new ArgumentNullException("A lista de unidades não pode ser nula.");
