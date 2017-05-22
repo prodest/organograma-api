@@ -5,15 +5,10 @@ docker tag $DOCKER_IMAGE $DOCKER_IMAGE-dev:$TRAVIS_COMMIT
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 docker push $DOCKER_IMAGE-dev:$TRAVIS_COMMIT
 
-export RANCHER_ENV_ID=1a10541 #env SEP/organograma (1a10541)
-export RANCHER_STACK_ID=1e100 #stack dev (1e100)
-export RANCHER_STACK=dev #stack dev (1e100)
-
-export RANCHER_URL=http://cloud.datacenter.es.gov.br.local/v1/projects/$RANCHER_ENV_ID
-export RANCHER_COMPOSE_URL=http://cloud.datacenter.es.gov.br.local/v1/projects/$RANCHER_ENV_ID/environments/$RANCHER_STACK_ID/composeconfig
-
 #Atualiza a infra
-git clone https://github.com/prodest/gerencio-upgrade.git
-cd gerencio-upgrade
+git clone https://github.com/prodest/api-cloud-v2.git
+cd api-cloud-v2
 npm install
-node ./client $RANCHER_SERVICE_NAME 40000
+node ./client --ENVIRONMENT=SEP/Organograma \
+    --STACK=dev --SERVICE=organograma-api \
+    --IMAGE=$DOCKER_IMAGE-dev:$TRAVIS_COMMIT --START_FIRST=true
