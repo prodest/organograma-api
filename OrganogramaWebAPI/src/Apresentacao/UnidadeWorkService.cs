@@ -52,11 +52,11 @@ namespace Organograma.Apresentacao
             return Mapper.Map<UnidadeModeloNegocio, UnidadeModeloGet>(umn); ;
         }
 
-        public List<UnidadeModeloGet> PesquisarPorOrganizacao(string guidOrganizacao)
+        public List<UnidadeSimplesModeloGet> PesquisarPorOrganizacao(string guidOrganizacao)
         {
             var umn = unidadeNegocio.PesquisarPorOrganizacao(guidOrganizacao);
 
-            return Mapper.Map<List<UnidadeModeloNegocio>, List<UnidadeModeloGet>>(umn); ;
+            return Mapper.Map<List<UnidadeModeloNegocio>, List<UnidadeSimplesModeloGet>>(umn); ;
         }
 
         public void ExcluirEmail(int id, List<EmailModelo> emails)

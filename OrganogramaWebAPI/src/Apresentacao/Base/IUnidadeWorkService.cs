@@ -9,7 +9,7 @@ namespace Organograma.Apresentacao.Base
 
         UnidadeModeloGet Pesquisar(string guid);
 
-        List<UnidadeModeloGet> PesquisarPorOrganizacao(string guidOrganziacao);
+        List<UnidadeSimplesModeloGet> PesquisarPorOrganizacao(string guidOrganziacao);
 
         UnidadeModeloRetornoPost Inserir(UnidadeModeloPost unidade);
 
