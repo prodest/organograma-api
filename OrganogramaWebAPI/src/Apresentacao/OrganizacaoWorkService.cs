@@ -16,11 +16,6 @@ namespace Organograma.Apresentacao
             this.organizacaoNegocio = organizacaoNegocio;
         }
 
-        public override void RaiseUsuarioAlterado()
-        {
-            organizacaoNegocio.Usuario = Usuario;
-        }
-
         #region Alterar
         public void Alterar(string guid, OrganizacaoModeloPatch organizacaoPatch)
         {

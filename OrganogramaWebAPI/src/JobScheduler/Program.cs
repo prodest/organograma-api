@@ -2,13 +2,13 @@
 using System;
 using System.IO;
 
-namespace Organograma.WebAPI
+namespace Organograma.JobScheduler
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            var port = Environment.GetEnvironmentVariable("PORT") ?? "8935";
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "9935";
             var requestPath = Environment.GetEnvironmentVariable("REQUEST_PATH");
             var url = $"http://*:{port}{requestPath}";
 

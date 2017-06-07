@@ -1,5 +1,4 @@
-﻿using Apresentacao.Base;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
@@ -20,7 +19,7 @@ namespace Organograma.WebAPI.Controllers
     {
         IEsferaOrganizacaoWorkService service;
 
-        public EsferaOrganizacaoController(IEsferaOrganizacaoWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor, IClientAccessToken clientAccessToken) : base(organizacaoService, httpContextAccessor, clientAccessToken)
+        public EsferaOrganizacaoController(IEsferaOrganizacaoWorkService service)
         {
             this.service = service;
         }

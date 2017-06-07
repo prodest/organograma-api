@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
 using Organograma.Negocio.Base;
+using Organograma.Negocio.Commom.Base;
 using Organograma.Negocio.Modelos;
 using Organograma.Negocio.Validacao;
 using System;
@@ -35,8 +36,10 @@ namespace Organograma.Negocio
         private PoderValidacao poderValidacao;
         private SiteValidacao siteValidacao;
         private TipoOrganizacaoValidacao tipoOrganizacaoValidacao;
+        private ICurrentUserProvider _currentUser;
+        private IClientAccessToken _clientAccessToken;
 
-        public OrganizacaoNegocio(IOrganogramaRepositorios repositorios)
+        public OrganizacaoNegocio(IOrganogramaRepositorios repositorios, ICurrentUserProvider currentUser, IClientAccessToken clientAccessToken)
         {
             this.repositorios = repositorios;
             unitOfWork = repositorios.UnitOfWork;
@@ -62,6 +65,8 @@ namespace Organograma.Negocio
             siteValidacao = new SiteValidacao();
             tipoOrganizacaoValidacao = new TipoOrganizacaoValidacao(repositorios.TiposOrganizacoes);
 
+            _currentUser = currentUser;
+            _clientAccessToken = clientAccessToken;
         }
 
         #region Alterar
@@ -109,7 +114,7 @@ namespace Organograma.Negocio
             validacao.Existe(guid);
             Guid g = new Guid(guid);
 
-            validacao.UsuarioTemPermissao(UsuarioGuidOrganizacoes, guid);
+            validacao.UsuarioTemPermissao(_currentUser.UserGuidsOrganizacao, guid);
 
             Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
                                                              .Include(o => o.IdentificadorExterno)
@@ -151,7 +156,7 @@ namespace Organograma.Negocio
             validacao.Valido(organizacaoNegocio);
 
             if (organizacaoNegocio.OrganizacaoPai != null)
-                validacao.UsuarioTemPermissao(UsuarioGuidOrganizacoes, organizacaoNegocio.OrganizacaoPai.Guid);
+                validacao.UsuarioTemPermissao(_currentUser.UserGuidsOrganizacao, organizacaoNegocio.OrganizacaoPai.Guid);
 
             contatoValidacao.Valido(organizacaoNegocio.Contatos);
             emailValidacao.Valido(organizacaoNegocio.Emails);
@@ -197,7 +202,7 @@ namespace Organograma.Negocio
             tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
 
             if (organizacaoNegocio.OrganizacaoPai != null)
-                validacao.UsuarioTemPermissao(UsuarioGuidOrganizacoes, organizacaoNegocio.OrganizacaoPai.Guid);
+                validacao.UsuarioTemPermissao(_currentUser.UserGuidsOrganizacao, organizacaoNegocio.OrganizacaoPai.Guid);
 
             Organizacao organizacao = PreparaInsercao(organizacaoNegocio);
             repositorioOrganizacoes.Add(organizacao);
@@ -444,7 +449,7 @@ namespace Organograma.Negocio
 
         public List<OrganizacaoModeloNegocio> PesquisarPorUsuario(bool filhas)
         {
-            List<Organizacao> organizacoes = repositorioOrganizacoes.Where(o => UsuarioGuidOrganizacoes.Contains(o.IdentificadorExterno.Guid))
+            List<Organizacao> organizacoes = repositorioOrganizacoes.Where(o => _currentUser.UserGuidsOrganizacao.Contains(o.IdentificadorExterno.Guid))
                                                              .Include(o => o.OrganizacoesFilhas)
                                                              .Include(o => o.Esfera)
                                                              .Include(o => o.Poder)
@@ -479,7 +484,7 @@ namespace Organograma.Negocio
         {
             IntegracaoSiarhesNegocio isn = new IntegracaoSiarhesNegocio();
 
-            isn.Integrar(repositorios, ClientAccessToken);
+            isn.Integrar(repositorios, _clientAccessToken.AccessToken);
         }
         #endregion
 

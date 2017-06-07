@@ -20,6 +20,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Infraestrutura", "src\Infra
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Dominio", "src\Dominio\Dominio.xproj", "{F24E9292-7DEB-4D47-AD4D-B941EA37B233}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "JobScheduler", "src\JobScheduler\JobScheduler.xproj", "{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{F24E9292-7DEB-4D47-AD4D-B941EA37B233}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F24E9292-7DEB-4D47-AD4D-B941EA37B233}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F24E9292-7DEB-4D47-AD4D-B941EA37B233}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,5 +62,6 @@ Global
 		{D931D7E5-50C5-44A8-9BC8-4C824D0C4D02} = {228F021F-6855-4684-AADF-DBC2A90EEABF}
 		{87AF0619-2320-40F6-8B89-1660F446A94A} = {228F021F-6855-4684-AADF-DBC2A90EEABF}
 		{F24E9292-7DEB-4D47-AD4D-B941EA37B233} = {228F021F-6855-4684-AADF-DBC2A90EEABF}
+		{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4} = {228F021F-6855-4684-AADF-DBC2A90EEABF}
 	EndGlobalSection
 EndGlobal

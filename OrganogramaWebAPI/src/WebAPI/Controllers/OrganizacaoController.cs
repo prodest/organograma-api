@@ -18,10 +18,9 @@ namespace Organograma.WebAPI.Controllers
 
         private IOrganizacaoWorkService service;
 
-        public OrganizacaoController(IOrganizacaoWorkService service, IHttpContextAccessor httpContextAccessor, IClientAccessToken clientAccessToken) : base(service, httpContextAccessor, clientAccessToken)
+        public OrganizacaoController(IOrganizacaoWorkService service)
         {
             this.service = service;
-            this.service.Usuario = UsuarioAutenticado;
         }
 
         #region GET
