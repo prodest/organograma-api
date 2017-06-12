@@ -16,7 +16,6 @@ namespace Organograma.JobScheduler
                 .UseKestrel()
                 .UseUrls(url)
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                //.UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
 

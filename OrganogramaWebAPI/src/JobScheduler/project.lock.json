@@ -49,18 +49,18 @@
           "lib/netstandard1.3/Dapper.dll": {}
         }
       },
-      "Hangfire/1.6.12": {
+      "Hangfire/1.6.13": {
         "type": "package",
         "dependencies": {
-          "Hangfire.AspNetCore": "[1.6.12]",
-          "Hangfire.Core": "[1.6.12]",
-          "Hangfire.SqlServer": "[1.6.12]"
+          "Hangfire.AspNetCore": "[1.6.13]",
+          "Hangfire.Core": "[1.6.13]",
+          "Hangfire.SqlServer": "[1.6.13]"
         }
       },
-      "Hangfire.AspNetCore/1.6.12": {
+      "Hangfire.AspNetCore/1.6.13": {
         "type": "package",
         "dependencies": {
-          "Hangfire.Core": "[1.6.12]",
+          "Hangfire.Core": "[1.6.13]",
           "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
@@ -76,7 +76,7 @@
           "lib/netstandard1.3/Hangfire.AspNetCore.dll": {}
         }
       },
-      "Hangfire.Core/1.6.12": {
+      "Hangfire.Core/1.6.13": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
@@ -99,11 +99,11 @@
           }
         }
       },
-      "Hangfire.SqlServer/1.6.12": {
+      "Hangfire.SqlServer/1.6.13": {
         "type": "package",
         "dependencies": {
           "Dapper": "1.50.1",
-          "Hangfire.Core": "[1.6.12]",
+          "Hangfire.Core": "[1.6.13]",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
           "NETStandard.Library": "1.6.0",
           "System.Data.Common": "4.1.0",
@@ -1507,7 +1507,7 @@
           "lib/netstandard1.0/Microsoft.Extensions.WebEncoders.dll": {}
         }
       },
-      "Microsoft.IdentityModel.Logging/1.1.0": {
+      "Microsoft.IdentityModel.Logging/1.1.4": {
         "type": "package",
         "dependencies": {
           "System.Diagnostics.Tracing": "4.3.0",
@@ -1550,10 +1550,10 @@
           "lib/netstandard1.4/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll": {}
         }
       },
-      "Microsoft.IdentityModel.Tokens/5.1.0": {
+      "Microsoft.IdentityModel.Tokens/5.1.4": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Logging": "1.1.0",
+          "Microsoft.IdentityModel.Logging": "1.1.4",
           "Newtonsoft.Json": "9.0.1",
           "System.Collections": "4.3.0",
           "System.Diagnostics.Tools": "4.3.0",
@@ -1563,7 +1563,6 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
           "System.Security.Claims": "4.3.0",
           "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Security.Cryptography.Csp": "4.3.0",
           "System.Security.Cryptography.X509Certificates": "4.3.0",
           "System.Text.RegularExpressions": "4.3.0",
           "System.Threading": "4.3.0",
@@ -2611,10 +2610,10 @@
           }
         }
       },
-      "System.IdentityModel.Tokens.Jwt/5.1.0": {
+      "System.IdentityModel.Tokens.Jwt/5.1.4": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "5.1.0"
+          "Microsoft.IdentityModel.Tokens": "5.1.4"
         },
         "compile": {
           "lib/netstandard1.4/System.IdentityModel.Tokens.Jwt.dll": {}
@@ -3619,7 +3618,7 @@
           "System.Threading": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Security.Cryptography.Csp.dll": {}
+          "ref/netstandard1.3/_._": {}
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard1.3/System.Security.Cryptography.Csp.dll": {
@@ -4266,18 +4265,18 @@
           "lib/netstandard1.3/Dapper.dll": {}
         }
       },
-      "Hangfire/1.6.12": {
+      "Hangfire/1.6.13": {
         "type": "package",
         "dependencies": {
-          "Hangfire.AspNetCore": "[1.6.12]",
-          "Hangfire.Core": "[1.6.12]",
-          "Hangfire.SqlServer": "[1.6.12]"
+          "Hangfire.AspNetCore": "[1.6.13]",
+          "Hangfire.Core": "[1.6.13]",
+          "Hangfire.SqlServer": "[1.6.13]"
         }
       },
-      "Hangfire.AspNetCore/1.6.12": {
+      "Hangfire.AspNetCore/1.6.13": {
         "type": "package",
         "dependencies": {
-          "Hangfire.Core": "[1.6.12]",
+          "Hangfire.Core": "[1.6.13]",
           "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
@@ -4293,7 +4292,7 @@
           "lib/netstandard1.3/Hangfire.AspNetCore.dll": {}
         }
       },
-      "Hangfire.Core/1.6.12": {
+      "Hangfire.Core/1.6.13": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
@@ -4316,11 +4315,11 @@
           }
         }
       },
-      "Hangfire.SqlServer/1.6.12": {
+      "Hangfire.SqlServer/1.6.13": {
         "type": "package",
         "dependencies": {
           "Dapper": "1.50.1",
-          "Hangfire.Core": "[1.6.12]",
+          "Hangfire.Core": "[1.6.13]",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
           "NETStandard.Library": "1.6.0",
           "System.Data.Common": "4.1.0",
@@ -5693,7 +5692,7 @@
           "lib/netstandard1.0/Microsoft.Extensions.WebEncoders.dll": {}
         }
       },
-      "Microsoft.IdentityModel.Logging/1.1.0": {
+      "Microsoft.IdentityModel.Logging/1.1.4": {
         "type": "package",
         "dependencies": {
           "System.Diagnostics.Tracing": "4.3.0",
@@ -5736,10 +5735,10 @@
           "lib/netstandard1.4/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll": {}
         }
       },
-      "Microsoft.IdentityModel.Tokens/5.1.0": {
+      "Microsoft.IdentityModel.Tokens/5.1.4": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Logging": "1.1.0",
+          "Microsoft.IdentityModel.Logging": "1.1.4",
           "Newtonsoft.Json": "9.0.1",
           "System.Collections": "4.3.0",
           "System.Diagnostics.Tools": "4.3.0",
@@ -5749,7 +5748,6 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
           "System.Security.Claims": "4.3.0",
           "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Security.Cryptography.Csp": "4.3.0",
           "System.Security.Cryptography.X509Certificates": "4.3.0",
           "System.Text.RegularExpressions": "4.3.0",
           "System.Threading": "4.3.0",
@@ -7093,10 +7091,10 @@
           "runtimes/unix/lib/netstandard1.3/System.Globalization.Extensions.dll": {}
         }
       },
-      "System.IdentityModel.Tokens.Jwt/5.1.0": {
+      "System.IdentityModel.Tokens.Jwt/5.1.4": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "5.1.0"
+          "Microsoft.IdentityModel.Tokens": "5.1.4"
         },
         "compile": {
           "lib/netstandard1.4/System.IdentityModel.Tokens.Jwt.dll": {}
@@ -8027,7 +8025,7 @@
           "System.Threading": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Security.Cryptography.Csp.dll": {}
+          "ref/netstandard1.3/_._": {}
         },
         "runtime": {
           "runtimes/unix/lib/netstandard1.3/System.Security.Cryptography.Csp.dll": {}
@@ -8630,18 +8628,18 @@
           "lib/netstandard1.3/Dapper.dll": {}
         }
       },
-      "Hangfire/1.6.12": {
+      "Hangfire/1.6.13": {
         "type": "package",
         "dependencies": {
-          "Hangfire.AspNetCore": "[1.6.12]",
-          "Hangfire.Core": "[1.6.12]",
-          "Hangfire.SqlServer": "[1.6.12]"
+          "Hangfire.AspNetCore": "[1.6.13]",
+          "Hangfire.Core": "[1.6.13]",
+          "Hangfire.SqlServer": "[1.6.13]"
         }
       },
-      "Hangfire.AspNetCore/1.6.12": {
+      "Hangfire.AspNetCore/1.6.13": {
         "type": "package",
         "dependencies": {
-          "Hangfire.Core": "[1.6.12]",
+          "Hangfire.Core": "[1.6.13]",
           "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
@@ -8657,7 +8655,7 @@
           "lib/netstandard1.3/Hangfire.AspNetCore.dll": {}
         }
       },
-      "Hangfire.Core/1.6.12": {
+      "Hangfire.Core/1.6.13": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
@@ -8680,11 +8678,11 @@
           }
         }
       },
-      "Hangfire.SqlServer/1.6.12": {
+      "Hangfire.SqlServer/1.6.13": {
         "type": "package",
         "dependencies": {
           "Dapper": "1.50.1",
-          "Hangfire.Core": "[1.6.12]",
+          "Hangfire.Core": "[1.6.13]",
           "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
           "NETStandard.Library": "1.6.0",
           "System.Data.Common": "4.1.0",
@@ -10057,7 +10055,7 @@
           "lib/netstandard1.0/Microsoft.Extensions.WebEncoders.dll": {}
         }
       },
-      "Microsoft.IdentityModel.Logging/1.1.0": {
+      "Microsoft.IdentityModel.Logging/1.1.4": {
         "type": "package",
         "dependencies": {
           "System.Diagnostics.Tracing": "4.3.0",
@@ -10100,10 +10098,10 @@
           "lib/netstandard1.4/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll": {}
         }
       },
-      "Microsoft.IdentityModel.Tokens/5.1.0": {
+      "Microsoft.IdentityModel.Tokens/5.1.4": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Logging": "1.1.0",
+          "Microsoft.IdentityModel.Logging": "1.1.4",
           "Newtonsoft.Json": "9.0.1",
           "System.Collections": "4.3.0",
           "System.Diagnostics.Tools": "4.3.0",
@@ -10113,7 +10111,6 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
           "System.Security.Claims": "4.3.0",
           "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Security.Cryptography.Csp": "4.3.0",
           "System.Security.Cryptography.X509Certificates": "4.3.0",
           "System.Text.RegularExpressions": "4.3.0",
           "System.Threading": "4.3.0",
@@ -11421,10 +11418,10 @@
           "runtimes/win/lib/netstandard1.3/System.Globalization.Extensions.dll": {}
         }
       },
-      "System.IdentityModel.Tokens.Jwt/5.1.0": {
+      "System.IdentityModel.Tokens.Jwt/5.1.4": {
         "type": "package",
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "5.1.0"
+          "Microsoft.IdentityModel.Tokens": "5.1.4"
         },
         "compile": {
           "lib/netstandard1.4/System.IdentityModel.Tokens.Jwt.dll": {}
@@ -12355,7 +12352,7 @@
           "System.Threading": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Security.Cryptography.Csp.dll": {}
+          "ref/netstandard1.3/_._": {}
         },
         "runtime": {
           "runtimes/win/lib/netstandard1.3/System.Security.Cryptography.Csp.dll": {}
@@ -12945,22 +12942,22 @@
         "lib/netstandard1.3/Dapper.xml"
       ]
     },
-    "Hangfire/1.6.12": {
-      "sha512": "Y6FX4ruVtP8MxRNQd3p7A5J4Qdcuse89vr78wp9UjNrxuYF+fgOXs3ZnjTiSeLxDUP0yT6CJABR6YF2TioUs+g==",
+    "Hangfire/1.6.13": {
+      "sha512": "R0ZIXK77HK9p/iPZsQqo3B38/Tl5ZLe1y1ZOkTNN1YrzWtO2hr8mJKdA5HpBRagC5ZhotY/6POhXKzRepHRTDQ==",
       "type": "package",
-      "path": "Hangfire/1.6.12",
+      "path": "Hangfire/1.6.13",
       "files": [
-        "HangFire.1.6.12.nupkg.sha512",
-        "HangFire.nuspec",
+        "Hangfire.1.6.13.nupkg.sha512",
+        "Hangfire.nuspec",
         "readme.txt"
       ]
     },
-    "Hangfire.AspNetCore/1.6.12": {
-      "sha512": "H6fZvrflPFiDs9Ln18fIJq6loC69MX0EPam32IyoyD60aYRoR4Y5HM7Pm3ukCrjJ4dqyJP9oph1rw+IuDtueYg==",
+    "Hangfire.AspNetCore/1.6.13": {
+      "sha512": "0AsR+2tuYSvV4hUWzH6CN9MM7uhfkw1HzEV5riBJ/JRptNrBcq3MW7Dw4vTDN/H4ByR1aOV8bH8kHHeZYUXzJg==",
       "type": "package",
-      "path": "Hangfire.AspNetCore/1.6.12",
+      "path": "Hangfire.AspNetCore/1.6.13",
       "files": [
-        "Hangfire.AspNetCore.1.6.12.nupkg.sha512",
+        "Hangfire.AspNetCore.1.6.13.nupkg.sha512",
         "Hangfire.AspNetCore.nuspec",
         "lib/net451/Hangfire.AspNetCore.dll",
         "lib/net451/Hangfire.AspNetCore.xml",
@@ -12968,12 +12965,12 @@
         "lib/netstandard1.3/Hangfire.AspNetCore.xml"
       ]
     },
-    "Hangfire.Core/1.6.12": {
-      "sha512": "fRe9z8GiIuOBVtiwW4UvSS4jciV69nZyoKM8bJDggFAz8Y5Hei7IgVLyubXT5/Ti250XGt7waX1NjCbUeMUfxQ==",
+    "Hangfire.Core/1.6.13": {
+      "sha512": "rbi0PEydm//Qdtg1aDkMcphoYEmSY55souXp3BHl1XKpMCiQFm4B94Iyq32fUtgGl6l6fQ0aqeagcSyn5jYW5Q==",
       "type": "package",
-      "path": "Hangfire.Core/1.6.12",
+      "path": "Hangfire.Core/1.6.13",
       "files": [
-        "Hangfire.Core.1.6.12.nupkg.sha512",
+        "Hangfire.Core.1.6.13.nupkg.sha512",
         "Hangfire.Core.nuspec",
         "lib/net45/Hangfire.Core.dll",
         "lib/net45/Hangfire.Core.xml",
@@ -12985,12 +12982,12 @@
         "lib/netstandard1.3/zh/Hangfire.Core.resources.dll"
       ]
     },
-    "Hangfire.SqlServer/1.6.12": {
-      "sha512": "6HY/ry/dKG3eldkMf+FLB6PvFxdV2pSx9UVJMrFotd6AVG8C81YRbMDSDZ3smzPeqd2VsPOEqBs2LTSse274CQ==",
+    "Hangfire.SqlServer/1.6.13": {
+      "sha512": "RkxeHXOOQ1uHkb8IKS5FzJX3ZIvNY4pZ0b7sB9ZYiO4Xr62TUAt3s8m9GMR2G7vnxJyh13SYyNL5/H7PQPymrQ==",
       "type": "package",
-      "path": "Hangfire.SqlServer/1.6.12",
+      "path": "Hangfire.SqlServer/1.6.13",
       "files": [
-        "Hangfire.SqlServer.1.6.12.nupkg.sha512",
+        "Hangfire.SqlServer.1.6.13.nupkg.sha512",
         "Hangfire.SqlServer.nuspec",
         "lib/net45/Hangfire.SqlServer.dll",
         "lib/net45/Hangfire.SqlServer.xml",
@@ -14116,15 +14113,19 @@
         "lib/netstandard1.0/Microsoft.Extensions.WebEncoders.xml"
       ]
     },
-    "Microsoft.IdentityModel.Logging/1.1.0": {
-      "sha512": "Dv3G9GIdKyCc4xJjZECQosRJ9//4q/yXmb0vOUOjN1XpkCcHEt5UJ5S4zm8yJR+5tLODA159G2QtVNtK1RsAXw==",
+    "Microsoft.IdentityModel.Logging/1.1.4": {
+      "sha512": "j7t22EsDOuo0IXqAbp6ijdB1GuaY8cu3YoPNZpymOhUMTVC+wRTV0IHqxL31HacCnJHU/igsqe70fDKZgZu3oA==",
       "type": "package",
-      "path": "Microsoft.IdentityModel.Logging/1.1.0",
+      "path": "Microsoft.IdentityModel.Logging/1.1.4",
       "files": [
-        "Microsoft.IdentityModel.Logging.1.1.0.nupkg.sha512",
+        "Microsoft.IdentityModel.Logging.1.1.4.nupkg.sha512",
         "Microsoft.IdentityModel.Logging.nuspec",
+        "lib/net45/Microsoft.IdentityModel.Logging.dll",
+        "lib/net45/Microsoft.IdentityModel.Logging.xml",
         "lib/net451/Microsoft.IdentityModel.Logging.dll",
-        "lib/netstandard1.4/Microsoft.IdentityModel.Logging.dll"
+        "lib/net451/Microsoft.IdentityModel.Logging.xml",
+        "lib/netstandard1.4/Microsoft.IdentityModel.Logging.dll",
+        "lib/netstandard1.4/Microsoft.IdentityModel.Logging.xml"
       ]
     },
     "Microsoft.IdentityModel.Protocols/2.1.2": {
@@ -14153,13 +14154,15 @@
         "lib/netstandard1.4/Microsoft.IdentityModel.Protocols.OpenIdConnect.xml"
       ]
     },
-    "Microsoft.IdentityModel.Tokens/5.1.0": {
-      "sha512": "Hg1+IbP0F9oQ8qIxQobKoOczrwufYMNHrSXj+xF1+4VCpvymhyvpVcgLqi5GOie1qcQYp/yBy04dpBImemVXKg==",
+    "Microsoft.IdentityModel.Tokens/5.1.4": {
+      "sha512": "SsJbZVPvjSlKFDAQmR2wpL6ZD/vCFlIsf0jxRlBJwyzKXZy3Wi/Xo+fE2MzAerLsJgG1UCdtplRwqDyq1euayw==",
       "type": "package",
-      "path": "Microsoft.IdentityModel.Tokens/5.1.0",
+      "path": "Microsoft.IdentityModel.Tokens/5.1.4",
       "files": [
-        "Microsoft.IdentityModel.Tokens.5.1.0.nupkg.sha512",
+        "Microsoft.IdentityModel.Tokens.5.1.4.nupkg.sha512",
         "Microsoft.IdentityModel.Tokens.nuspec",
+        "lib/net45/Microsoft.IdentityModel.Tokens.dll",
+        "lib/net45/Microsoft.IdentityModel.Tokens.xml",
         "lib/net451/Microsoft.IdentityModel.Tokens.dll",
         "lib/net451/Microsoft.IdentityModel.Tokens.xml",
         "lib/netstandard1.4/Microsoft.IdentityModel.Tokens.dll",
@@ -16910,13 +16913,15 @@
         "runtimes/win/lib/netstandard1.3/System.Globalization.Extensions.dll"
       ]
     },
-    "System.IdentityModel.Tokens.Jwt/5.1.0": {
-      "sha512": "oMcOZ0/7seZYkv8yRPBlfHyc7K/33TS0hVtshvOAiH9rHWqCb3htq4mEbOtqMTo45pzblcm10ArpERlZrSS69A==",
+    "System.IdentityModel.Tokens.Jwt/5.1.4": {
+      "sha512": "hLUU1N99aL9uyxiTraBnCKlpUKsbP/+5ygD7cswspH9/+M7fAAL0hRzt2aA4w7VEQlSSiu8j+xWFk3NRcqhfQQ==",
       "type": "package",
-      "path": "System.IdentityModel.Tokens.Jwt/5.1.0",
+      "path": "System.IdentityModel.Tokens.Jwt/5.1.4",
       "files": [
-        "System.IdentityModel.Tokens.Jwt.5.1.0.nupkg.sha512",
+        "System.IdentityModel.Tokens.Jwt.5.1.4.nupkg.sha512",
         "System.IdentityModel.Tokens.Jwt.nuspec",
+        "lib/net45/System.IdentityModel.Tokens.Jwt.dll",
+        "lib/net45/System.IdentityModel.Tokens.Jwt.xml",
         "lib/net451/System.IdentityModel.Tokens.Jwt.dll",
         "lib/net451/System.IdentityModel.Tokens.Jwt.xml",
         "lib/netstandard1.4/System.IdentityModel.Tokens.Jwt.dll",
@@ -20373,7 +20378,7 @@
   "projectFileDependencyGroups": {
     "": [
       "Apresentacao >= 1.0.0-*",
-      "Hangfire >= 1.6.12",
+      "Hangfire >= 1.6.13",
       "IdentityModel >= 2.9.1",
       "Infraestrutura >= 1.0.0-*",
       "Microsoft.ApplicationInsights.AspNetCore >= 1.0.0",
@@ -20387,9 +20392,10 @@
       "Microsoft.Extensions.Logging.Console >= 1.0.0",
       "Microsoft.Extensions.Logging.Debug >= 1.1.0",
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 1.1.0",
+      "Microsoft.IdentityModel.Tokens >= 5.1.4",
       "Microsoft.NETCore.App >= 1.1.0",
       "Negocio >= 1.0.0-*",
-      "System.IdentityModel.Tokens.Jwt >= 5.1.0"
+      "System.IdentityModel.Tokens.Jwt >= 5.1.4"
     ],
     ".NETCoreApp,Version=v1.0": []
   },

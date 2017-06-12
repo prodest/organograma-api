@@ -8,7 +8,7 @@
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
     "Microsoft.Extensions.Logging.Console": "1.0.0",
-    "Hangfire": "1.6.12",
+    "Hangfire": "1.6.13",
     "IdentityModel": "2.9.1",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.AspNetCore.Mvc": "1.1.0",
@@ -16,8 +16,9 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
-    "System.IdentityModel.Tokens.Jwt": "5.1.0",
-    "Microsoft.AspNetCore.Authentication.OpenIdConnect": "1.1.2"
+    "System.IdentityModel.Tokens.Jwt": "5.1.4",
+    "Microsoft.AspNetCore.Authentication.OpenIdConnect": "1.1.2",
+    "Microsoft.IdentityModel.Tokens": "5.1.4"
   },
 
   "tools": {

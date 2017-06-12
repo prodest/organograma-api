@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:8935/",
+      "applicationUrl": "http://localhost:9935/",
       "sslPort": 0
     }
   },
@@ -19,7 +19,7 @@
     "JobScheduler": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:9935/jobscheduler",
+      "launchUrl": "http://localhost:9935/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

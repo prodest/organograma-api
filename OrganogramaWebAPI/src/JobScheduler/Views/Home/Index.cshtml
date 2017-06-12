@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Organograma Job Scheduler</title>
+</head>
+<body>
+    <h3>Organograma Job Scheduler</h3>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <br />
+        <a href="/Home/Sair">Sair</a>
+    }
+    else
+    {
+        <br />
+        <a href="/Home/Entrar">Entrar</a>
+    }
+</body>
+</html>

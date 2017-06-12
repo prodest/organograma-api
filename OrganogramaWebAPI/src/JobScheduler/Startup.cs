@@ -1,21 +1,21 @@
 ﻿using Hangfire;
 using Hangfire.AspNetCore;
 using Hangfire.SqlServer;
+using JobScheduler.Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Organograma.Infraestrutura.Mapeamento;
 using Organograma.JobScheduler.Commom;
 using Organograma.JobScheduler.Commom.Config;
 using Organograma.JobScheduler.Hangfire.Middleware;
 using Organograma.Negocio.Commom.Base;
 using System;
-using IdentityModel;
-
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Organograma.JobScheduler
@@ -76,37 +76,55 @@ namespace Organograma.JobScheduler
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationScheme = "Cookies",
-
+                
                 AutomaticAuthenticate = true,
 
                 ExpireTimeSpan = TimeSpan.FromMinutes(60),
-                CookieName = "mvchybrid"
+                CookieName = "OrganogramaJobScheduler"
             });
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             AutenticacaoIdentityServer autenticacaoIdentityServer = autenticacaoIdentityServerConfig.Value;
-            app.UseOpenIdConnectAuthentication(options =>{});
+            OpenIdConnectOptions oico = new OpenIdConnectOptions {
+                AuthenticationScheme = "oidc",
+                SignInScheme = "Cookies",
 
+                Authority = autenticacaoIdentityServer.Authority,
+                RequireHttpsMetadata = autenticacaoIdentityServer.RequireHttpsMetadata,
+
+                ClientId = Environment.GetEnvironmentVariable("OrganogramaJobSchedulerClientId"),
+                ClientSecret = Environment.GetEnvironmentVariable("OrganogramaJobSchedulerSecret"),
+
+                ResponseType = "code id_token",
+                GetClaimsFromUserInfoEndpoint = true,
+
+                SaveTokens = true,
+
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "nome",
+                    RoleClaimType = "role",
+                }
+            };
+            foreach (string scope in autenticacaoIdentityServer.AllowedScopes)
+            {
+                oico.Scope.Add(scope);
+            }
+
+            app.UseOpenIdConnectAuthentication(oico);
 
             #region Hangfire
-            //Verica se está no ambiente de desenvolvimento para não iniciar o serviço
-            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
-            //{
-            //var authorizationFilters = new IAuthorizationFilter[]
-            //                                   {
-            //                                       new AuthorizationFilter
-            //                                       {
-            //                                           Roles = "MyAuthorizedRole1;MyAuthorizedRole2"
-            //                                       },
-            //                                   };
-
-            app.UseHangfireDashboard("/jobscheduler");
+            app.UseHangfireDashboard("/restrito", new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
                 app.UseHangfireServer();
                 app.UseHangfire();
-            //}
             #endregion
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
