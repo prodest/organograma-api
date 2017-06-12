@@ -176,6 +176,11 @@ namespace Organograma.Apresentacao.Config
                    .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco != null ? Mapper.Map<EnderecoModeloNegocio, EnderecoModeloGet>(s.Endereco) : null))
                 ;
 
+                cfg.CreateMap<UnidadeModeloNegocio, UnidadeSimplesModeloGet>()
+                   .ForMember(dest => dest.TipoUnidade, opt => opt.MapFrom(s => s.TipoUnidade != null ? Mapper.Map<TipoUnidadeModeloNegocio, TipoUnidadeModeloPut>(s.TipoUnidade) : null))
+                   .ForMember(dest => dest.UnidadePai, opt => opt.MapFrom(s => s.UnidadePai != null ? Mapper.Map<UnidadeModeloNegocio, UnidadePaiModeloGet>(s.UnidadePai) : null))
+                ;
+
                 cfg.CreateMap<UnidadeModeloPost, UnidadeModeloNegocio>()
                    .ForMember(dest => dest.Organizacao, opt => opt.MapFrom(s => !string.IsNullOrWhiteSpace(s.GuidOrganizacao) ? new OrganizacaoModeloNegocio() { Guid = s.GuidOrganizacao } : null))
                    .ForMember(dest => dest.TipoUnidade, opt => opt.MapFrom(s => s.IdTipoUnidade != default(int) ? new TipoUnidadeModeloNegocio() { Id = s.IdTipoUnidade } : null))

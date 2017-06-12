@@ -32,7 +32,7 @@ namespace Organograma.WebAPI.Controllers
         /// <response code="400">Falha na validação.</response>
         /// <response code="500">Erro inesperado.</response>
         [HttpGet("organizacao/{guid}")]
-        [ProducesResponseType(typeof(List<UnidadeModeloGet>), 200)]
+        [ProducesResponseType(typeof(List<UnidadeSimplesModeloGet>), 200)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 500)]
         public IActionResult PesquisarPorOrganizacao(string guid)
