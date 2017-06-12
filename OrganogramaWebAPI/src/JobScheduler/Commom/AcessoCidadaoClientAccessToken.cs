@@ -1,11 +1,12 @@
 ﻿using IdentityModel.Client;
 using Microsoft.Extensions.Options;
-using Organograma.WebAPI.Base;
+using Organograma.JobScheduler.Commom.Config;
+using Organograma.Negocio.Commom.Base;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Organograma.WebAPI.Config
+namespace Organograma.JobScheduler.Commom
 {
     public class AcessoCidadaoClientAccessToken : IClientAccessToken
     {

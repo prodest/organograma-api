@@ -1,5 +1,4 @@
-﻿using Apresentacao.Base;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organograma.Apresentacao.Base;
@@ -18,7 +17,7 @@ namespace Organograma.WebAPI.Controllers
     {
         ITipoOrganizacaoWorkService service;
 
-        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service, IOrganizacaoWorkService organizacaoService, IHttpContextAccessor httpContextAccessor, IClientAccessToken clientAccessToken) : base(organizacaoService, httpContextAccessor, clientAccessToken)
+        public TipoOrganizacaoController(ITipoOrganizacaoWorkService service)
         {
             this.service = service;
         }

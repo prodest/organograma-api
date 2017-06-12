@@ -7,7 +7,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Organograma.Infraestrutura.Mapeamento;
-using Organograma.WebAPI.Base;
+using Organograma.Negocio.Commom.Base;
+using Organograma.WebAPI.Commom;
+using Organograma.WebAPI.Commom.Config;
 using Organograma.WebAPI.Config;
 using Organograma.WebAPI.Middleware;
 using Swashbuckle.Swagger.Model;
@@ -42,18 +44,19 @@ namespace Organograma.WebAPI
 
             services.AddMemoryCache();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IClientAccessToken, AcessoCidadaoClientAccessToken>();
+            services.AddScoped<ICurrentUserProvider, CurrentUser>();
+
+            ConfiguracaoDependencias.InjetarDependencias(services);
+            ConfiguracaoAutoMapper.CriarMapeamento();
+
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IClientAccessToken, AcessoCidadaoClientAccessToken>();
-
-            ConfiguracaoDependencias.InjetarDependencias(services);
-            ConfiguracaoAutoMapper.CriarMapeamento();
 
             #region Políticas que serão concedidas
             services.AddAuthorization(options =>

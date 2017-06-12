@@ -12,6 +12,7 @@ namespace Organograma.Negocio
 {
     public class IntegracaoSiarhesNegocio
     {
+        private const string _baseUrlSiarhes = "https://api.es.gov.br/siarhes/v1/";
         private IUnitOfWork _unitOfWork;
         private IRepositorioGenerico<Organizacao> _repositorioOrganizacoes;
         private IRepositorioGenerico<Unidade> _repositorioUnidades;
@@ -54,7 +55,7 @@ namespace Organograma.Negocio
             TiposUnidades = _repositorioTiposUnidades.ToList();
             Municipios = repositorios.Municipios.ToList();
 
-            List<OrganizacaoSiarhes> organizacoesSiarhes = JsonData.DownloadAsync<List<OrganizacaoSiarhes>>("https://api.es.gov.br/siarhes/v1/subempresas", clientAccessToken).Result;
+            List<OrganizacaoSiarhes> organizacoesSiarhes = JsonData.DownloadAsync<List<OrganizacaoSiarhes>>($"{_baseUrlSiarhes}subempresas", clientAccessToken).Result;
 
             //TODO: Foram retiradas as unidades de algumas organizações, pois existem dados duplicados de nome da unidade
             organizacoesSiarhes = organizacoesSiarhes.Where(us => !(us.Empresa == 9 && us.Codigo == 1)) //DETRAN
@@ -73,7 +74,7 @@ namespace Organograma.Negocio
                 _unitOfWork.Save();
             }
 
-            List<UnidadeSiarhes> unidadesSiarhes = JsonData.DownloadAsync<List<UnidadeSiarhes>>("https://api.es.gov.br/siarhes/v1/organograma", clientAccessToken).Result;
+            List<UnidadeSiarhes> unidadesSiarhes = JsonData.DownloadAsync<List<UnidadeSiarhes>>($"{_baseUrlSiarhes}organograma", clientAccessToken).Result;
 
             var idsOrganizacoes = organizacoesSiarhes.Select(os => new { Empresa = os.Empresa, Subempresa = os.Codigo })
                                                      .ToList();
