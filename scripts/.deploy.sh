@@ -16,3 +16,4 @@ node ./client --ENVIRONMENT=$RANCHER_ENV \
     --IMAGE=$IMAGE_NAME --START_FIRST=$RANCHER_START_FIRST
 
 cd ..
+rm -r api-cloud-v2
