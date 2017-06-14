@@ -3,6 +3,8 @@ using Apresentacao.Base;
 using Microsoft.Extensions.DependencyInjection;
 using Organograma.Apresentacao;
 using Organograma.Apresentacao.Base;
+using Organograma.Negocio;
+using Organograma.Negocio.Base;
 using System;
 using System.Collections.Generic;
 
@@ -23,6 +25,8 @@ namespace Organograma.WebAPI.Config
             dependencias.Add(typeof(IOrganizacaoWorkService), typeof(OrganizacaoWorkService));
             dependencias.Add(typeof(IUnidadeWorkService), typeof(UnidadeWorkService));
 
+            dependencias.Add(typeof(IGuidOrganizacaoProvider), typeof(GuidOrganizacao));
+
             return dependencias;
         }
 
@@ -37,7 +41,5 @@ namespace Organograma.WebAPI.Config
             }
 
         }
-
-
     }
 }

@@ -285,6 +285,14 @@ namespace Organograma.Negocio.Validacao
             }
         }
 
+        internal void NaoEncontrado(Guid guid)
+        {
+            if (guid == null || guid.Equals(Guid.Empty))
+            {
+                throw new OrganogramaNaoEncontradoException("Organização não encontrada.");
+            }
+        }
+
         internal void GuidValido(OrganizacaoModeloNegocio organizacaoNegocio)
         {
             GuidValido(organizacaoNegocio.Guid);
