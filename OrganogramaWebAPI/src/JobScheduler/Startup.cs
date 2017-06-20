@@ -73,10 +73,6 @@ namespace Organograma.JobScheduler
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            string cookiePath = "/prodest/organograma-jobscheduler/";
-            if (env.IsDevelopment())
-                cookiePath = "/";
-
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationScheme = "Cookies",
@@ -86,7 +82,7 @@ namespace Organograma.JobScheduler
                 ExpireTimeSpan = TimeSpan.FromMinutes(60),
                 CookieName = "OrganogramaJobScheduler.Auth",
 
-                CookiePath = cookiePath
+                CookiePath = Environment.GetEnvironmentVariable("REQUEST_PATH")
             });
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -120,7 +116,7 @@ namespace Organograma.JobScheduler
             app.UseOpenIdConnectAuthentication(oico);
 
             #region Hangfire
-            app.UseHangfireDashboard("/restrito", new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
+            app.UseHangfireDashboard($"{Environment.GetEnvironmentVariable("REQUEST_PATH")}/restrito", new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
                 app.UseHangfireServer();
                 app.UseHangfire();
             #endregion

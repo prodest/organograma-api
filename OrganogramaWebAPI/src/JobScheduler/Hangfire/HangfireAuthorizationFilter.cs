@@ -19,7 +19,7 @@ namespace JobScheduler.Hangfire
                                             .Select(c => c.Value)
                                             .ToList();
 
-                    if (perfis != null || perfis.Contains("Administrador"))
+                    if (perfis != null && perfis.Contains("Administrador"))
                         isAuthenticated = true;
                 }
             }
