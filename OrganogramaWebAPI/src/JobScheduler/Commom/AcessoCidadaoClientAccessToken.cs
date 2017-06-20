@@ -22,8 +22,8 @@ namespace Organograma.JobScheduler.Commom
 
         public AcessoCidadaoClientAccessToken(IOptions<AutenticacaoIdentityServer> autenticacaoIdentityServerConfig)
         {
-            _clientId = Environment.GetEnvironmentVariable("OrganogramaApiClientId");
-            _secret = Environment.GetEnvironmentVariable("OrganogramaApiSecret");
+            _clientId = Environment.GetEnvironmentVariable("OrganogramaJobSchedulerClientId");
+            _secret = Environment.GetEnvironmentVariable("OrganogramaJobSchedulerSecret");
             _autenticacaoIdentityServerConfig = autenticacaoIdentityServerConfig;
         }
 
