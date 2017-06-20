@@ -82,7 +82,7 @@ namespace Organograma.JobScheduler
                 ExpireTimeSpan = TimeSpan.FromMinutes(60),
                 CookieName = "OrganogramaJobScheduler.Auth",
 
-                CookiePath = Environment.GetEnvironmentVariable("REQUEST_PATH")
+                CookiePath = $"{Environment.GetEnvironmentVariable("REQUEST_PATH")}/"
             });
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
