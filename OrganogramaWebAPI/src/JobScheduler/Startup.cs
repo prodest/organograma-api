@@ -73,6 +73,10 @@ namespace Organograma.JobScheduler
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            string cookiePath = "/prodest/organograma-jobscheduler/";
+            if (env.IsDevelopment())
+                cookiePath = "/";
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationScheme = "Cookies",
@@ -80,7 +84,9 @@ namespace Organograma.JobScheduler
                 AutomaticAuthenticate = true,
 
                 ExpireTimeSpan = TimeSpan.FromMinutes(60),
-                CookieName = "OrganogramaJobScheduler"
+                CookieName = "OrganogramaJobScheduler.Auth",
+
+                CookiePath = cookiePath
             });
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
