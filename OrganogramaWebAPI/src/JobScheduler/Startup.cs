@@ -116,7 +116,7 @@ namespace Organograma.JobScheduler
             app.UseOpenIdConnectAuthentication(oico);
 
             #region Hangfire
-            app.UseHangfireDashboard($"{Environment.GetEnvironmentVariable("REQUEST_PATH")}/restrito", new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
+            app.UseHangfireDashboard("/restrito", new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
                 app.UseHangfireServer();
                 app.UseHangfire();
             #endregion
