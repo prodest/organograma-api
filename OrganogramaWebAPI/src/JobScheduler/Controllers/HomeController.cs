@@ -12,7 +12,7 @@ namespace JobScheduler.Controllers
 
         public IActionResult Entrar()
         {
-            return Redirect("/restrito");
+            return RedirectToAction("", "restrito");
         }
 
         public async Task<IActionResult> Sair()

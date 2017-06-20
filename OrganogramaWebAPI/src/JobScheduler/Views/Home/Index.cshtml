@@ -10,12 +10,12 @@
     @if (User.Identity.IsAuthenticated)
     {
         <br />
-        <a href="/Home/Sair">Sair</a>
+        <a href="@Url.Action("Sair")">Sair</a>
     }
     else
     {
         <br />
-        <a href="/Home/Entrar">Entrar</a>
+        <a href="@Url.Action("Entrar")">Entrar</a>
     }
 </body>
 </html>
