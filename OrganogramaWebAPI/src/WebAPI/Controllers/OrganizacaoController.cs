@@ -96,19 +96,20 @@ namespace Organograma.WebAPI.Controllers
         /// Retorna as informações da organização informada.
         /// </summary>
         /// <param name="sigla">Sigla da organização a qual se deseja obter suas informações.</param>
+        /// <param name="guidPatriarca">Indica se irá retornar o guid da patriarca.</param>
         /// <returns>Infomações da organização informada.</returns>
         /// <response code="200">Retorna as informações da organização informada.</response>
         /// <response code="404">Organização não foi encontrada.</response>
         /// <response code="500">Erro inesperado.</response>
         [HttpGet("sigla/{sigla}")]
-        [ProducesResponseType(typeof(OrganizacaoModeloGet), 200)]
+        [ProducesResponseType(typeof(OrganizacaoModeloGetPorSigla), 200)]
         [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult PesquisarPorSigla(string sigla)
+        public IActionResult PesquisarPorSigla(string sigla, [FromQuery] bool guidPatriarca = false)
         {
             try
             {
-                return new ObjectResult(service.PesquisarPorSigla(sigla));
+                return new ObjectResult(service.PesquisarPorSigla(sigla, guidPatriarca));
             }
 
             catch (OrganogramaNaoEncontradoException e)

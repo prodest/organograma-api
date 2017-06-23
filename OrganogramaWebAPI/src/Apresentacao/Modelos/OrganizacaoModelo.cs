@@ -56,6 +56,24 @@ namespace Organograma.Apresentacao.Modelos
         public TipoOrganizacaoModeloPost TipoOrganizacao { get; set; }
     }
 
+    public class OrganizacaoModeloGetPorSigla
+    {
+        public string Guid { get; set; }
+        public string Cnpj { get; set; }
+        public string RazaoSocial { get; set; }
+        public string NomeFantasia { get; set; }
+        public string Sigla { get; set; }
+        public string GuidPatriarca { get; set; }
+        public List<ContatoModeloGet> Contatos { get; set; }
+        public List<EmailModelo> Emails { get; set; }
+        public EnderecoModeloGet Endereco { get; set; }
+        public EsferaOrganizacaoModeloPost Esfera { get; set; }
+        public PoderModeloPost Poder { get; set; }
+        public OrganizacaoPaiModeloGet OrganizacaoPai { get; set; }
+        public List<SiteModelo> Sites { get; set; }
+        public TipoOrganizacaoModeloPost TipoOrganizacao { get; set; }
+    }
+
     public class OrganizacaoModeloPatch
     {
         public string Guid { get; set; }

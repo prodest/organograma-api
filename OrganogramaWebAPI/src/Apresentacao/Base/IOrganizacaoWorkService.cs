@@ -15,7 +15,7 @@ namespace Apresentacao.Base
         SiteModeloPatch InserirSite(int idOrganizacao, SiteModelo sitePost);
         OrganizacaoModeloGet PesquisarPatriarca(string guid);
         List<OrganizacaoModeloGet> PesquisarFilhas(string guid);
-        OrganizacaoModeloGet PesquisarPorSigla(string sigla);
+        OrganizacaoModeloGetPorSigla PesquisarPorSigla(string sigla, bool patriarca);
         OrganizacaoOrganograma PesquisarOrganograma(string guid, bool filhas);
         List<OrganizacaoOrganograma> PesquisarOrganograma();
         List<OrganizacaoModeloGet> PesquisarPorUsuario(bool filhas);

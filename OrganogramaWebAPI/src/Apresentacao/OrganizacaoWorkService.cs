@@ -77,9 +77,19 @@ namespace Organograma.Apresentacao
         {
             return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.Pesquisar(guid));
         }
-        public OrganizacaoModeloGet PesquisarPorSigla(string sigla)
+
+        public OrganizacaoModeloGetPorSigla PesquisarPorSigla(string sigla, bool patriarca)
         {
-            return Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGet>(organizacaoNegocio.PesquisarPorSigla(sigla));
+            var organizacao = Mapper.Map<OrganizacaoModeloNegocio, OrganizacaoModeloGetPorSigla>(organizacaoNegocio.PesquisarPorSigla(sigla));
+
+            if (patriarca)
+            {
+                var organizacaoPatriarca = organizacaoNegocio.PesquisarPatriarca(organizacao.Guid);
+
+                organizacao.GuidPatriarca = organizacaoPatriarca.Guid;
+            }
+
+            return organizacao;
         }
 
         public OrganizacaoModeloGet PesquisarPatriarca(string guid)

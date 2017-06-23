@@ -110,6 +110,17 @@ namespace Organograma.Apresentacao.Config
                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao))
                 ;
 
+                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoModeloGetPorSigla>()
+                .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.Contatos))
+                .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.Emails))
+                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(s => s.Endereco))
+                .ForMember(dest => dest.Esfera, opt => opt.MapFrom(s => s.Esfera))
+                .ForMember(dest => dest.Poder, opt => opt.MapFrom(s => s.Poder))
+                .ForMember(dest => dest.OrganizacaoPai, opt => opt.MapFrom(s => s.OrganizacaoPai))
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.Sites))
+                .ForMember(dest => dest.TipoOrganizacao, opt => opt.MapFrom(s => s.TipoOrganizacao))
+                ;
+
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoUnidadeModeloGet>();
 
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoPaiModeloGet>();
