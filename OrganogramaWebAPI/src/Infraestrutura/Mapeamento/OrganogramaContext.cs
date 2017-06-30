@@ -514,10 +514,6 @@ namespace Organograma.Infraestrutura.Mapeamento
 
             modelBuilder.Entity<Unidade>(entity =>
             {
-                entity.HasIndex(e => new { e.IdOrganizacao, e.Nome })
-                    .HasName("UK_UnidadeNome")
-                    .IsUnique();
-
                 entity.HasIndex(e => new { e.IdOrganizacao, e.Sigla })
                     .HasName("UK_UnidadeSigla")
                     .IsUnique();

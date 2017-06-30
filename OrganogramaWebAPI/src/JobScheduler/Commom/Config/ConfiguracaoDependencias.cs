@@ -1,6 +1,8 @@
 ﻿using Apresentacao.Base;
 using Microsoft.Extensions.DependencyInjection;
 using Organograma.Apresentacao;
+using Organograma.Negocio;
+using Organograma.Negocio.Base;
 using System;
 using System.Collections.Generic;
 
@@ -14,6 +16,8 @@ namespace Organograma.JobScheduler.Commom.Config
             dependencias = Apresentacao.Config.ConfiguracaoDepedencias.ObterDependencias();
 
             dependencias.Add(typeof(IOrganizacaoWorkService), typeof(OrganizacaoWorkService));
+
+            dependencias.Add(typeof(IGuidOrganizacaoProvider), typeof(GuidOrganizacao));
 
             return dependencias;
         }

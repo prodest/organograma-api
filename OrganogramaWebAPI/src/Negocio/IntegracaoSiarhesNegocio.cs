@@ -58,8 +58,7 @@ namespace Organograma.Negocio
             List<OrganizacaoSiarhes> organizacoesSiarhes = JsonData.DownloadAsync<List<OrganizacaoSiarhes>>($"{_baseUrlSiarhes}subempresas", clientAccessToken).Result;
 
             //TODO: Foram retiradas as unidades de algumas organizações, pois existem dados duplicados de nome da unidade
-            organizacoesSiarhes = organizacoesSiarhes.Where(us => !(us.Empresa == 9 && us.Codigo == 1)) //DETRAN
-                                                     .ToList();
+            organizacoesSiarhes = organizacoesSiarhes.ToList();
 
             if (organizacoesSiarhes != null && organizacoesSiarhes.Count > 0)
             {
@@ -78,18 +77,6 @@ namespace Organograma.Negocio
 
             var idsOrganizacoes = organizacoesSiarhes.Select(os => new { Empresa = os.Empresa, Subempresa = os.Codigo })
                                                      .ToList();
-            
-            //Pegando somente as unidades cujas organizações foram inseridas
-            unidadesSiarhes = unidadesSiarhes.Where(us => idsOrganizacoes.Contains(new { Empresa = us.Empresa, Subempresa = us.Subempresa}))
-                                             .ToList();
-
-            //TODO: Foram retiradas as unidades de algumas organizações, pois existem dados duplicados de nome da unidade
-            unidadesSiarhes = unidadesSiarhes.Where(us => !(us.Empresa == 1 && us.Subempresa == 51) //SEDU
-                                                       && !(us.Empresa == 6 && us.Subempresa == 1) //IASES
-                                                       && !(us.Empresa == 1 && us.Subempresa == 2) //PMES
-                                                       && !(us.Empresa == 1 && us.Subempresa == 3) //CBMES
-                                                       && !(us.Empresa == 1 && us.Subempresa == 24)) //SEJUS
-                                             .ToList();
 
             if (unidadesSiarhes != null && unidadesSiarhes.Count > 0)
             {
@@ -560,24 +547,17 @@ namespace Organograma.Negocio
             if (organizacao == null) throw new ArgumentNullException("A organização não pode ser nula.");
             if (organizacaoSiarhes == null) throw new ArgumentNullException("A organização SIARHES não pode ser nula.");
 
-            if (!string.IsNullOrWhiteSpace(organizacaoSiarhes.Bairro)
-                && !string.IsNullOrWhiteSpace(organizacaoSiarhes.Cep)
-                && !string.IsNullOrWhiteSpace(organizacaoSiarhes.Logradouro)
-                && !string.IsNullOrWhiteSpace(organizacaoSiarhes.Municipio)
-                )
-            {
-                if (organizacao.Endereco == null)
-                    organizacao.Endereco = new Endereco();
+            if (organizacao.Endereco == null)
+                organizacao.Endereco = new Endereco();
 
-                organizacao.Endereco.Bairro = organizacaoSiarhes.Bairro;
-                organizacao.Endereco.Cep = organizacaoSiarhes.Cep;
-                organizacao.Endereco.Complemento = !string.IsNullOrWhiteSpace(organizacaoSiarhes.Complemento) ? organizacaoSiarhes.Complemento : null;
-                organizacao.Endereco.IdMunicipio = ObterIdMunicipio(organizacaoSiarhes.Municipio);
-                organizacao.Endereco.Logradouro = organizacaoSiarhes.Logradouro;
-                organizacao.Endereco.Numero = !string.IsNullOrWhiteSpace(organizacaoSiarhes.NumEnder) ? organizacaoSiarhes.NumEnder : null;
-            }
-            else
-                throw new OrganogramaException($"A organização {organizacaoSiarhes.Empresa} - {organizacaoSiarhes.Codigo} - {organizacaoSiarhes.Razao} - {organizacaoSiarhes.Fantasia} não possui endereço.");
+            string informacaoNaoFornecida = "Informação não fornecida [SIARHES]";
+
+            organizacao.Endereco.Bairro = !string.IsNullOrWhiteSpace(organizacaoSiarhes.Bairro) ? organizacaoSiarhes.Bairro : informacaoNaoFornecida;
+            organizacao.Endereco.Cep = !string.IsNullOrWhiteSpace(organizacaoSiarhes.Cep) ? organizacaoSiarhes.Cep : informacaoNaoFornecida;
+            organizacao.Endereco.Complemento = !string.IsNullOrWhiteSpace(organizacaoSiarhes.Complemento) ? organizacaoSiarhes.Complemento : null;
+            organizacao.Endereco.IdMunicipio = ObterIdMunicipio(organizacaoSiarhes.Municipio);
+            organizacao.Endereco.Logradouro = !string.IsNullOrWhiteSpace(organizacaoSiarhes.Logradouro) ? organizacaoSiarhes.Logradouro : informacaoNaoFornecida;
+            organizacao.Endereco.Numero = !string.IsNullOrWhiteSpace(organizacaoSiarhes.NumEnder) ? organizacaoSiarhes.NumEnder : null;
         }
 
         private void PreencherEndereco(Unidade unidade, UnidadeSiarhes unidadeSiarhes)
