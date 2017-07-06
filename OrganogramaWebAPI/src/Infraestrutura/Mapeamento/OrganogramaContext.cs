@@ -1,7 +1,6 @@
-﻿using Organograma.Dominio.Modelos;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Logging;
+using Organograma.Dominio.Modelos;
 using System;
 
 namespace Organograma.Infraestrutura.Mapeamento
@@ -18,6 +17,7 @@ namespace Organograma.Infraestrutura.Mapeamento
         public virtual DbSet<EmailUnidade> EmailUnidade { get; set; }
         public virtual DbSet<Endereco> Endereco { get; set; }
         public virtual DbSet<EsferaOrganizacao> EsferaOrganizacao { get; set; }
+        public virtual DbSet<HistoricoMunicipio> HistoricoMunicipio { get; set; }
         public virtual DbSet<IdentificadorExterno> IdentificadorExterno { get; set; }
         public virtual DbSet<Municipio> Municipio { get; set; }
         public virtual DbSet<Organizacao> Organizacao { get; set; }
@@ -226,6 +226,43 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnType("varchar(100)");
             });
 
+            modelBuilder.Entity<HistoricoMunicipio>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.FimVigencia)
+                    .HasColumnName("fimVigencia")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.IdIdentificadorExterno).HasColumnName("idIdentificadorExterno");
+
+                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
+
+                entity.Property(e => e.InicioVigencia)
+                    .HasColumnName("inicioVigencia")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Json)
+                    .IsRequired()
+                    .HasColumnName("json")
+                    .HasColumnType("varchar(max)");
+
+                entity.Property(e => e.ObservacaoFimVigencia)
+                    .HasColumnName("observacaoFimVigencia")
+                    .HasColumnType("varchar(100)");
+
+                entity.HasOne(d => d.IdentificadorExterno)
+                    .WithMany(p => p.HistoricosMunicipio)
+                    .HasForeignKey(d => d.IdIdentificadorExterno)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_HistoricoMunicipio_IdentificadorExterno");
+
+                entity.HasOne(d => d.Municipio)
+                    .WithMany(p => p.HistoricosMunicipio)
+                    .HasForeignKey(d => d.IdMunicipio)
+                    .HasConstraintName("FK_HistoricoMunicipio_Municipio");
+            });
+
             modelBuilder.Entity<IdentificadorExterno>(entity =>
             {
                 entity.HasIndex(e => e.Guid)
@@ -261,33 +298,21 @@ namespace Organograma.Infraestrutura.Mapeamento
             modelBuilder.Entity<Municipio>(entity =>
             {
                 entity.HasIndex(e => e.CodigoIbge)
-                    .HasName("UQ__codigoIbge")
+                    .HasName("UK_Municipio_CodigoIbge")
                     .IsUnique();
 
                 entity.HasIndex(e => new { e.Nome, e.Uf })
-                    .HasName("UQ_nome_uf")
+                    .HasName("UK_Municipio_NomeUf")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.CodigoIbge).HasColumnName("codigoIbge");
 
-                entity.Property(e => e.FimVigencia)
-                    .HasColumnName("fimVigencia")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.InicioVigencia)
-                    .HasColumnName("inicioVigencia")
-                    .HasColumnType("datetime");
-
                 entity.Property(e => e.Nome)
                     .IsRequired()
                     .HasColumnName("nome")
                     .HasColumnType("varchar(100)");
-
-                entity.Property(e => e.ObservacaoFimVigencia)
-                    .HasColumnName("observacaoFimVigencia")
-                    .HasColumnType("varchar(255)");
 
                 entity.Property(e => e.Uf)
                     .IsRequired()
@@ -354,7 +379,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                 entity.HasOne(d => d.OrganizacaoPai)
                     .WithMany(p => p.OrganizacoesFilhas)
                     .HasForeignKey(d => d.IdOrganizacaoPai)
-                    .OnDelete(DeleteBehavior.Restrict)
+                    //.OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Organizacao_OrganizacaoPai");
 
                 entity.HasOne(d => d.Poder)
@@ -373,7 +398,7 @@ namespace Organograma.Infraestrutura.Mapeamento
             modelBuilder.Entity<Poder>(entity =>
             {
                 entity.HasIndex(e => e.Descricao)
-                    .HasName("UQ__PoderDescricao")
+                    .HasName("UK_Poder_Descricao")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
