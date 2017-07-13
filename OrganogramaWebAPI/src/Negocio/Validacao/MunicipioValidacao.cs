@@ -111,7 +111,7 @@ namespace Organograma.Negocio.Validacao
 
         internal void GuidAlteracaoValido(string guid, MunicipioModeloNegocio municipioNegocio)
         {
-            if (!guid.Equals(municipioNegocio.Guid))
+            if (!guid.ToUpper().Equals(municipioNegocio.Guid.ToUpper()))
                 throw new Exception("Identificadores do municipio não podem ser diferentes.");
         }
 
@@ -130,6 +130,14 @@ namespace Organograma.Negocio.Validacao
 
             if(mun == null)
                 throw new OrganogramaNaoEncontradoException("Município não encontrado.");
+        }
+
+        internal void MunicipioPossuiEndereco(Municipio municipio)
+        {
+            if (municipio == null) throw new ArgumentNullException("O municipio não pode ser nulo.");
+
+            if (municipio.Enderecos != null && municipio.Enderecos.Count > 0)
+                throw new OrganogramaRequisicaoInvalidaException("Existe(m) endereço(s) atribuído(s) a este município.");
         }
     }
 

@@ -17,7 +17,7 @@ namespace Organograma.Infraestrutura.Mapeamento
         public virtual DbSet<EmailUnidade> EmailUnidade { get; set; }
         public virtual DbSet<Endereco> Endereco { get; set; }
         public virtual DbSet<EsferaOrganizacao> EsferaOrganizacao { get; set; }
-        public virtual DbSet<HistoricoMunicipio> HistoricoMunicipio { get; set; }
+        public virtual DbSet<Historico> Historico { get; set; }
         public virtual DbSet<IdentificadorExterno> IdentificadorExterno { get; set; }
         public virtual DbSet<Municipio> Municipio { get; set; }
         public virtual DbSet<Organizacao> Organizacao { get; set; }
@@ -225,8 +225,7 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("descricao")
                     .HasColumnType("varchar(100)");
             });
-
-            modelBuilder.Entity<HistoricoMunicipio>(entity =>
+            modelBuilder.Entity<Historico>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -235,8 +234,6 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.IdIdentificadorExterno).HasColumnName("idIdentificadorExterno");
-
-                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
 
                 entity.Property(e => e.InicioVigencia)
                     .HasColumnName("inicioVigencia")
@@ -252,15 +249,10 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnType("varchar(100)");
 
                 entity.HasOne(d => d.IdentificadorExterno)
-                    .WithMany(p => p.HistoricosMunicipio)
+                    .WithMany(p => p.Historicos)
                     .HasForeignKey(d => d.IdIdentificadorExterno)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_HistoricoMunicipio_IdentificadorExterno");
-
-                entity.HasOne(d => d.Municipio)
-                    .WithMany(p => p.HistoricosMunicipio)
-                    .HasForeignKey(d => d.IdMunicipio)
-                    .HasConstraintName("FK_HistoricoMunicipio_Municipio");
             });
 
             modelBuilder.Entity<IdentificadorExterno>(entity =>
@@ -308,6 +300,10 @@ namespace Organograma.Infraestrutura.Mapeamento
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.CodigoIbge).HasColumnName("codigoIbge");
+
+                entity.Property(e => e.InicioVigencia)
+                    .HasColumnName("inicioVigencia")
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.Nome)
                     .IsRequired()

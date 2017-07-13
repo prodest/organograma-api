@@ -1,13 +1,14 @@
-﻿using Organograma.Dominio.Base;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
-using Organograma.Negocio.Modelos;
+using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Base;
+using Organograma.Negocio.Modelos;
+using Organograma.Negocio.Validacao;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
-using System;
-using Organograma.Negocio.Validacao;
-using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.Negocio
 {
@@ -15,6 +16,7 @@ namespace Organograma.Negocio
     {
         IUnitOfWork unitOfWork;
         IRepositorioGenerico<Municipio> repositorioMunicipios;
+        IRepositorioGenerico<Historico> repositorioHistoricos;
         IRepositorioGenerico<IdentificadorExterno> repositorioIdentificadoresExternos;
         MunicipioValidacao validacao;
         
@@ -22,6 +24,7 @@ namespace Organograma.Negocio
         {
             unitOfWork = repositorios.UnitOfWork;
             repositorioMunicipios = repositorios.Municipios;
+            repositorioHistoricos = repositorios.Historicos;
             repositorioIdentificadoresExternos = repositorios.IdentificadoresExternos;
             validacao = new MunicipioValidacao(repositorioMunicipios);
         }
@@ -92,16 +95,19 @@ namespace Organograma.Negocio
             Guid gMunicipio = new Guid(municipioNegocio.Guid);
 
             Municipio municipioDominio = repositorioMunicipios.Where(q => q.IdentificadorExterno.Guid.Equals(gMunicipio))
+                                                              .Include(m => m.IdentificadorExterno)
                                                               .Single();
 
             validacao.MunicipioNaoExistente(municipioDominio);
 
-            municipioNegocio.Id = municipioDominio.Id;
-            municipioNegocio.InicioVigencia = municipioDominio.InicioVigencia;
-            municipioDominio = Mapper.Map(municipioNegocio, municipioDominio);
+            DateTime agora = DateTime.Now;
 
-            //Não se deseja alterar nada do Identificador Externo
-            municipioDominio.IdentificadorExterno = null;
+            InserirHistorico(municipioDominio, "Edição", agora);
+
+            municipioNegocio.Id = municipioDominio.Id;
+            municipioNegocio.InicioVigencia = agora;
+
+            municipioDominio = Mapper.Map(municipioNegocio, municipioDominio);
 
             unitOfWork.Save();
         }
@@ -114,11 +120,15 @@ namespace Organograma.Negocio
 
             Municipio municipio = repositorioMunicipios.Where(m => m.IdentificadorExterno.Guid.Equals(guidMunicipio))
                                                        .Include(m => m.IdentificadorExterno)
+                                                       .Include(m => m.Enderecos)
                                                        .SingleOrDefault();
 
             validacao.MunicipioNaoExistente(municipio);
 
-            repositorioIdentificadoresExternos.Remove(municipio.IdentificadorExterno);
+            validacao.MunicipioPossuiEndereco(municipio);
+
+            InserirHistorico(municipio, "Exclusão", null);
+
             repositorioMunicipios.Remove(municipio);
 
             unitOfWork.Save();
@@ -135,6 +145,22 @@ namespace Organograma.Negocio
             
             return municipio;
 
+        }
+
+        private void InserirHistorico(Municipio municipio, string obsFimVigencia, DateTime? now)
+        {
+            string municipioJson = JsonData.SerializeObject(municipio);
+
+            Historico historico = new Historico
+            {
+                Json = municipioJson,
+                InicioVigencia = municipio.InicioVigencia,
+                FimVigencia = now.HasValue ? now.Value : DateTime.Now,
+                ObservacaoFimVigencia = obsFimVigencia,
+                IdIdentificadorExterno = municipio.IdentificadorExterno.Id
+            };
+
+            repositorioHistoricos.Add(historico);
         }
     }
 }

@@ -79,7 +79,11 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.Guid, opt => opt.MapFrom(s => s.IdentificadorExterno != null ? s.IdentificadorExterno.Guid.ToString("D") : null));
 
             CreateMap<MunicipioModeloNegocio, Municipio>()
-                .ForMember(dest => dest.IdentificadorExterno, opt => opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) }));
+                .ForMember(dest => dest.IdentificadorExterno, opt =>
+                                                            {
+                                                                opt.Condition((a, b) => b.IdentificadorExterno == null);
+                                                                opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) });
+                                                            });
 
             //CreateMap<Municipio, MunicipioModeloNegocio>();
             #endregion

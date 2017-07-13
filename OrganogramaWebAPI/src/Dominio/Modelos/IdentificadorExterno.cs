@@ -7,7 +7,7 @@ namespace Organograma.Dominio.Modelos
     {
         public IdentificadorExterno()
         {
-            HistoricosMunicipio = new HashSet<HistoricoMunicipio>();
+            Historicos = new HashSet<Historico>();
         }
 
         public int Id { get; set; }
@@ -16,7 +16,7 @@ namespace Organograma.Dominio.Modelos
         public int? IdUnidade { get; set; }
         public int? IdMunicipio { get; set; }
 
-        public virtual ICollection<HistoricoMunicipio> HistoricosMunicipio { get; set; }
+        public virtual ICollection<Historico> Historicos { get; set; }
         public virtual Municipio Municipio { get; set; }
         public virtual Organizacao Organizacao { get; set; }
         public virtual Unidade Unidade { get; set; }

@@ -89,7 +89,7 @@ namespace Organograma.WebAPI.Controllers
         /// <response code="500">Retorna a descrição do erro.</response>
         [HttpPost]
         [Authorize(Policy = "Municipio.Inserir")]
-        [ProducesResponseType(typeof(EsferaOrganizacaoModelo), 201)]
+        [ProducesResponseType(typeof(MunicipioModeloGet), 201)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 500)]
         public IActionResult Post([FromBody]MunicipioModeloPost municipioPost)
