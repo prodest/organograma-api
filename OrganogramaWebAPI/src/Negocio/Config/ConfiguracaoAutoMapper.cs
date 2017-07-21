@@ -224,7 +224,11 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.ContatosUnidade, opt => opt.MapFrom(s => s.Contatos != null ? Mapper.Map<List<ContatoModeloNegocio>, List<ContatoUnidade>>(s.Contatos) : null))
                 .ForMember(dest => dest.EmailsUnidade, opt => opt.MapFrom(s => s.Emails != null ? Mapper.Map<List<EmailModeloNegocio>, List<EmailUnidade>>(s.Emails) : null))
                 .ForMember(dest => dest.SitesUnidade, opt => opt.MapFrom(s => s.Sites != null ? Mapper.Map<List<SiteModeloNegocio>, List<SiteUnidade>>(s.Sites) : null))
-                .ForMember(dest => dest.IdentificadorExterno, opt => opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) }));
+                .ForMember(dest => dest.IdentificadorExterno, opt =>
+                                                            {
+                                                                opt.Condition((a, b) => b.IdentificadorExterno == null);
+                                                                opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) });
+                                                            });
             #endregion
         }
     }

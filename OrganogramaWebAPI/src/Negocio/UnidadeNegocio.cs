@@ -1,14 +1,14 @@
-﻿using Organograma.Negocio.Base;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Organograma.Dominio.Base;
+using Organograma.Dominio.Modelos;
+using Organograma.Infraestrutura.Comum;
+using Organograma.Negocio.Base;
+using Organograma.Negocio.Modelos;
+using Organograma.Negocio.Validacao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Organograma.Negocio.Modelos;
-using Organograma.Dominio.Base;
-using Organograma.Dominio.Modelos;
-using Organograma.Negocio.Validacao;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace Organograma.Negocio
 {
@@ -21,6 +21,7 @@ namespace Organograma.Negocio
         private IRepositorioGenerico<ContatoUnidade> repositorioContatosUnidades;
         private IRepositorioGenerico<Email> repositorioEmails;
         private IRepositorioGenerico<EmailUnidade> repositorioEmailsUnidades;
+        private IRepositorioGenerico<Historico> repositorioHistoricos;
         private IRepositorioGenerico<IdentificadorExterno> repositorioIdentificadoresExternos;
         private IRepositorioGenerico<Municipio> repositorioMunicipios;
         private IRepositorioGenerico<Organizacao> repositorioOrganizcoes;
@@ -34,7 +35,6 @@ namespace Organograma.Negocio
         private EmailValidacao emailValidacao;
         private SiteValidacao siteValidacao;
 
-
         public UnidadeNegocio(IOrganogramaRepositorios repositorios)
         {
             unitOfWork = repositorios.UnitOfWork;
@@ -44,6 +44,7 @@ namespace Organograma.Negocio
             repositorioContatosUnidades = repositorios.ContatosUnidades;
             repositorioEmails = repositorios.Emails;
             repositorioEmailsUnidades = repositorios.EmailsUnidades;
+            repositorioHistoricos = repositorios.Historicos;
             repositorioIdentificadoresExternos = repositorios.IdentificadoresExternos;
             repositorioMunicipios = repositorios.Municipios;
             repositorioOrganizcoes = repositorios.Organizacoes;
@@ -71,13 +72,15 @@ namespace Organograma.Negocio
 
             Guid g = new Guid(unidade.Guid);
             var unidadeDominio = repositorioUnidades.Where(u => u.IdentificadorExterno.Guid.Equals(g))
-                                                    .Include(un => un.Organizacao)
+                                                    .Include(un => un.IdentificadorExterno)
+                                                    .Include(un => un.Organizacao).ThenInclude(o => o.IdentificadorExterno)
                                                     .Include(un => un.TipoUnidade)
                                                     .Include(un => un.UnidadePai).ThenInclude(up => up.IdentificadorExterno)
                                                     .SingleOrDefault();
 
             //Verificação da unidade na base de dados
             unidadeValidacao.NaoEncontrado(unidadeDominio);
+
             Mapper.Map(unidadeDominio, unidade);
 
             #region Verificação de campos obrigatórios
@@ -107,7 +110,13 @@ namespace Organograma.Negocio
             unidade.Guid = null;
             #endregion
 
+            DateTime agora = DateTime.Now;
+
+            InserirHistorico(unidadeDominio, "Edição", agora);
+
             Mapper.Map(unidade, unidadeDominio);
+
+            unidadeDominio.InicioVigencia = agora;
 
             unitOfWork.Save();
         }
@@ -129,7 +138,7 @@ namespace Organograma.Negocio
 
             unidadeValidacao.PossuiFilho(unidade.Id);
 
-            ExcluirIdentificadorExterno(unidade);
+            InserirHistorico(unidade, "Exclusão", null);
 
             if (unidade.Endereco != null)
                 ExcluirEndereco(unidade);
@@ -223,6 +232,7 @@ namespace Organograma.Negocio
             unidade.Guid = Guid.NewGuid().ToString("D");
 
             var unid = Mapper.Map<UnidadeModeloNegocio, Unidade>(unidade);
+            unid.InicioVigencia = DateTime.Now;
 
             repositorioUnidades.Add(unid);
 
@@ -311,6 +321,22 @@ namespace Organograma.Negocio
         {
             repositorioSites.Remove(siteUnidade.Site);
             repositorioSitesUnidades.Remove(siteUnidade);
+        }
+
+        private void InserirHistorico(Unidade unidade, string obsFimVigencia, DateTime? now)
+        {
+            string municipioJson = JsonData.SerializeObject(unidade);
+
+            Historico historico = new Historico
+            {
+                Json = municipioJson,
+                InicioVigencia = unidade.InicioVigencia,
+                FimVigencia = now.HasValue ? now.Value : DateTime.Now,
+                ObservacaoFimVigencia = obsFimVigencia,
+                IdIdentificadorExterno = unidade.IdentificadorExterno.Id
+            };
+
+            repositorioHistoricos.Add(historico);
         }
     }
 }

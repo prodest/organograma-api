@@ -20,6 +20,7 @@ namespace Organograma.Dominio.Modelos
         public int? IdEndereco { get; set; }
         public int? IdUnidadePai { get; set; }
         public int? IdAntigo { get; set; }
+        public DateTime InicioVigencia { get; set; }
 
         public virtual ICollection<ContatoUnidade> ContatosUnidade { get; set; }
         public virtual ICollection<EmailUnidade> EmailsUnidade { get; set; }

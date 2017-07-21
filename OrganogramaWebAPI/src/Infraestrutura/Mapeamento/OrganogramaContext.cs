@@ -551,6 +551,10 @@ namespace Organograma.Infraestrutura.Mapeamento
 
                 entity.Property(e => e.IdUnidadePai).HasColumnName("idUnidadePai");
 
+                entity.Property(e => e.InicioVigencia)
+                    .HasColumnName("inicioVigencia")
+                    .HasColumnType("datetime");
+
                 entity.Property(e => e.Nome)
                     .IsRequired()
                     .HasColumnName("nome")
