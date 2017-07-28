@@ -139,7 +139,11 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.OrganizacaoPai, opt => opt.Ignore())
                 .ForMember(dest => dest.Poder, opt => opt.Ignore())
                 .ForMember(dest => dest.TipoOrganizacao, opt => opt.Ignore())
-                .ForMember(dest => dest.IdentificadorExterno, opt => opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) }))
+                .ForMember(dest => dest.IdentificadorExterno, opt =>
+                                                            {
+                                                                opt.Condition((a, b) => b.IdentificadorExterno == null);
+                                                                opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) });
+                                                            })
                 .ForMember(dest => dest.EmailsOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailOrganizacao>>(s.Emails)))
                 .ForMember(dest => dest.SitesOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteOrganizacao>>(s.Sites)))
                 .ForMember(dest => dest.ContatosOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoOrganizacao>>(s.Contatos)));

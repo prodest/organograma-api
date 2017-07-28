@@ -52,6 +52,13 @@ namespace Organograma.Infraestrutura.Comum
 
             return json;
         }
+
+        public static T DeserializeObject<T>(string value) where T : new()
+        {
+            return JsonConvert.DeserializeObject<T>(value);
+        }
+
+
     }
 
     public class IgnoreEmptyEnumerablesResolver : DefaultContractResolver

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
+using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Base;
 using Organograma.Negocio.Commom.Base;
 using Organograma.Negocio.Modelos;
@@ -22,6 +23,7 @@ namespace Organograma.Negocio
         private IRepositorioGenerico<Email> repositorioEmails;
         private IRepositorioGenerico<EmailOrganizacao> repositorioEmailsOrganizacoes;
         private IRepositorioGenerico<Endereco> repositorioEnderecos;
+        private IRepositorioGenerico<Historico> repositorioHistoricos;
         private IRepositorioGenerico<IdentificadorExterno> repositorioIdentificadoresExternos;
         private IRepositorioGenerico<Municipio> repositorioMunicipios;
         private IRepositorioGenerico<Site> repositorioSites;
@@ -49,6 +51,7 @@ namespace Organograma.Negocio
             repositorioEmails = repositorios.Emails;
             repositorioEmailsOrganizacoes = repositorios.EmailsOrganizacoes;
             repositorioEnderecos = repositorios.Enderecos;
+            repositorioHistoricos = repositorios.Historicos;
             repositorioIdentificadoresExternos = repositorios.IdentificadoresExternos;
             repositorioMunicipios = repositorios.Municipios;
             repositorioSites = repositorios.Sites;
@@ -99,10 +102,15 @@ namespace Organograma.Negocio
             poderValidacao.Existe(organizacaoNegocio.Poder);
             tipoOrganizacaoValidacao.Existe(organizacaoNegocio.TipoOrganizacao);
 
-            organizacaoNegocio.Guid = null;
-            Mapper.Map(organizacaoNegocio, organizacao);
-            unitOfWork.Save();
+            DateTime agora = DateTime.Now;
 
+            InserirHistorico(organizacao, "Edição", agora);
+
+            Mapper.Map(organizacaoNegocio, organizacao);
+
+            organizacao.InicioVigencia = agora;
+
+            unitOfWork.Save();
         }
 
         #endregion
@@ -126,7 +134,8 @@ namespace Organograma.Negocio
             validacao.PossuiFilho(organizacao.Id);
             validacao.PossuiUnidade(organizacao.Id);
 
-            ExcluirIdentificadorExterno(organizacao);
+            InserirHistorico(organizacao, "Exclusão", null);
+
             ExcluiContatos(organizacao);
             ExcluiEndereco(organizacao);
             ExcluiEmails(organizacao);
@@ -168,6 +177,8 @@ namespace Organograma.Negocio
 
 
             Organizacao organizacao = PreparaInsercao(organizacaoNegocio);
+            organizacao.InicioVigencia = DateTime.Now;
+
             repositorioOrganizacoes.Add(organizacao);
             unitOfWork.Attach(organizacao.TipoOrganizacao);
             unitOfWork.Attach(organizacao.Esfera);
@@ -205,6 +216,8 @@ namespace Organograma.Negocio
                 validacao.UsuarioTemPermissao(_currentUser.UserGuidsOrganizacao, organizacaoNegocio.OrganizacaoPai.Guid);
 
             Organizacao organizacao = PreparaInsercao(organizacaoNegocio);
+            organizacao.InicioVigencia = DateTime.Now;
+
             repositorioOrganizacoes.Add(organizacao);
             unitOfWork.Attach(organizacao.TipoOrganizacao);
             unitOfWork.Attach(organizacao.Esfera);
@@ -495,7 +508,7 @@ namespace Organograma.Negocio
             Guid g = new Guid(organizacaoNegocio.Guid);
 
             Organizacao organizacao = repositorioOrganizacoes.Where(o => o.IdentificadorExterno.Guid.Equals(g))
-                                                             //.Include(o => o.IdentificadorExterno)
+                                                             .Include(un => un.IdentificadorExterno)
                                                              .Include(e => e.Esfera)
                                                              .Include(p => p.Poder)
                                                              .Include(to => to.TipoOrganizacao)
@@ -786,6 +799,31 @@ namespace Organograma.Negocio
             }
 
             return idsOrganizacoes;
+        }
+
+        private void InserirHistorico(Organizacao organizacao, string obsFimVigencia, DateTime? now)
+        {
+            Organizacao organizacaoSimples = JsonData.DeserializeObject<Organizacao>(JsonData.SerializeObject(organizacao));
+
+            organizacaoSimples.Esfera = null;
+            organizacaoSimples.OrganizacaoPai = null;
+            organizacaoSimples.OrganizacoesFilhas = null;
+            organizacaoSimples.Poder = null;
+            organizacaoSimples.TipoOrganizacao = null;
+            organizacaoSimples.Unidades = null;
+
+            string json = JsonData.SerializeObject(organizacaoSimples);
+
+            Historico historico = new Historico
+            {
+                Json = json,
+                InicioVigencia = organizacao.InicioVigencia,
+                FimVigencia = now.HasValue ? now.Value : DateTime.Now,
+                ObservacaoFimVigencia = obsFimVigencia,
+                IdIdentificadorExterno = organizacao.IdentificadorExterno.Id
+            };
+
+            repositorioHistoricos.Add(historico);
         }
         #endregion
     }
