@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export RANCHER_ENV=SEP/Organograma
+export RANCHER_ENV=processo-eletronico
 export RANCHER_START_FIRST=true
 export DOCKER_TAG=${TRAVIS_COMMIT:0:7}
 
