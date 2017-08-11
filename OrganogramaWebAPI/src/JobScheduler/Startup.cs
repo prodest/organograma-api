@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Organograma.Apresentacao.Config;
 using Organograma.Infraestrutura.Mapeamento;
 using Organograma.JobScheduler.Commom;
 using Organograma.JobScheduler.Commom.Config;
@@ -48,6 +49,7 @@ namespace Organograma.JobScheduler
             services.AddScoped<ICurrentUserProvider, CurrentUser>();
 
             ConfiguracaoDependencias.InjetarDependencias(services);
+            ConfiguracaoAutoMapper.CriarMapeamento();
 
             #region Hnagfire
             //Verica se está no ambiente de desenvolvimento para não iniciar o serviço
