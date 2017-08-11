@@ -25,6 +25,7 @@ namespace Organograma.Negocio
         private IRepositorioGenerico<EmailOrganizacao> _repositorioEmailsOrganizacoes;
         private IRepositorioGenerico<EmailUnidade> _repositorioEmailsUnidades;
         private IRepositorioGenerico<Email> _repositorioEmails;
+        private IRepositorioGenerico<Endereco> _repositorioEnderecos;
         private IRepositorioGenerico<SiteOrganizacao> _repositorioSitesOrganizacoes;
         private IRepositorioGenerico<SiteUnidade> _repositorioSitesUnidades;
         private IRepositorioGenerico<Site> _repositorioSites;
@@ -50,6 +51,7 @@ namespace Organograma.Negocio
             _repositorioEmailsOrganizacoes = repositorios.EmailsOrganizacoes;
             _repositorioEmailsUnidades = repositorios.EmailsUnidades;
             _repositorioEmails = repositorios.Emails;
+            _repositorioEnderecos = repositorios.Enderecos;
             _repositorioHistoricos = repositorios.Historicos;
             _repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
             _repositorioSitesUnidades = repositorios.SitesUnidades;
@@ -130,6 +132,11 @@ namespace Organograma.Negocio
 
                 InserirHistorico(orgExcluir, "Exclusão", null);
 
+                ExcluiContatos(orgExcluir);
+                ExcluiEndereco(orgExcluir);
+                ExcluiEmails(orgExcluir);
+                ExcluiSites(orgExcluir);
+
                 _repositorioOrganizacoes.Remove(orgExcluir);
             }
         }
@@ -178,6 +185,9 @@ namespace Organograma.Negocio
         private void RemoverUnidadeExcluida(Unidade unidade)
         {
             InserirHistorico(unidade, "Exclusão", null);
+
+            if (unidade.Endereco != null)
+                ExcluirEndereco(unidade);
 
             foreach (var cu in unidade.ContatosUnidade)
             {
@@ -1060,11 +1070,63 @@ namespace Organograma.Negocio
             _repositorioEmailsUnidades.Remove(emailUnidade);
         }
 
+        private void ExcluirEndereco(Unidade unidade)
+        {
+            _repositorioEnderecos.Remove(unidade.Endereco);
+        }
+
         private void ExcluirSite(SiteUnidade siteUnidade)
         {
             _repositorioSites.Remove(siteUnidade.Site);
             _repositorioSitesUnidades.Remove(siteUnidade);
         }
 
+        private void ExcluiContatos(Organizacao organizacao)
+        {
+            if (organizacao.ContatosOrganizacao != null)
+            {
+                foreach (var contatoOrganizacao in organizacao.ContatosOrganizacao)
+                {
+                    _repositorioContatosOrganizacoes.Remove(contatoOrganizacao);
+                    _repositorioContatos.Remove(contatoOrganizacao.Contato);
+                }
+
+            }
+        }
+
+        private void ExcluiEmails(Organizacao organizacao)
+        {
+            if (organizacao.EmailsOrganizacao != null)
+            {
+                foreach (var emailOrganizacao in organizacao.EmailsOrganizacao)
+                {
+                    _repositorioEmailsOrganizacoes.Remove(emailOrganizacao);
+                    _repositorioEmails.Remove(emailOrganizacao.Email);
+                }
+
+            }
+
+        }
+
+        private void ExcluiEndereco(Organizacao organizacao)
+        {
+            if (organizacao.Endereco != null)
+            {
+                _repositorioEnderecos.Remove(organizacao.Endereco);
+            }
+        }
+
+        private void ExcluiSites(Organizacao organizacao)
+        {
+            if (organizacao.SitesOrganizacao != null)
+            {
+                foreach (var siteOrganizacao in organizacao.SitesOrganizacao)
+                {
+                    _repositorioSitesOrganizacoes.Remove(siteOrganizacao);
+                    _repositorioSites.Remove(siteOrganizacao.Site);
+                }
+
+            }
+        }
     }
 }
