@@ -4,11 +4,14 @@ using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
 using Organograma.Infraestrutura.Comum;
 using Organograma.Negocio.Base;
+using Organograma.Negocio.Commom.Base;
 using Organograma.Negocio.Modelos;
+using Organograma.Negocio.Modelos.Siarhes;
 using Organograma.Negocio.Validacao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Organograma.Negocio
 {
@@ -35,7 +38,9 @@ namespace Organograma.Negocio
         private EmailValidacao emailValidacao;
         private SiteValidacao siteValidacao;
 
-        public UnidadeNegocio(IOrganogramaRepositorios repositorios)
+        private IClientAccessToken _clientAccessToken;
+
+        public UnidadeNegocio(IOrganogramaRepositorios repositorios, IClientAccessToken clientAccessToken)
         {
             unitOfWork = repositorios.UnitOfWork;
             repositorioUnidades = repositorios.Unidades;
@@ -59,6 +64,8 @@ namespace Organograma.Negocio
             contatoValidacao = new ContatoValidacao(repositorios.Contatos, repositorios.TiposContatos);
             emailValidacao = new EmailValidacao();
             siteValidacao = new SiteValidacao();
+
+            _clientAccessToken = clientAccessToken;
         }
 
         public void Alterar(string guid, UnidadeModeloNegocio unidade)
@@ -337,6 +344,36 @@ namespace Organograma.Negocio
             };
 
             repositorioHistoricos.Add(historico);
+        }
+
+        public async Task<UnidadeModeloNegocio.Responsavel> PesquisarResponsavel(string guid)
+        {
+            Guid g = new Guid(guid);
+
+            Unidade unidade = await repositorioUnidades.Where(u => u.IdentificadorExterno.Guid.Equals(g))
+                                                       .Include(u => u.Organizacao)
+                                                       .SingleOrDefaultAsync();
+
+            UnidadeModeloNegocio.Responsavel responsavel = null;
+
+            if (unidade != null)
+            {
+                string _baseUrlSiarhes = "https://api.es.gov.br/siarhes/v1/";
+
+                List<GestorSiarhes> gestor = await JsonData.DownloadAsync<List<GestorSiarhes>>($"{_baseUrlSiarhes}organograma/setor/gestor?empresa={unidade.Organizacao.IdEmpresaSiarhes}&setor={unidade.Sigla}", _clientAccessToken.AccessToken);
+
+                if (gestor != null && gestor.Count == 1)
+                {
+                    List<FuncionarioSiarhes> funcionario = await JsonData.DownloadAsync<List<FuncionarioSiarhes>>($"{_baseUrlSiarhes}funcionarios?numfunc={gestor[0].NumFunc}", _clientAccessToken.AccessToken);
+
+                    if (funcionario != null && funcionario.Count == 1)
+                    {
+                        responsavel = Mapper.Map<FuncionarioSiarhes, UnidadeModeloNegocio.Responsavel>(funcionario[0]);
+                    }
+                }
+            }
+
+            return responsavel;
         }
     }
 }

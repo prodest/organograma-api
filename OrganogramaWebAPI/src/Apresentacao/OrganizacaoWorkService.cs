@@ -4,6 +4,7 @@ using Organograma.Apresentacao.Modelos;
 using Organograma.Negocio.Base;
 using Organograma.Negocio.Modelos;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Organograma.Apresentacao
 {
@@ -123,9 +124,9 @@ namespace Organograma.Apresentacao
         #endregion
 
         #region Integração com o SIARHES
-        public void IntegarSiarhes()
+        public async Task IntegarSiarhes()
         {
-            organizacaoNegocio.IntegrarSiarhes();
+            await organizacaoNegocio.IntegrarSiarhes();
         }
         #endregion
     }

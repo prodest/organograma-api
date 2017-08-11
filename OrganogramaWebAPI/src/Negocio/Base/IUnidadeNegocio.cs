@@ -17,6 +17,9 @@ namespace Organograma.Negocio.Base
         void Alterar(string guid, UnidadeModeloNegocio esferaOrganizacao);
 
         void Excluir(string guid);
+
         List<UnidadeModeloNegocio> PesquisarPorOrganizacao(string guidOrganizacao);
+
+        Task<UnidadeModeloNegocio.Responsavel> PesquisarResponsavel(string guid);
     }
 }

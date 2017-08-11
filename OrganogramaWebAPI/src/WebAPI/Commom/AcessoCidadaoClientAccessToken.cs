@@ -129,7 +129,7 @@ namespace Organograma.WebAPI.Commom.Config
 
             TokenClient tokenClient = new TokenClient(autenticacaoIdentityServer.Authority + "/connect/token", _clientId, _secret);
 
-            return await tokenClient.RequestClientCredentialsAsync("siarhes_admin");
+            return await tokenClient.RequestClientCredentialsAsync("siarhes_admin siarhes_basico");
         }
     }
 }

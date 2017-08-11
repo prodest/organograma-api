@@ -10,6 +10,7 @@ using Organograma.Negocio.Validacao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Organograma.Negocio
 {
@@ -118,6 +119,13 @@ namespace Organograma.Negocio
         #region Excluir
         public void Excluir(string guid)
         {
+            ExcluirSemSalvar(guid);
+
+            unitOfWork.Save();
+        }
+
+        public void ExcluirSemSalvar(string guid)
+        {
             validacao.GuidValido(guid);
             validacao.Existe(guid);
             Guid g = new Guid(guid);
@@ -141,7 +149,6 @@ namespace Organograma.Negocio
             ExcluiEmails(organizacao);
             ExcluiSites(organizacao);
             repositorioOrganizacoes.Remove(organizacao);
-            unitOfWork.Save();
         }
         #endregion
 
@@ -493,11 +500,11 @@ namespace Organograma.Negocio
         #endregion
 
         #region Integração com o SIARHES
-        public void IntegrarSiarhes()
+        public async Task IntegrarSiarhes()
         {
             IntegracaoSiarhesNegocio isn = new IntegracaoSiarhesNegocio();
 
-            isn.Integrar(repositorios, _clientAccessToken.AccessToken);
+            await isn.Integrar(repositorios, _clientAccessToken.AccessToken);
         }
         #endregion
 
@@ -801,7 +808,7 @@ namespace Organograma.Negocio
             return idsOrganizacoes;
         }
 
-        private void InserirHistorico(Organizacao organizacao, string obsFimVigencia, DateTime? now)
+        private void InserirHistorico(Organizacao organizacao, string obsFimVigencia, DateTime? fimVigencia)
         {
             Organizacao organizacaoSimples = JsonData.DeserializeObject<Organizacao>(JsonData.SerializeObject(organizacao));
 
@@ -818,7 +825,7 @@ namespace Organograma.Negocio
             {
                 Json = json,
                 InicioVigencia = organizacao.InicioVigencia,
-                FimVigencia = now.HasValue ? now.Value : DateTime.Now,
+                FimVigencia = fimVigencia.HasValue ? fimVigencia.Value : DateTime.Now,
                 ObservacaoFimVigencia = obsFimVigencia,
                 IdIdentificadorExterno = organizacao.IdentificadorExterno.Id
             };

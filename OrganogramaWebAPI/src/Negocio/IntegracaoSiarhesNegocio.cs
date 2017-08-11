@@ -1,12 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
 using Organograma.Infraestrutura.Comum;
+using Organograma.Negocio.Modelos;
 using Organograma.Negocio.Modelos.Siarhes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Organograma.Negocio
 {
@@ -27,12 +30,13 @@ namespace Organograma.Negocio
         private IRepositorioGenerico<Site> _repositorioSites;
         private IRepositorioGenerico<TipoOrganizacao> _repositorioTiposOrganizacao;
         private IRepositorioGenerico<TipoUnidade> _repositorioTiposUnidades;
+        private IRepositorioGenerico<Historico> _repositorioHistoricos;
         private List<TipoOrganizacao> TiposOrganizacao;
         private List<TipoUnidade> TiposUnidades;
         private List<Municipio> Municipios { get; set; }
         private Organizacao _governoEstado;
 
-        public void Integrar(IOrganogramaRepositorios repositorios, string clientAccessToken)
+        public async Task Integrar(IOrganogramaRepositorios repositorios, string clientAccessToken)
         {
             if (repositorios == null) throw new ArgumentNullException("O repositório não pode ser nulo.");
             if (clientAccessToken == null) throw new ArgumentNullException("O access token não pode ser nulo.");
@@ -46,6 +50,7 @@ namespace Organograma.Negocio
             _repositorioEmailsOrganizacoes = repositorios.EmailsOrganizacoes;
             _repositorioEmailsUnidades = repositorios.EmailsUnidades;
             _repositorioEmails = repositorios.Emails;
+            _repositorioHistoricos = repositorios.Historicos;
             _repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
             _repositorioSitesUnidades = repositorios.SitesUnidades;
             _repositorioSites = repositorios.Sites;
@@ -55,10 +60,9 @@ namespace Organograma.Negocio
             TiposUnidades = _repositorioTiposUnidades.ToList();
             Municipios = repositorios.Municipios.ToList();
 
-            List<OrganizacaoSiarhes> organizacoesSiarhes = JsonData.DownloadAsync<List<OrganizacaoSiarhes>>($"{_baseUrlSiarhes}subempresas", clientAccessToken).Result;
+            DateTime agora = DateTime.Now;
 
-            //TODO: Foram retiradas as unidades de algumas organizações, pois existem dados duplicados de nome da unidade
-            organizacoesSiarhes = organizacoesSiarhes.ToList();
+            List<OrganizacaoSiarhes> organizacoesSiarhes = JsonData.DownloadAsync<List<OrganizacaoSiarhes>>($"{_baseUrlSiarhes}subempresas", clientAccessToken).Result;
 
             if (organizacoesSiarhes != null && organizacoesSiarhes.Count > 0)
             {
@@ -68,7 +72,9 @@ namespace Organograma.Negocio
 
                 TiposOrganizacao = _repositorioTiposOrganizacao.ToList();
 
-                ConverterDados(organizacoesSiarhes);
+                await RemoverOrganizacoesExcluidas(organizacoesSiarhes);
+
+                ConverterDados(organizacoesSiarhes, agora);
 
                 _unitOfWork.Save();
             }
@@ -86,14 +92,113 @@ namespace Organograma.Negocio
 
                 TiposUnidades = _repositorioTiposUnidades.ToList();
 
-                ConverterDados(unidadesSiarhes);
+                await RemoverUnidadesExcluidas(unidadesSiarhes);
+
+                ConverterDados(unidadesSiarhes, agora);
 
                 _unitOfWork.Save();
             }
         }
 
+        private async Task RemoverOrganizacoesExcluidas(List<OrganizacaoSiarhes> organizacoesSiarhes)
+        {
+            List<Organizacao> organizacoes = await _repositorioOrganizacoes.Where(o => o.Esfera.Descricao.ToUpper().Equals("ESTADUAL")
+                                                                                    && o.Poder.Descricao.ToUpper().Equals("EXECUTIVO")
+                                                                                    && o.Endereco.Municipio.Uf.ToUpper().Equals("ES"))
+                                                                           .Include(o => o.IdentificadorExterno)
+                                                                           .Include(i => i.Endereco)
+                                                                           .Include(i => i.ContatosOrganizacao).ThenInclude(c => c.Contato)
+                                                                           .Include(i => i.SitesOrganizacao).ThenInclude(s => s.Site)
+                                                                           .Include(i => i.EmailsOrganizacao).ThenInclude(s => s.Email)
+                                                                           .ToListAsync();
+
+            var a = organizacoesSiarhes.Select(o => new { Empresa = (int?)o.Empresa, Codigo = (int?)o.Codigo })
+                                       .ToList();
+
+            var organizacoesExcluir = organizacoes.Where(o => !a.Contains(
+                                                                        new
+                                                                        {
+                                                                            Empresa = o.IdEmpresaSiarhes,
+                                                                            Codigo = o.IdSubEmpresaSiarhes
+                                                                        })
+                                                           && !o.Cnpj.Equals("27080530000143"))
+                                                  .ToList();
+
+            foreach (Organizacao orgExcluir in organizacoesExcluir)
+            {
+                await RemoverUnidadesExcluidas(orgExcluir);
+
+                InserirHistorico(orgExcluir, "Exclusão", null);
+
+                _repositorioOrganizacoes.Remove(orgExcluir);
+            }
+        }
+
+        private async Task RemoverUnidadesExcluidas(Organizacao orgExcluir)
+        {
+            var unidades = await _repositorioUnidades.Where(u => u.IdOrganizacao == orgExcluir.Id)
+                                                     .ToListAsync();
+
+            foreach (var unidade in unidades)
+            {
+                RemoverUnidadeExcluida(unidade);
+            }
+        }
+
+        private async Task RemoverUnidadesExcluidas(List<UnidadeSiarhes> unidadesSiarhes)
+        {
+            List<Unidade> unidades = await _repositorioUnidades.Where(u => u.Organizacao.IdEmpresaSiarhes.HasValue
+                                                                        && u.Organizacao.IdEmpresaSiarhes.Value > 0
+                                                                        && u.Organizacao.IdSubEmpresaSiarhes.HasValue
+                                                                        && u.Organizacao.IdSubEmpresaSiarhes.Value > 0)
+                                                               .Include(u => u.IdentificadorExterno)
+                                                               .Include(u => u.Endereco)
+                                                               .Include(u => u.ContatosUnidade).ThenInclude(cu => cu.Contato)
+                                                               .Include(u => u.EmailsUnidade).ThenInclude(eu => eu.Email)
+                                                               .Include(u => u.SitesUnidade).ThenInclude(su => su.Site)
+                                                               .ToListAsync();
+
+            var identificadoresUnidadesSiarhes = unidadesSiarhes.Select(u => new { Empresa = (int?)u.Empresa, Codigo = RemoveDiacritics(u.Setor.ToUpper()) })
+                                                                .ToList();
+
+            List<Unidade> unidadesExcluir = unidades.Where(u => !identificadoresUnidadesSiarhes.Contains(
+                                                                                                        new
+                                                                                                        {
+                                                                                                            Empresa = u.Organizacao.IdEmpresaSiarhes,
+                                                                                                            Codigo = u.Sigla
+                                                                                                        }))
+                                                    .ToList();
+
+            foreach (Unidade uniExcluir in unidadesExcluir)
+            {
+                RemoverUnidadeExcluida(uniExcluir);
+            }
+        }
+
+        private void RemoverUnidadeExcluida(Unidade unidade)
+        {
+            InserirHistorico(unidade, "Exclusão", null);
+
+            foreach (var cu in unidade.ContatosUnidade)
+            {
+                ExcluirContato(cu);
+            }
+
+            foreach (var eu in unidade.EmailsUnidade)
+            {
+                ExcluirEmail(eu);
+            }
+
+            foreach (var su in unidade.SitesUnidade)
+            {
+                ExcluirSite(su);
+            }
+
+            _repositorioUnidades.Remove(unidade);
+        }
+
         #region Converter Dados
-        private void ConverterDados(List<OrganizacaoSiarhes> organizacoesSiarhes)
+        private void ConverterDados(List<OrganizacaoSiarhes> organizacoesSiarhes, DateTime agora)
         {
             if (organizacoesSiarhes == null) throw new ArgumentNullException("A lista de organizações não pode ser nula.");
 
@@ -138,6 +243,7 @@ namespace Organograma.Negocio
                     if (org == null)
                     {
                         org = new Organizacao();
+                        org.InicioVigencia = agora;
                         organizacoes.Add(org);
 
                         org.IdentificadorExterno = ObterIdentificadoresExternos();
@@ -178,6 +284,7 @@ namespace Organograma.Negocio
                         else
                         {
                             organizacaoPai = new Organizacao();
+                            organizacaoPai.InicioVigencia = agora;
                             organizacaoPai.IdEmpresaSiarhes = orgSiarhes.Empresa;
                             organizacaoPai.IdSubEmpresaSiarhes = orgSiarhes.Codigo;
                             organizacaoPai.IdentificadorExterno = ObterIdentificadoresExternos();
@@ -199,7 +306,7 @@ namespace Organograma.Negocio
             }
         }
 
-        private void ConverterDados(List<UnidadeSiarhes> unidadesSiarhes)
+        private void ConverterDados(List<UnidadeSiarhes> unidadesSiarhes, DateTime agora)
         {
             if (unidadesSiarhes == null) throw new ArgumentNullException("A lista de unidades não pode ser nula.");
 
@@ -232,6 +339,7 @@ namespace Organograma.Negocio
                     if (und == null)
                     {
                         und = new Unidade();
+                        und.InicioVigencia = agora;
                         und.IdentificadorExterno = ObterIdentificadoresExternos();
 
                         unidades.Add(und);
@@ -283,6 +391,7 @@ namespace Organograma.Negocio
                             if (unidadePaiSiarhes != null)
                             {
                                 unidadePai = new Unidade();
+                                unidadePai.InicioVigencia = agora;
                                 unidadePai.Organizacao = organizacoes.Where(o => o.IdEmpresaSiarhes.Value == unidadePaiSiarhes.Empresa
                                                                               && o.IdSubEmpresaSiarhes.Value == unidadePaiSiarhes.Subempresa)
                                                                      .SingleOrDefault();
@@ -902,5 +1011,60 @@ namespace Organograma.Negocio
                 return value;
             }
         }
+
+        private void InserirHistorico(Organizacao organizacao, string obsFimVigencia, DateTime? fimvigencia)
+        {
+            HistoricoOrganizacaoModeloNegocio historicoOrganizacao = Mapper.Map<Organizacao, HistoricoOrganizacaoModeloNegocio>(organizacao);
+
+            string json = JsonData.SerializeObject(historicoOrganizacao);
+
+            Historico historico = new Historico
+            {
+                Json = json,
+                InicioVigencia = organizacao.InicioVigencia,
+                FimVigencia = fimvigencia.HasValue ? fimvigencia.Value : DateTime.Now,
+                ObservacaoFimVigencia = obsFimVigencia,
+                IdIdentificadorExterno = organizacao.IdentificadorExterno.Id
+            };
+
+            _repositorioHistoricos.Add(historico);
+        }
+
+        private void InserirHistorico(Unidade unidade, string obsFimVigencia, DateTime? fimvigencia)
+        {
+            HistoricoUnidadeModeloNegocio historicoUnidade = Mapper.Map<Unidade, HistoricoUnidadeModeloNegocio>(unidade);
+
+            string json = JsonData.SerializeObject(historicoUnidade);
+
+            Historico historico = new Historico
+            {
+                Json = json,
+                InicioVigencia = unidade.InicioVigencia,
+                FimVigencia = fimvigencia.HasValue ? fimvigencia.Value : DateTime.Now,
+                ObservacaoFimVigencia = obsFimVigencia,
+                IdIdentificadorExterno = unidade.IdentificadorExterno.Id
+            };
+
+            _repositorioHistoricos.Add(historico);
+        }
+
+        private void ExcluirContato(ContatoUnidade contatoUnidade)
+        {
+            _repositorioContatos.Remove(contatoUnidade.Contato);
+            _repositorioContatosUnidades.Remove(contatoUnidade);
+        }
+
+        private void ExcluirEmail(EmailUnidade emailUnidade)
+        {
+            _repositorioEmails.Remove(emailUnidade.Email);
+            _repositorioEmailsUnidades.Remove(emailUnidade);
+        }
+
+        private void ExcluirSite(SiteUnidade siteUnidade)
+        {
+            _repositorioSites.Remove(siteUnidade.Site);
+            _repositorioSitesUnidades.Remove(siteUnidade);
+        }
+
     }
 }

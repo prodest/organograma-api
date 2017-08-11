@@ -1,6 +1,7 @@
 ﻿using Organograma.Apresentacao.Base;
 using Organograma.Apresentacao.Modelos;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Apresentacao.Base
 {
@@ -19,7 +20,7 @@ namespace Apresentacao.Base
         OrganizacaoOrganograma PesquisarOrganograma(string guid, bool filhas);
         List<OrganizacaoOrganograma> PesquisarOrganograma();
         List<OrganizacaoModeloGet> PesquisarPorUsuario(bool filhas);
-        void IntegarSiarhes();
+        Task IntegarSiarhes();
     }
 
 }

@@ -9,6 +9,7 @@ using Organograma.WebAPI.Config;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -69,6 +70,40 @@ namespace Organograma.WebAPI.Controllers
             try
             {
                 return new ObjectResult(service.Pesquisar(guid));
+            }
+            catch (OrganogramaRequisicaoInvalidaException e)
+            {
+                return BadRequest(MensagemErro.ObterMensagem(e));
+            }
+            catch (OrganogramaNaoEncontradoException e)
+            {
+                return NotFound(MensagemErro.ObterMensagem(e));
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, MensagemErro.ObterMensagem(e));
+            }
+        }
+
+        /// <summary>
+        /// Retorna as informações do responsável pela unidade.
+        /// </summary>
+        /// <param name="guid">Identificador da organização a qual se deseja obter seu responsável.</param>
+        /// <returns>Informações do responsável pela unidade informada.</returns>
+        /// <response code="200">Retorna as informações do responsável pela unidade informada.</response>
+        /// <response code="400">Retorna a descrição do problema encontrado.</response>
+        /// <response code="404">Unidade não encontrada.</response>
+        /// <response code="500">Retorna a descrição do erro.</response>
+        [HttpGet("{guid}/responsavel")]
+        [ProducesResponseType(typeof(ResponsavelUnidadeModeloGet), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        public async Task<IActionResult> GetResponsavel(string guid)
+        {
+            try
+            {
+                return new ObjectResult(await service.PesquisarResponsavel(guid));
             }
             catch (OrganogramaRequisicaoInvalidaException e)
             {

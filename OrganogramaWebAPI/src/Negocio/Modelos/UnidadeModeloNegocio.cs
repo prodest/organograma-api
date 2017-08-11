@@ -18,5 +18,11 @@ namespace Organograma.Negocio.Modelos
         public List<EmailModeloNegocio> Emails { get; set; }
         public List<SiteModeloNegocio> Sites { get; set; }
         public List<UnidadeModeloNegocio> UnidadesFilhas { get; set; }
+
+        public class Responsavel
+        {
+            public string Cpf { get; set; }
+            public string Nome { get; set; }
+        }
     }
 }

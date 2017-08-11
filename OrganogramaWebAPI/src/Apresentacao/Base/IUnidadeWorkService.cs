@@ -1,5 +1,6 @@
 ﻿using Organograma.Apresentacao.Modelos;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Organograma.Apresentacao.Base
 {
@@ -18,5 +19,7 @@ namespace Organograma.Apresentacao.Base
         void Excluir(string guid);
 
         void ExcluirEmail(int id, List<EmailModelo> emails);
+
+        Task<ResponsavelUnidadeModeloGet> PesquisarResponsavel(string guid);
     }
 }

@@ -9,6 +9,7 @@ using Organograma.WebAPI.Config;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Organograma.WebAPI.Controllers
 {
@@ -406,11 +407,11 @@ namespace Organograma.WebAPI.Controllers
         [Authorize(Policy = "IntegracaoSiarhes.Integrar")]
         [ProducesResponseType(typeof(void), 200)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult IntegrarSiarhes()
+        public async Task<IActionResult> IntegrarSiarhes()
         {
             try
             {
-                service.IntegarSiarhes();
+                await service.IntegarSiarhes();
                 return Ok();
             }
             catch (OrganogramaRequisicaoInvalidaException e)

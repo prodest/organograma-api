@@ -5,6 +5,7 @@ using Organograma.Negocio.Base;
 using Organograma.Negocio.Modelos;
 using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
 
 namespace Organograma.Apresentacao
 {
@@ -62,6 +63,13 @@ namespace Organograma.Apresentacao
         public void ExcluirEmail(int id, List<EmailModelo> emails)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ResponsavelUnidadeModeloGet> PesquisarResponsavel(string guid)
+        {
+            var umn = await unidadeNegocio.PesquisarResponsavel(guid);
+
+            return Mapper.Map<UnidadeModeloNegocio.Responsavel, ResponsavelUnidadeModeloGet>(umn);
         }
     }
 }

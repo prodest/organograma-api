@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Organograma.Dominio.Modelos;
 using Organograma.Negocio.Modelos;
+using Organograma.Negocio.Modelos.Siarhes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,11 +34,20 @@ namespace Organograma.Negocio.Config
             CreateMap<Contato, ContatoModeloNegocio>()
                 .ForMember(dest => dest.TipoContato, opt => opt.MapFrom(s => s.TipoContato != null ? Mapper.Map<TipoContato, TipoContatoModeloNegocio>(s.TipoContato) : null));
 
+            CreateMap<Contato, HistoricoContatoModeloNegocio>();
+
             CreateMap<ContatoOrganizacao, ContatoModeloNegocio>()
                 .ConvertUsing(s => s.Contato != null ? Mapper.Map<Contato, ContatoModeloNegocio>(s.Contato) : null);
 
+            CreateMap<ContatoOrganizacao, HistoricoContatoModeloNegocio>()
+                .ConvertUsing(s => s.Contato != null ? Mapper.Map<Contato, HistoricoContatoModeloNegocio>(s.Contato) : null);
+
             CreateMap<ContatoUnidade, ContatoModeloNegocio>()
                 .ConvertUsing(s => s.Contato != null ? Mapper.Map<Contato, ContatoModeloNegocio>(s.Contato) : null);
+
+            CreateMap<ContatoUnidade, HistoricoContatoModeloNegocio>()
+                .ConvertUsing(s => s.Contato != null ? Mapper.Map<Contato, HistoricoContatoModeloNegocio>(s.Contato) : null);
+
             #endregion
 
             #region Mapeamento de Email
@@ -53,14 +63,25 @@ namespace Organograma.Negocio.Config
             CreateMap<EmailOrganizacao, EmailModeloNegocio>()
                 .ConvertUsing(s => s.Email != null ? Mapper.Map<Email, EmailModeloNegocio>(s.Email) : null);
 
+            CreateMap<EmailOrganizacao, HistoricoEmailModeloNegocio>()
+                .ConvertUsing(s => s.Email != null ? Mapper.Map<Email, HistoricoEmailModeloNegocio>(s.Email) : null);
+
             CreateMap<EmailUnidade, EmailModeloNegocio>()
                 .ConvertUsing(s => s.Email != null ? Mapper.Map<Email, EmailModeloNegocio>(s.Email) : null);
+
+            CreateMap<EmailUnidade, HistoricoEmailModeloNegocio>()
+                .ConvertUsing(s => s.Email != null ? Mapper.Map<Email, HistoricoEmailModeloNegocio>(s.Email) : null);
+
+            CreateMap<Email, HistoricoEmailModeloNegocio>();
+
             #endregion
 
             #region Mapeamento de Endereço
             CreateMap<Endereco, EnderecoModeloNegocio>()
                 .ForMember(dest => dest.Organizacoes, opt => opt.Ignore())
                 .ForMember(dest => dest.Unidades, opt => opt.Ignore());
+
+            CreateMap<Endereco, HistoricoEnderecoModeloNegocio>();
 
             CreateMap<EnderecoModeloNegocio, Endereco>().ForMember(dest => dest.IdMunicipio, opt => opt.MapFrom(s => s.Municipio.Id));
             #endregion
@@ -69,9 +90,11 @@ namespace Organograma.Negocio.Config
             CreateMap<EsferaOrganizacao, EsferaOrganizacaoModeloNegocio>().ReverseMap();
             #endregion
 
-            #region Mapeamento de identificador externo
+            #region Mapeamento de Identificador Externo
             CreateMap<IdentificadorExterno, Guid>()
                 .ConvertUsing(s => s.Guid);
+
+            CreateMap<IdentificadorExterno, HistoricoIdentificadorExternoModeloNegocio>();
             #endregion
 
             #region Mapeamento de Municipio
@@ -147,10 +170,20 @@ namespace Organograma.Negocio.Config
                 .ForMember(dest => dest.EmailsOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<EmailModeloNegocio>, List<EmailOrganizacao>>(s.Emails)))
                 .ForMember(dest => dest.SitesOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<SiteModeloNegocio>, List<SiteOrganizacao>>(s.Sites)))
                 .ForMember(dest => dest.ContatosOrganizacao, opt => opt.MapFrom(s => Mapper.Map<List<ContatoModeloNegocio>, List<ContatoOrganizacao>>(s.Contatos)));
+
+            CreateMap<Organizacao, HistoricoOrganizacaoModeloNegocio>()
+                .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.ContatosOrganizacao != null ? Mapper.Map<List<ContatoOrganizacao>, List<HistoricoContatoModeloNegocio>>(s.ContatosOrganizacao.ToList()) : null))
+                .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.EmailsOrganizacao != null ? Mapper.Map<List<EmailOrganizacao>, List<HistoricoEmailModeloNegocio>>(s.EmailsOrganizacao.ToList()) : null))
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.SitesOrganizacao != null ? Mapper.Map<List<SiteOrganizacao>, List<HistoricoSiteModeloNegocio>>(s.SitesOrganizacao.ToList()) : null))
+                .MaxDepth(1);
             #endregion
 
             #region Mapeamento de Poder
             CreateMap<Poder, PoderModeloNegocio>().ReverseMap();
+            #endregion
+
+            #region Mapeamento de Responsável
+            CreateMap<FuncionarioSiarhes, UnidadeModeloNegocio.Responsavel>();
             #endregion
 
             #region Mapeamento de Site
@@ -166,8 +199,17 @@ namespace Organograma.Negocio.Config
             CreateMap<SiteOrganizacao, SiteModeloNegocio>()
                 .ConvertUsing(s => s.Site != null ? Mapper.Map<Site, SiteModeloNegocio>(s.Site) : null);
 
+            CreateMap<SiteOrganizacao, HistoricoSiteModeloNegocio>()
+                .ConvertUsing(s => s.Site != null ? Mapper.Map<Site, HistoricoSiteModeloNegocio>(s.Site) : null);
+
             CreateMap<SiteUnidade, SiteModeloNegocio>()
                 .ConvertUsing(s => s.Site != null ? Mapper.Map<Site, SiteModeloNegocio>(s.Site) : null);
+
+            CreateMap<SiteUnidade, HistoricoSiteModeloNegocio>()
+                .ConvertUsing(s => s.Site != null ? Mapper.Map<Site, HistoricoSiteModeloNegocio>(s.Site) : null);
+
+            CreateMap<Site, HistoricoSiteModeloNegocio>();
+
             #endregion
 
             #region Mapeamento de Tipo de Contato
@@ -233,6 +275,12 @@ namespace Organograma.Negocio.Config
                                                                 opt.Condition((a, b) => b.IdentificadorExterno == null);
                                                                 opt.MapFrom(s => new IdentificadorExterno { Guid = new Guid(s.Guid) });
                                                             });
+
+            CreateMap<Unidade, HistoricoUnidadeModeloNegocio>()
+                .ForMember(dest => dest.Contatos, opt => opt.MapFrom(s => s.ContatosUnidade != null ? Mapper.Map<List<ContatoUnidade>, List<HistoricoContatoModeloNegocio>>(s.ContatosUnidade.ToList()) : null))
+                .ForMember(dest => dest.Emails, opt => opt.MapFrom(s => s.EmailsUnidade != null ? Mapper.Map<List<EmailUnidade>, List<HistoricoEmailModeloNegocio>>(s.EmailsUnidade.ToList()) : null))
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(s => s.SitesUnidade != null ? Mapper.Map<List<SiteUnidade>, List<HistoricoSiteModeloNegocio>>(s.SitesUnidade.ToList()) : null))
+                .MaxDepth(1);
             #endregion
         }
     }

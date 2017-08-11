@@ -144,6 +144,10 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<PoderModeloNegocio, PoderModeloGet>();
                 #endregion
 
+                #region Mapeamento de Reponsável
+                cfg.CreateMap<UnidadeModeloNegocio.Responsavel, ResponsavelUnidadeModeloGet>();
+                #endregion
+
                 #region Mapeamento de Site
                 cfg.CreateMap<SiteModelo, SiteModeloNegocio>().ReverseMap();
 

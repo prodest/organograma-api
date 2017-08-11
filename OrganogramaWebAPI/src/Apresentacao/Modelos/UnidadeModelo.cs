@@ -71,4 +71,9 @@ namespace Organograma.Apresentacao.Modelos
         public UnidadePaiModeloGet UnidadePai { get; set; }
     }
 
+    public class ResponsavelUnidadeModeloGet
+    {
+        public string Cpf { get; set; }
+        public string Nome { get; set; }
+    }
 }

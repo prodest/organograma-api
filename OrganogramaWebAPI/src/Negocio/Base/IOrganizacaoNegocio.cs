@@ -1,5 +1,6 @@
 ﻿using Organograma.Negocio.Modelos;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Organograma.Negocio.Base
 {
@@ -20,6 +21,6 @@ namespace Organograma.Negocio.Base
         OrganizacaoModeloNegocio PesquisarOrganograma(string guid, bool filhas);
         List<OrganizacaoModeloNegocio> PesquisarOrganograma();
         List<OrganizacaoModeloNegocio> PesquisarPorUsuario(bool filhas);
-        void IntegrarSiarhes();
+        Task IntegrarSiarhes();
     }
 }
