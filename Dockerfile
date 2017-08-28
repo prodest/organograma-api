@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:1.1.0-runtime-deps
+FROM microsoft/dotnet:1.1-runtime-deps
 
 COPY OrganogramaWebAPI/src/WebAPI/publish /home/bin
 WORKDIR /home/bin
