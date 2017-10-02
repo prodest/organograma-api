@@ -305,7 +305,7 @@ namespace Organograma.Negocio
                             organizacaoPai.OrganizacoesFilhas.Add(org);
                         }
                     }
-                    else
+                    else if (!org.Cnpj.Equals(_governoEstado.Cnpj))
                     {
                         org.IdOrganizacaoPai = _governoEstado.Id;
                     }
