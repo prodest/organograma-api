@@ -1,26 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{228F021F-6855-4684-AADF-DBC2A90EEABF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C954BE7-BF86-40E5-AF54-010B117D7DE2}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WebAPI", "src\WebAPI\WebAPI.xproj", "{BE13B25E-19DC-48DC-94A6-E24ED00B841F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "src\WebAPI\WebAPI.csproj", "{BE13B25E-19DC-48DC-94A6-E24ED00B841F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Apresentacao", "src\Apresentacao\Apresentacao.xproj", "{114BD83B-2CC9-4B2B-9A10-5D240BFE1E49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apresentacao", "src\Apresentacao\Apresentacao.csproj", "{114BD83B-2CC9-4B2B-9A10-5D240BFE1E49}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Negocio", "src\Negocio\Negocio.xproj", "{D931D7E5-50C5-44A8-9BC8-4C824D0C4D02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Negocio", "src\Negocio\Negocio.csproj", "{D931D7E5-50C5-44A8-9BC8-4C824D0C4D02}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Infraestrutura", "src\Infraestrutura\Infraestrutura.xproj", "{87AF0619-2320-40F6-8B89-1660F446A94A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infraestrutura", "src\Infraestrutura\Infraestrutura.csproj", "{87AF0619-2320-40F6-8B89-1660F446A94A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Dominio", "src\Dominio\Dominio.xproj", "{F24E9292-7DEB-4D47-AD4D-B941EA37B233}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dominio", "src\Dominio\Dominio.csproj", "{F24E9292-7DEB-4D47-AD4D-B941EA37B233}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "JobScheduler", "src\JobScheduler\JobScheduler.xproj", "{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobScheduler", "src\JobScheduler\JobScheduler.csproj", "{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,5 +60,8 @@ Global
 		{87AF0619-2320-40F6-8B89-1660F446A94A} = {228F021F-6855-4684-AADF-DBC2A90EEABF}
 		{F24E9292-7DEB-4D47-AD4D-B941EA37B233} = {228F021F-6855-4684-AADF-DBC2A90EEABF}
 		{AABC657C-3ED9-48E2-8DBF-C311ED7F46E4} = {228F021F-6855-4684-AADF-DBC2A90EEABF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {06A95EEA-14D7-4DF9-897C-F7CCE7FCF48C}
 	EndGlobalSection
 EndGlobal

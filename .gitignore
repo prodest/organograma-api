@@ -1,5 +1,5 @@
 */.vs/
-
+*.user
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -11,3 +11,5 @@ bld/
 [Oo]bj/
 [Ll]og/
 /OrganogramaWebAPI/src/JobScheduler/JobScheduler.xproj.user
+/OrganogramaWebAPI/Backup
+/OrganogramaWebAPI/UpgradeLog.htm
