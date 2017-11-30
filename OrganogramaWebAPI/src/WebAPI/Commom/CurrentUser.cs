@@ -75,17 +75,18 @@ namespace Organograma.WebAPI.Commom
                     {
                         foreach (Claim c in claimsOrganizacao)
                         {
-                            FillOrgaoEPatriarca(c.Value);
+                            Guid guidClaim = new Guid();
+
+                            if (Guid.TryParse(c.Value, out guidClaim))
+                                FillOrgaoEPatriarca(guidClaim);
                         }
                     }
                 }
             }
         }
 
-        private void FillOrgaoEPatriarca(string organizacaoSigla)
+        private void FillOrgaoEPatriarca(Guid guidOrganizacaoUsuario)
         {
-            Guid guidOrganizacaoUsuario = _service.Search(organizacaoSigla);
-
             if (_userGuidsOrganizacao == null)
                 _userGuidsOrganizacao = new List<Guid>();
 
