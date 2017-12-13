@@ -40,4 +40,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration.Tools" Version="1.1.0-preview4-final" />
   </ItemGroup>
 
+  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
+    <ItemGroup>
+      <DocFile Include="bin\**\**\WebAPI.xml" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DocFile)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="false" />
+  </Target>
+
 </Project>
