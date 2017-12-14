@@ -42,8 +42,6 @@ namespace Organograma.WebAPI
             //Configurar o objeto AutenticacaoIdentityServer para ser usado na autenticação
             services.Configure<AutenticacaoIdentityServer>(Configuration.GetSection("AutenticacaoIdentityServer"));
 
-            services.AddCors();
-
             services.AddMemoryCache();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -59,6 +57,8 @@ namespace Organograma.WebAPI
                 {
                     opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
+
+            services.AddCors(setupAction => setupAction.AddPolicy("default", policy => policy.AllowAnyHeader().AllowAnyMethod()));
 
             #region Políticas que serão concedidas
             services.AddAuthorization(options =>
@@ -126,8 +126,6 @@ namespace Organograma.WebAPI
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseCors(builder => builder.AllowAnyOrigin());
-
             #region Configurações de autenticação
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -150,6 +148,8 @@ namespace Organograma.WebAPI
             #endregion
 
             app.UseMvc();
+
+            app.UseCors(builder => builder.AllowAnyOrigin());
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
