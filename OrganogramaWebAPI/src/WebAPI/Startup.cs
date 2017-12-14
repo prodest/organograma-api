@@ -42,6 +42,8 @@ namespace Organograma.WebAPI
             //Configurar o objeto AutenticacaoIdentityServer para ser usado na autenticação
             services.Configure<AutenticacaoIdentityServer>(Configuration.GetSection("AutenticacaoIdentityServer"));
 
+            services.AddCors();
+
             services.AddMemoryCache();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -116,8 +118,6 @@ namespace Organograma.WebAPI
                 options.IncludeXmlComments(xmlPath);
             });
             #endregion
-
-            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -125,6 +125,8 @@ namespace Organograma.WebAPI
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseCors(builder => builder.AllowAnyOrigin());
 
             #region Configurações de autenticação
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -155,8 +157,6 @@ namespace Organograma.WebAPI
             var requestPath = Environment.GetEnvironmentVariable("REQUEST_PATH") ?? string.Empty;
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUi("api/documentation", requestPath + "/swagger/v1/swagger.json");
-
-            app.UseCors(builder => builder.AllowAnyOrigin());
         }
     }
 }
