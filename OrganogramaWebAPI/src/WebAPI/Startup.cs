@@ -58,7 +58,9 @@ namespace Organograma.WebAPI
                     opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
 
-            services.AddCors(setupAction => setupAction.AddPolicy("default", policy => policy.AllowAnyHeader().AllowAnyMethod()));
+            services.AddCors(setupAction => setupAction.AddPolicy("default", policy => policy.AllowAnyOrigin()
+                                                                                             .AllowAnyHeader()
+                                                                                             .AllowAnyMethod()));
 
             #region Políticas que serão concedidas
             services.AddAuthorization(options =>
@@ -126,6 +128,8 @@ namespace Organograma.WebAPI
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseCors("default");
+
             #region Configurações de autenticação
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -146,10 +150,8 @@ namespace Organograma.WebAPI
                 UserInfoEndpoint = autenticacaoIdentityServer.Authority + "connect/userinfo"
             });
             #endregion
-
+            
             app.UseMvc();
-
-            app.UseCors(builder => builder.AllowAnyOrigin());
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
