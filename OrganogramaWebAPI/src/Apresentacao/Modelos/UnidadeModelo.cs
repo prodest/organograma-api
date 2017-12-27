@@ -61,6 +61,14 @@ namespace Organograma.Apresentacao.Modelos
         public List<UnidadeOrganograma> UnidadesFilhas { get; set; }
     }
 
+    public class UnidadeOrganogramaAcessoCidadao
+    {
+        public string Guid { get; set; }
+        public string Nome { get; set; }
+        public string Sigla { get; set; }
+        public List<UnidadeOrganogramaAcessoCidadao> UnidadesFilhas { get; set; }
+    }
+
     public class UnidadeSimplesModeloGet
     {
         public string Guid { get; set; }

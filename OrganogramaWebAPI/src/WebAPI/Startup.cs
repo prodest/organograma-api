@@ -88,6 +88,7 @@ namespace Organograma.WebAPI
                 options.AddPolicy("Unidade.Alterar", policy => policy.RequireClaim("Acao$Unidade", "Alterar"));
                 options.AddPolicy("Unidade.Excluir", policy => policy.RequireClaim("Acao$Unidade", "Excluir"));
                 options.AddPolicy("IntegracaoSiarhes.Integrar", policy => policy.RequireClaim("Acao$IntegracaoSiarhes", "Integrar"));
+                options.AddPolicy("AcessoCidadao", policy => policy.RequireClaim("api-organograma-acessocidadao"));
             }
             );
             #endregion

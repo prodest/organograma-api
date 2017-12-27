@@ -115,4 +115,18 @@ namespace Organograma.Apresentacao.Modelos
         public List<UnidadeOrganograma> Unidades { get; set; }
     }
 
+    public class OrganizacaoOrganogramaAcessoCidadao
+    {
+        public string Guid { get; set; }
+        public string Cnpj { get; set; }
+        public string RazaoSocial { get; set; }
+        public string NomeFantasia { get; set; }
+        public string Sigla { get; set; }
+        public int? IdEmpresaSiarhes { get; set; }
+        public int? IdSubEmpresaSiarhes { get; set; }
+        public EsferaOrganizacaoModeloPost Esfera { get; set; }
+        public PoderModeloPost Poder { get; set; }
+        public List<OrganizacaoOrganogramaAcessoCidadao> OrganizacoesFilhas { get; set; }
+        public List<UnidadeOrganogramaAcessoCidadao> Unidades { get; set; }
+    }
 }

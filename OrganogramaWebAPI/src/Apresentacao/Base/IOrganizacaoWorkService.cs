@@ -19,6 +19,7 @@ namespace Apresentacao.Base
         OrganizacaoModeloGetPorSigla PesquisarPorSigla(string sigla, bool patriarca);
         OrganizacaoOrganograma PesquisarOrganograma(string guid, bool filhas);
         List<OrganizacaoOrganograma> PesquisarOrganograma();
+        List<OrganizacaoOrganogramaAcessoCidadao> PesquisarOrganogramaAcessoCidadao();
         List<OrganizacaoModeloGet> PesquisarPorUsuario(bool filhas);
         Task IntegarSiarhes();
     }

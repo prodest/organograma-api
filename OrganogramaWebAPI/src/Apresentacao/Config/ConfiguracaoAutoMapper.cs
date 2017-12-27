@@ -134,6 +134,8 @@ namespace Organograma.Apresentacao.Config
 
                 cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoOrganograma>();
 
+                cfg.CreateMap<OrganizacaoModeloNegocio, OrganizacaoOrganogramaAcessoCidadao>();
+
                 #endregion
 
                 #region Mapeamento de Poder
@@ -212,6 +214,8 @@ namespace Organograma.Apresentacao.Config
                 cfg.CreateMap<UnidadeModeloNegocio, UnidadePaiModeloGet>();
 
                 cfg.CreateMap<UnidadeModeloNegocio, UnidadeOrganograma>();
+
+                cfg.CreateMap<UnidadeModeloNegocio, UnidadeOrganogramaAcessoCidadao>();
                 #endregion
 
                 #region Importação do mapeamento do Negócio   
