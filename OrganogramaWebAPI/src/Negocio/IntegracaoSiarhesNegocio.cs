@@ -377,6 +377,7 @@ namespace Organograma.Negocio
                     if (!string.IsNullOrWhiteSpace(undSiarhes.PaiSetor))
                     {
                         var unidadePai = unidades.Where(u => u.Organizacao.IdEmpresaSiarhes == undSiarhes.Empresa
+                                                          && u.Organizacao.IdSubEmpresaSiarhes == undSiarhes.Subempresa
                                                           && u.Sigla.Equals(undSiarhes.PaiSetor))
                                                  .SingleOrDefault();
 
@@ -395,6 +396,7 @@ namespace Organograma.Negocio
                         else
                         {
                             var unidadePaiSiarhes = unidadesSiarhes.Where(us => us.Empresa == undSiarhes.Empresa
+                                                                             && us.Subempresa == undSiarhes.Subempresa
                                                                              && us.Setor.Equals(undSiarhes.PaiSetor))
                                                                    .SingleOrDefault();
 
