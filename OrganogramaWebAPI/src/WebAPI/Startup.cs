@@ -118,7 +118,7 @@ namespace Organograma.WebAPI
 
                 //Set the comments path for the swagger json and ui.
                 var xmlPath = Path.Combine(basePath, "WebAPI.xml");
-                options.IncludeXmlComments(xmlPath);
+                //options.IncludeXmlComments(xmlPath);
             });
             #endregion
         }

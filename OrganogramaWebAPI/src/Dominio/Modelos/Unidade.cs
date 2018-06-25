@@ -14,6 +14,7 @@ namespace Organograma.Dominio.Modelos
 
         public int Id { get; set; }
         public string Nome { get; set; }
+        public string NomeCurto { get; set; }
         public string Sigla { get; set; }
         public int IdOrganizacao { get; set; }
         public int IdTipoUnidade { get; set; }

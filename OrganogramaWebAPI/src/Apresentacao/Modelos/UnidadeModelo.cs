@@ -27,6 +27,7 @@ namespace Organograma.Apresentacao.Modelos
         public string Guid { get; set; }
         public string Nome { get; set; }
         public string Sigla { get; set; }
+        public string NomeCurto { get; set; }
 
         public TipoUnidadeModeloPut TipoUnidade { get; set; }
         public OrganizacaoUnidadeModeloGet Organizacao { get; set; }
@@ -74,6 +75,7 @@ namespace Organograma.Apresentacao.Modelos
         public string Guid { get; set; }
         public string Nome { get; set; }
         public string Sigla { get; set; }
+        public string NomeCurto { get; set; }
 
         public TipoUnidadeModeloPut TipoUnidade { get; set; }
         public UnidadePaiModeloGet UnidadePai { get; set; }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Organograma.Dominio.Base;
 using Organograma.Dominio.Modelos;
 using Organograma.Infraestrutura.Comum;
@@ -26,6 +27,7 @@ namespace Organograma.Negocio
         private IRepositorioGenerico<EmailUnidade> _repositorioEmailsUnidades;
         private IRepositorioGenerico<Email> _repositorioEmails;
         private IRepositorioGenerico<Endereco> _repositorioEnderecos;
+        private IRepositorioGenerico<IdentificadorExterno> _repositorioIdentificadoresExternos;
         private IRepositorioGenerico<SiteOrganizacao> _repositorioSitesOrganizacoes;
         private IRepositorioGenerico<SiteUnidade> _repositorioSitesUnidades;
         private IRepositorioGenerico<Site> _repositorioSites;
@@ -36,6 +38,8 @@ namespace Organograma.Negocio
         private List<TipoUnidade> TiposUnidades;
         private List<Municipio> Municipios { get; set; }
         private Organizacao _governoEstado;
+        private ICollection<Unidade> _unidadesExcluidas;
+        private ICollection<Organizacao> _organizacoesExcluidas;
 
         public async Task Integrar(IOrganogramaRepositorios repositorios, string clientAccessToken)
         {
@@ -53,6 +57,7 @@ namespace Organograma.Negocio
             _repositorioEmails = repositorios.Emails;
             _repositorioEnderecos = repositorios.Enderecos;
             _repositorioHistoricos = repositorios.Historicos;
+            _repositorioIdentificadoresExternos = repositorios.IdentificadoresExternos;
             _repositorioSitesOrganizacoes = repositorios.SitesOrganizacoes;
             _repositorioSitesUnidades = repositorios.SitesUnidades;
             _repositorioSites = repositorios.Sites;
@@ -63,6 +68,9 @@ namespace Organograma.Negocio
             Municipios = repositorios.Municipios.ToList();
 
             DateTime agora = DateTime.Now;
+
+            SetOrganizacoesExcluidas();
+            SetUnidadesExcluidas();
 
             List<OrganizacaoSiarhes> organizacoesSiarhes = JsonData.DownloadAsync<List<OrganizacaoSiarhes>>($"{_baseUrlSiarhes}subempresas", clientAccessToken).Result;
 
@@ -102,6 +110,34 @@ namespace Organograma.Negocio
             }
         }
 
+        private void SetOrganizacoesExcluidas()
+        {
+            ICollection<Historico> historico = _repositorioHistoricos
+                .Where(h => h.Json.Contains("razaoSocial")
+                    && h.ObservacaoFimVigencia != null
+                    && h.ObservacaoFimVigencia.ToUpper().Equals("EXCLUSÃO"))
+                .ToList();
+
+            _organizacoesExcluidas = historico
+                .Select(h => JsonConvert.DeserializeObject<Organizacao>(h.Json))
+                .OrderBy(u => u.Id)
+                .ToList();
+        }
+
+        private void SetUnidadesExcluidas()
+        {
+            ICollection<Historico> historico = _repositorioHistoricos
+                .Where(h => h.Json.Contains("idOrganizacao")
+                    && h.ObservacaoFimVigencia != null
+                    && h.ObservacaoFimVigencia.ToUpper().Equals("EXCLUSÃO"))
+                .ToList();
+
+            _unidadesExcluidas = historico
+                .Select(h => JsonConvert.DeserializeObject<Unidade>(h.Json))
+                .OrderBy(u => u.Id)
+                .ToList();
+        }
+
         private async Task RemoverOrganizacoesExcluidas(List<OrganizacaoSiarhes> organizacoesSiarhes)
         {
             List<Organizacao> organizacoes = await _repositorioOrganizacoes.Where(o => o.Esfera.Descricao.ToUpper().Equals("ESTADUAL")
@@ -125,6 +161,9 @@ namespace Organograma.Negocio
                                                                         })
                                                            && !o.Cnpj.Equals("27080530000143"))
                                                   .ToList();
+
+            if ((organizacoesExcluir.Count / organizacoes.Count) > 0.01)
+                throw new Exception("Não pode ser removido mais de 1% da base de uma só vez.");
 
             foreach (Organizacao orgExcluir in organizacoesExcluir)
             {
@@ -175,6 +214,9 @@ namespace Organograma.Negocio
                                                                                                             Codigo = u.Sigla
                                                                                                         }))
                                                     .ToList();
+
+            if ((unidadesExcluir.Count / unidades.Count) > 0.01)
+                throw new Exception("Não pode ser removido mais de 1% da base de uma só vez.");
 
             foreach (Unidade uniExcluir in unidadesExcluir)
             {
@@ -254,9 +296,15 @@ namespace Organograma.Negocio
                     {
                         org = new Organizacao();
                         org.InicioVigencia = agora;
-                        organizacoes.Add(org);
 
-                        org.IdentificadorExterno = ObterIdentificadoresExternos();
+                        IdentificadorExterno identificadorExterno = ObterIdentificadorExternoOrganizacao(orgSiarhes.Empresa, orgSiarhes.Codigo);
+
+                        if (identificadorExterno == null)
+                            org.IdentificadorExterno = ObterIdentificadoresExternos();
+                        else
+                            org.IdentificadorExterno = identificadorExterno;
+
+                        organizacoes.Add(org);
                     }
 
                     org.IdEmpresaSiarhes = orgSiarhes.Empresa;
@@ -346,16 +394,6 @@ namespace Organograma.Negocio
                                            && RemoveDiacritics(u.Sigla.ToUpper()).Equals(RemoveDiacritics(undSiarhes.Setor.ToUpper())))
                                   .SingleOrDefault();
 
-                    if (und == null)
-                    {
-                        und = new Unidade();
-                        und.InicioVigencia = agora;
-                        und.IdentificadorExterno = ObterIdentificadoresExternos();
-
-                        unidades.Add(und);
-                        _repositorioUnidades.Add(und);
-                    }
-
                     var organizacao = organizacoes.Where(o => o.IdEmpresaSiarhes.Value == undSiarhes.Empresa
                                                              && o.IdSubEmpresaSiarhes.Value == undSiarhes.Subempresa)
                                                     .SingleOrDefault();
@@ -363,10 +401,26 @@ namespace Organograma.Negocio
                     if (organizacao == null)
                         throw new Exception($"A organização da unidade {undSiarhes.Setor} - {undSiarhes.NomeSetor} não foi encontrada. Empresa = {undSiarhes.Empresa}, Subempresa = {undSiarhes.Subempresa}.");
 
+                    if (und == null)
+                    {
+                        und = new Unidade();
+                        und.InicioVigencia = agora;
+                        IdentificadorExterno identificadorExterno = ObterIdentificadorExternoUnidade(organizacao.Id, undSiarhes.Setor);
+
+                        if (identificadorExterno == null)
+                            und.IdentificadorExterno = ObterIdentificadoresExternos();
+                        else
+                            und.IdentificadorExterno = identificadorExterno;
+
+                        unidades.Add(und);
+                        _repositorioUnidades.Add(und);
+                    }
+
                     und.Organizacao = organizacao;
                     und.IdOrganizacao = organizacao.Id;
                     und.Nome = undSiarhes.NomeSetor;
                     und.Sigla = undSiarhes.Setor;
+                    und.NomeCurto = undSiarhes.Sigla;
                     und.IdTipoUnidade = ObterIdTipoUnidade(undSiarhes);
 
                     PreencherContatosUnidade(und, undSiarhes);
@@ -790,6 +844,54 @@ namespace Organograma.Negocio
         private IdentificadorExterno ObterIdentificadoresExternos()
         {
             return new IdentificadorExterno { Guid = Guid.NewGuid() };
+        }
+
+        private IdentificadorExterno ObterIdentificadorExternoOrganizacao(int empresa, int codigo)
+        {
+            IdentificadorExterno identificadorExterno = null;
+
+            if (_organizacoesExcluidas != null && _organizacoesExcluidas.Count > 0)
+            {
+                var organizacaoExcluida = _organizacoesExcluidas
+                    .Where(o => o.IdEmpresaSiarhes.Equals(empresa)
+                        && o.IdSubEmpresaSiarhes.Equals(codigo))
+                    .OrderBy(o => o.Id)
+                    .FirstOrDefault();
+
+                if (organizacaoExcluida != null && organizacaoExcluida.IdentificadorExterno != null && !organizacaoExcluida.IdentificadorExterno.Guid.Equals(Guid.Empty))
+                    identificadorExterno = _repositorioIdentificadoresExternos
+                        .Where(ie => ie.Guid.Equals(organizacaoExcluida.IdentificadorExterno.Guid)
+                            && !ie.IdMunicipio.HasValue
+                            && !ie.IdOrganizacao.HasValue
+                            && !ie.IdUnidade.HasValue)
+                        .FirstOrDefault();
+            }
+
+            return identificadorExterno;
+        }
+
+        private IdentificadorExterno ObterIdentificadorExternoUnidade(int idOrganizacao, string sigla)
+        {
+            IdentificadorExterno identificadorExterno = null;
+
+            if (_unidadesExcluidas != null && _unidadesExcluidas.Count > 0)
+            {
+                var unidadeExcluida = _unidadesExcluidas
+                    .Where(u => u.IdOrganizacao.Equals(idOrganizacao)
+                        && u.Sigla.Equals(sigla))
+                    .OrderBy(u => u.Id)
+                    .FirstOrDefault();
+
+                if (unidadeExcluida != null && unidadeExcluida.IdentificadorExterno != null && !unidadeExcluida.IdentificadorExterno.Guid.Equals(Guid.Empty))
+                    identificadorExterno = _repositorioIdentificadoresExternos
+                        .Where(ie => ie.Guid.Equals(unidadeExcluida.IdentificadorExterno.Guid)
+                            && !ie.IdMunicipio.HasValue
+                            && !ie.IdOrganizacao.HasValue
+                            && !ie.IdUnidade.HasValue)
+                        .FirstOrDefault();
+            }
+
+            return identificadorExterno;
         }
         #endregion
 

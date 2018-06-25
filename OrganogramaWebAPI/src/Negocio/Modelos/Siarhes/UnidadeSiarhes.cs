@@ -10,6 +10,7 @@ namespace Organograma.Negocio.Modelos.Siarhes
         public int Empresa { get; set; }
         public int Subempresa { get; set; }
         public string Setor { get; set; }
+        public string Sigla { get; set; }
         public string NomeSetor { get; set; }
         public string NomeSetorLongo { get; set; }
         public string PaiSetor { get; set; }

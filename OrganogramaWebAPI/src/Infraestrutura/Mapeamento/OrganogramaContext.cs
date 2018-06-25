@@ -564,6 +564,10 @@ namespace Organograma.Infraestrutura.Mapeamento
                     .HasColumnName("nome")
                     .HasColumnType("varchar(100)");
 
+                entity.Property(e => e.NomeCurto)
+                    .HasColumnName("nomeCurto")
+                    .HasColumnType("varchar(20)");
+
                 entity.Property(e => e.Sigla)
                     .IsRequired()
                     .HasColumnName("sigla")
