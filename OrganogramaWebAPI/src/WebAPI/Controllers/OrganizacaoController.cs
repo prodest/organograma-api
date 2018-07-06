@@ -240,7 +240,7 @@ namespace Organograma.WebAPI.Controllers
         /// <response code="500">Erro inesperado.</response>
         [Authorize(Policy = "AcessoCidadao")]
         [HttpGet("organogramaAcessoCidadao")]
-        [ProducesResponseType(typeof(OrganizacaoOrganograma), 200)]
+        [ProducesResponseType(typeof(List<OrganizacaoOrganogramaAcessoCidadao>), 200)]
         [ProducesResponseType(typeof(string), 500)]
         public IActionResult PesquisarOrganogramaAcessoCidadao()
         {
