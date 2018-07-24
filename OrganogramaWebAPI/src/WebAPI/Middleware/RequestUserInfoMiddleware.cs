@@ -39,39 +39,44 @@ namespace Organograma.WebAPI.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            string accessToken = await context.Authentication.GetTokenAsync("access_token");
-            if (!string.IsNullOrWhiteSpace(accessToken))
+            object sub = context.User.Claims.SingleOrDefault(c => c.Type.Equals("sub"));
+
+            if (sub != null)
             {
-                UserInfoResponse userInfoResponse = GetUserInfoFromCache(accessToken);
-
-                if (!userInfoResponse.IsError)
+                string accessToken = await context.Authentication.GetTokenAsync("access_token");
+                if (!string.IsNullOrWhiteSpace(accessToken))
                 {
-                    var id = new ClaimsIdentity();
-                    id.AddClaim(new Claim("accessToken", accessToken));
+                    UserInfoResponse userInfoResponse = GetUserInfoFromCache(accessToken);
 
-                    var userInfoList = userInfoResponse.Claims.ToList();
-                    foreach (var ui in userInfoList)
+                    if (!userInfoResponse.IsError)
                     {
-                        if (ui.Type != "permissao")
-                        {
-                            id.AddClaim(new Claim(ui.Type, ui.Value));
-                        }
-                    }
+                        var id = new ClaimsIdentity();
+                        id.AddClaim(new Claim("accessToken", accessToken));
 
-                    var permissaoClaims = userInfoResponse.Claims.Where(x => x.Type == "permissao").ToList();
-                    foreach (var permissaoClaim in permissaoClaims)
-                    {
-                        dynamic objetoPermissao = JsonConvert.DeserializeObject(permissaoClaim.Value.ToString());
-                        string recurso = objetoPermissao.Recurso;
-                        id.AddClaim(new Claim("Recurso", recurso));
-                        var listaAcoes = ((JArray)objetoPermissao.Acoes).Select(x => x.ToString()).ToList();
-                        foreach (var acao in listaAcoes)
+                        var userInfoList = userInfoResponse.Claims.ToList();
+                        foreach (var ui in userInfoList)
                         {
-                            id.AddClaim(new Claim("Acao$" + recurso, acao));
+                            if (ui.Type != "permissao")
+                            {
+                                id.AddClaim(new Claim(ui.Type, ui.Value));
+                            }
                         }
-                    }
 
-                    context.User.AddIdentity(id);
+                        var permissaoClaims = userInfoResponse.Claims.Where(x => x.Type == "permissao").ToList();
+                        foreach (var permissaoClaim in permissaoClaims)
+                        {
+                            dynamic objetoPermissao = JsonConvert.DeserializeObject(permissaoClaim.Value.ToString());
+                            string recurso = objetoPermissao.Recurso;
+                            id.AddClaim(new Claim("Recurso", recurso));
+                            var listaAcoes = ((JArray)objetoPermissao.Acoes).Select(x => x.ToString()).ToList();
+                            foreach (var acao in listaAcoes)
+                            {
+                                id.AddClaim(new Claim("Acao$" + recurso, acao));
+                            }
+                        }
+
+                        context.User.AddIdentity(id);
+                    }
                 }
             }
 
