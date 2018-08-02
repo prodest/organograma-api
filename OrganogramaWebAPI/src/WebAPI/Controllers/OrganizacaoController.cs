@@ -217,7 +217,7 @@ namespace Organograma.WebAPI.Controllers
         /// <response code="200">Retorna os organogramas.</response>
         /// <response code="500">Erro inesperado.</response>
         [HttpGet("organograma")]
-        [ProducesResponseType(typeof(OrganizacaoOrganograma), 200)]
+        [ProducesResponseType(typeof(List<OrganizacaoOrganograma>), 200)]
         [ProducesResponseType(typeof(string), 500)]
         public IActionResult PesquisarOrganograma()
         {
