@@ -211,7 +211,7 @@ namespace Organograma.Negocio
                                                                                                         new
                                                                                                         {
                                                                                                             Empresa = u.Organizacao.IdEmpresaSiarhes,
-                                                                                                            Codigo = u.Sigla
+                                                                                                            Codigo = RemoveDiacritics(u.Sigla.ToUpper())
                                                                                                         }))
                                                     .ToList();
 
