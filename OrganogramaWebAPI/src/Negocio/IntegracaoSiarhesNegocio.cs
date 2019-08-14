@@ -182,8 +182,14 @@ namespace Organograma.Negocio
 
         private async Task RemoverUnidadesExcluidas(Organizacao orgExcluir)
         {
-            var unidades = await _repositorioUnidades.Where(u => u.IdOrganizacao == orgExcluir.Id)
-                                                     .ToListAsync();
+            var unidades = await _repositorioUnidades
+                .Where(u => u.IdOrganizacao == orgExcluir.Id)
+                .Include(u => u.IdentificadorExterno)
+                .Include(u => u.ContatosUnidade).ThenInclude(cu => cu.Contato)
+                .Include(u => u.EmailsUnidade).ThenInclude(eu => eu.Email)
+                .Include(u => u.SitesUnidade).ThenInclude(su => su.Site)
+                .Include(u => u.Endereco)
+                .ToListAsync();
 
             foreach (var unidade in unidades)
             {
